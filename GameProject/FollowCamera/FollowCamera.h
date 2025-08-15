@@ -35,6 +35,7 @@ public: // メンバ関数
 
   //-----------------------------Setters------------------------------//
   void SetTarget(const Transform* target);
+  void SetTarget2(const Transform* target2);
   void SetOffset(const Vector3& offset)
   {
     offset_.x = offset.x;
@@ -53,15 +54,18 @@ public: // メンバ関数
   Camera* GetCamera() { return camera_; }
   const Matrix4x4& GetViewProjection() const { return camera_->GetViewProjectionMatrix(); }
   const Vector3& GetOffset() const { return offset_; }
+  const Transform* GetTarget2() const { return target2_; }
+  bool GetMode() const { return mode_; } // true: FirstPersonMode, false: TopDownMode
 
 private: // メンバ変数
   Camera* camera_;
 
   const Transform* target_ = nullptr;
+  const Transform* target2_ = nullptr;
 
   Input* input_ = nullptr;
 
-  bool mode_ = true; // true: FirstPersonMode, false: TopDownMode
+  bool mode_ = false; // true: FirstPersonMode, false: TopDownMode
 
   Vector3 interTargetPos_;
 
@@ -76,6 +80,12 @@ private: // メンバ変数
   bool isRotating_ = false;
 
   float rotateSpeed_ = 0.05f;
+
+  // TopDownMode専用パラメータ
+  float topDownBaseHeight_ = 50.0f;
+  float topDownHeightMultiplier_ = 1.5f;
+  float topDownMinHeight_ = 20.0f;
+  float topDownMaxHeight_ = 500.0f;
 
 };
 

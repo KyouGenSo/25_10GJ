@@ -34,11 +34,10 @@ void MyGame::Initialize()
   // シーンの初期化
   sceneFactory_ = new SceneFactory();
   SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
-  SceneManager::GetInstance()->ChangeScene("game", 0.0f);
+  SceneManager::GetInstance()->ChangeScene("title", 0.0f);
 
   TextureManager::GetInstance()->LoadTexture("white.png");
   TextureManager::GetInstance()->LoadTexture("circle.png");
-  TextureManager::GetInstance()->LoadTexture("uvChecker.png");
   TextureManager::GetInstance()->LoadTexture("my_skybox.dds");
 
   spriteBasicOnresizeId = winApp_->RegisterOnResizeFunc(std::bind(&SpriteBasic::OnResize, SpriteBasic::GetInstance(), std::placeholders::_1));

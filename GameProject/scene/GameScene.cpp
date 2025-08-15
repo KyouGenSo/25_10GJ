@@ -49,6 +49,15 @@ void GameScene::Initialize()
   ground_->SetModel("ground_black.gltf");
   ground_->SetUvTransform(groundUvTransform_);
 
+  // 敵モデルの初期化
+  enemyTransform_.translate = Vector3(0.0f, 1.5f, 10.0f);
+  enemyTransform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
+  enemyTransform_.scale = Vector3(1.0f, 1.0f, 1.0f);
+  enemy_ = std::make_unique<Object3d>();
+  enemy_->Initialize();
+  enemy_->SetModel("enemy.gltf");
+  enemy_->SetTransform(enemyTransform_);
+
   // Playerの初期化
   player_ = new Player();
   player_->Initialize();
@@ -57,7 +66,7 @@ void GameScene::Initialize()
   followCamera_ = std::make_unique<FollowCamera>();
   followCamera_->Initialize((*Object3dBasic::GetInstance()->GetCamera()));
   followCamera_->SetTarget(&player_->GetTransform());
-
+  followCamera_->SetTarget2(&enemyTransform_);
 
 }
 
@@ -86,9 +95,13 @@ void GameScene::Update()
   ///              更新処理               ///
   /// ================================== ///
 
+  enemy_->SetTransform(enemyTransform_);
+  player_->SetMode(followCamera_->GetMode());
+
   skyBox_->Update();
   ground_->Update();
   player_->Update();
+  enemy_->Update();
   followCamera_->Update();
 
   // シーン遷移
@@ -118,6 +131,7 @@ void GameScene::Draw()
 
   ground_->Draw();
   player_->Draw();
+  enemy_->Draw();
 
   //------------------前景Spriteの描画------------------//
   // スプライト共通描画設定

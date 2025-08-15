@@ -39,6 +39,7 @@ public: // メンバ関数
   //-----------------------------Getters/Setters------------------------------//
   void SetSpeed(float speed) { speed_ = speed; }
   void SetCamera(Camera* camera) { camera_ = camera; }
+  void SetMode(bool mode) { mode_ = mode; } // true: FirstPersonMode, false: TopDownMode
 
   // 変形情報を取得
   const Transform& GetTransform() const { return transform_; }
@@ -53,5 +54,6 @@ private: // メンバ変数
   float speed_ = 1.f; ///< 移動速度
   float targetAngle_ = 0.f; ///< 目標角度
 
+  bool mode_ = false; // true: FirstPersonMode, false: TopDownMode
 };
 

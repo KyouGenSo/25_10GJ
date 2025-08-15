@@ -44,10 +44,12 @@ private: // メンバ変数
   // SkyBox
   std::unique_ptr<SkyBox> skyBox_;
   std::unique_ptr<Object3d> ground_;
+  std::unique_ptr<Object3d> enemy_;
   Player* player_;
   std::unique_ptr<FollowCamera> followCamera_;
 
   Transform groundUvTransform_{};
+  Transform enemyTransform_{};
 
   bool isDebug_ = false;
 

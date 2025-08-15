@@ -80,6 +80,42 @@ void FollowCamera::FirstPersonMode()
 
 void FollowCamera::TopDownMode()
 {
+  if (!target_) return;
+
+  // 2つのターゲットがある場合は中心を計算、1つの場合はそのターゲットの位置
+  Vector3 centerPos;
+  if (target2_) {
+    centerPos = Vec3::Add(target_->translate, target2_->translate);
+    centerPos = Vec3::Multiply(centerPos, 0.5f);
+  } else {
+    centerPos = target_->translate;
+  }
+
+  // 中心位置に補間して追従
+  interTargetPos_ = Vec3::Lerp(interTargetPos_, centerPos, t_);
+
+  // カメラの高度を計算
+  float cameraHeight = topDownBaseHeight_;
+  if (target2_) {
+    // 2つのターゲット間の距離を計算
+    Vector3 distance = Vec3::Subtract(target_->translate, target2_->translate);
+    float targetDistance = static_cast<float>(Vec3::Length(distance));
+    
+    // 距離に応じて高度を調整
+    cameraHeight = topDownBaseHeight_ + targetDistance * topDownHeightMultiplier_;
+    
+    // 最小・最大高度で制限
+    if (cameraHeight < topDownMinHeight_) cameraHeight = topDownMinHeight_;
+    if (cameraHeight > topDownMaxHeight_) cameraHeight = topDownMaxHeight_;
+  }
+
+  // カメラの位置を設定（中心の真上）
+  Vector3 cameraPos = interTargetPos_;
+  cameraPos.y = cameraHeight;
+  camera_->SetTranslate(cameraPos);
+
+  // カメラの回転を固定（真下を向く）
+  camera_->SetRotate(Vector3(1.5708f, 0.0f, 0.0f)); // 90度（π/2ラジアン）をX軸で回転
 }
 
 void FollowCamera::Reset() {
@@ -118,14 +154,50 @@ void FollowCamera::SetTarget(const Transform* target) {
   Reset();
 }
 
+void FollowCamera::SetTarget2(const Transform* target2) {
+  target2_ = target2;
+}
+
 void FollowCamera::DrawImGui() {
 #ifdef _DEBUG
   ImGui::Begin("FollowCamera");
 
-  ImGui::DragFloat("Offset.x", &offset_.x, 0.1f);
-  ImGui::DragFloat("Offset.y", &offset_.y, 0.1f);
-  ImGui::DragFloat("Offset.z", &offsetOrigin_.z, 0.1f);
-  ImGui::DragFloat("Rotate Speed", &rotateSpeed_, 0.01f);
+  // モード選択
+  bool modeChanged = ImGui::Checkbox("FirstPersonMode", &mode_);
+  if (modeChanged) {
+    Reset();
+  }
+
+  if (mode_) {
+    // FirstPersonMode用の設定
+    ImGui::Separator();
+    ImGui::Text("FirstPerson Settings");
+    ImGui::DragFloat("Offset.x", &offset_.x, 0.1f);
+    ImGui::DragFloat("Offset.y", &offset_.y, 0.1f);
+    ImGui::DragFloat("Offset.z", &offsetOrigin_.z, 0.1f);
+    ImGui::DragFloat("Rotate Speed", &rotateSpeed_, 0.01f);
+  } else {
+    // TopDownMode用の設定
+    ImGui::Separator();
+    ImGui::Text("TopDown Settings");
+    ImGui::DragFloat("Base Height", &topDownBaseHeight_, 0.5f, 5.0f, 100.0f);
+    ImGui::DragFloat("Height Multiplier", &topDownHeightMultiplier_, 0.01f, 0.0f, 2.0f);
+    ImGui::DragFloat("Min Height", &topDownMinHeight_, 0.5f, 1.0f, 50.0f);
+    ImGui::DragFloat("Max Height", &topDownMaxHeight_, 0.5f, 10.0f, 200.0f);
+    
+    ImGui::Separator();
+    ImGui::Text("Target Info");
+    if (target_) {
+      ImGui::Text("Target1: Set");
+    } else {
+      ImGui::Text("Target1: Not Set");
+    }
+    if (target2_) {
+      ImGui::Text("Target2: Set");
+    } else {
+      ImGui::Text("Target2: Not Set");
+    }
+  }
 
   ImGui::End();
 #endif _DEBUG
