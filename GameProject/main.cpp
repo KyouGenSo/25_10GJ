@@ -1,15 +1,15 @@
-﻿#include"TakoFramework.h"
+#include"TakoFramework.h"
 #include "MyGame/MyGame.h"
 
 //Windowsプログラムのエントリーポイント
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 
-	TakoFramework* game = new MyGame();
+  TakoFramework* game = new MyGame();
 
-	game->Run();
+  game->Run();
 
-	delete game;
+  delete game;
 
-	return 0;
+  return 0;
 }

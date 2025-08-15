@@ -40,6 +40,9 @@ private: // メンバ変数
 
   // SkyBox
   std::unique_ptr<SkyBox> skyBox_;
+  std::unique_ptr<Object3d> ground_;
+
+  Transform groundUvTransform_{};
 
   bool isDebug_ = false;
 

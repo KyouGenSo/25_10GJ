@@ -17,24 +17,24 @@
 void MyGame::Initialize()
 {
 
-	TakoFramework::Initialize();
+  TakoFramework::Initialize();
 
   winApp_->SetWindowSize(1280, 720);
   winApp_->SetWindowTitle(L"TakoEngine Sample Game");
 
 #pragma region 汎用機能初期化-------------------------------------------------------------------------------------------------------------------
-	// 入力クラスの初期化
-	Input::GetInstance()->Initialize(winApp_);
+  // 入力クラスの初期化
+  Input::GetInstance()->Initialize(winApp_);
 
-	// オーディオの初期化
-	Audio::GetInstance()->Initialize("resources/Sound/");
+  // オーディオの初期化
+  Audio::GetInstance()->Initialize("resources/Sound/");
 
 #pragma endregion
 
-	// シーンの初期化
-	sceneFactory_ = new SceneFactory();
-	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
-	SceneManager::GetInstance()->ChangeScene("game", 0.0f);
+  // シーンの初期化
+  sceneFactory_ = new SceneFactory();
+  SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+  SceneManager::GetInstance()->ChangeScene("game", 0.0f);
 
   TextureManager::GetInstance()->LoadTexture("white.png");
   TextureManager::GetInstance()->LoadTexture("circle.png");
@@ -51,13 +51,13 @@ void MyGame::Finalize()
 {
   winApp_->UnregisterOnResizeFunc(spriteBasicOnresizeId);
 
-	TakoFramework::Finalize();
+  TakoFramework::Finalize();
 
-	// Audioの解放
-	Audio::GetInstance()->Finalize();
+  // Audioの解放
+  Audio::GetInstance()->Finalize();
 
-	// 入力クラスの解放
-	Input::GetInstance()->Finalize();
+  // 入力クラスの解放
+  Input::GetInstance()->Finalize();
 
   // GPUパーティクルの解放
   GPUParticle::GetInstance()->Finalize();
@@ -65,11 +65,11 @@ void MyGame::Finalize()
 
 void MyGame::Update()
 {
-	// カメラの更新
-	defaultCamera_->Update();
+  // カメラの更新
+  defaultCamera_->Update();
 
-	// 入力情報の更新
-	Input::GetInstance()->Update();
+  // 入力情報の更新
+  Input::GetInstance()->Update();
 
   // F11キーでフルスクリーン切り替え
   if (Input::GetInstance()->TriggerKey(DIK_F11))
@@ -80,36 +80,36 @@ void MyGame::Update()
   // GPUパーティクルの更新
   GPUParticle::GetInstance()->Update();
 
-	TakoFramework::Update();
+  TakoFramework::Update();
 
-	//　サウンドの更新
-	Audio::GetInstance()->Update();
+  //　サウンドの更新
+  Audio::GetInstance()->Update();
 
   // ゲームパッドの状態をリスレッシュ
-	Input::GetInstance()->RefreshGamePadState();
+  Input::GetInstance()->RefreshGamePadState();
 }
 
 void MyGame::Draw()
 {
-	/// ============================================= ///
-	/// ------------------シーン描画-------------------///
-	/// ============================================= ///
+  /// ============================================= ///
+  /// ------------------シーン描画-------------------///
+  /// ============================================= ///
 
   //ポストエフェクト適用対象のレンダーテクスチャを描画先に設定
-	dx12_->SetEffectRenderTexture();
+  dx12_->SetEffectRenderTexture();
 
-	// テクスチャ用のsrvヒープの設定
-	SrvManager::GetInstance()->BeginDraw();
+  // テクスチャ用のsrvヒープの設定
+  SrvManager::GetInstance()->BeginDraw();
 
-	SceneManager::GetInstance()->Draw();
+  SceneManager::GetInstance()->Draw();
 
   GPUParticle::GetInstance()->Draw();
 
   Draw2D::GetInstance()->Draw();
 
-	/// ===================================================== ///
-	/// ------------------ポストエフェクト描画-------------------///
-	/// ===================================================== ///
+  /// ===================================================== ///
+  /// ------------------ポストエフェクト描画-------------------///
+  /// ===================================================== ///
 
     // ポストエフェクトの描画
   PostEffectManager::GetInstance()->Draw();
@@ -133,16 +133,16 @@ void MyGame::Draw()
   PostEffectManager::GetInstance()->DrawFinalResult();
 
 
-	/// ========================================= ///
-	///-------------------ImGui-------------------///
-	/// ========================================= ///
+  /// ========================================= ///
+  ///-------------------ImGui-------------------///
+  /// ========================================= ///
 #ifdef _DEBUG
 
-	imguiManager_->Begin();
+  imguiManager_->Begin();
 
-	SceneManager::GetInstance()->DrawImGui();
+  SceneManager::GetInstance()->DrawImGui();
 
-	Draw2D::GetInstance()->ImGui();
+  Draw2D::GetInstance()->ImGui();
 
   // GlobalVariablesの更新
   GlobalVariables::GetInstance()->Update();
@@ -172,18 +172,18 @@ void MyGame::Draw()
   }
 
 
-	// PostEffectのパラメータ調整
+  // PostEffectのパラメータ調整
   if (PostEffectWindowVisible) {
     PostEffectManager::GetInstance()->DrawImgui();
   }
 
-	imguiManager_->End();
+  imguiManager_->End();
 
-	//imguiの描画
-	imguiManager_->Draw();
+  //imguiの描画
+  imguiManager_->Draw();
 #endif
 
 
-	// 描画後の処理
-	dx12_->EndDraw();
+  // 描画後の処理
+  dx12_->EndDraw();
 }
