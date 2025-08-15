@@ -154,6 +154,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGame\MyGame.cpp" />
+    <ClCompile Include="Object\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\SampleScene.cpp" />
     <ClCompile Include="scene\SceneFactory.cpp" />
@@ -173,6 +174,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="FollowCamera\FollowCamera.h" />
     <ClInclude Include="MyGame\MyGame.h" />
+    <ClInclude Include="Object\Player.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\SampleScene.h" />
     <ClInclude Include="scene\SceneFactory.h" />

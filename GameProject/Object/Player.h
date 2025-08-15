@@ -1,0 +1,57 @@
+#pragma once
+#include <memory>
+
+#include "Object3d.h"
+
+class Player
+{
+public: // メンバ関数
+  /// <summary>
+  /// 初期化
+  /// </summary>
+  void Initialize();
+
+  /// <summary>
+  /// 終了処理
+  /// </summary>
+  void Finalize();
+
+  /// <summary>
+  /// 更新
+  /// </summary>
+  void Update();
+
+  /// <summary>
+  /// 描画
+  /// </summary>
+  void Draw();
+
+  /// <summary>
+  /// 移動
+  /// </summary>
+  void Move();
+
+  /// <summary>
+  /// ImGuiの描画
+  /// </summary>
+  void DrawImGui();
+
+  //-----------------------------Getters/Setters------------------------------//
+  void SetSpeed(float speed) { speed_ = speed; }
+  void SetCamera(Camera* camera) { camera_ = camera; }
+
+  // 変形情報を取得
+  const Transform& GetTransform() const { return transform_; }
+
+private: // メンバ変数
+
+  std::unique_ptr<Object3d> model_; ///< モデル
+  Camera* camera_ = nullptr; ///< カメラ
+
+  Transform transform_{}; ///< 変形情報
+  Vector3 velocity_{}; ///< 速度
+  float speed_ = 1.f; ///< 移動速度
+  float targetAngle_ = 0.f; ///< 目標角度
+
+};
+

@@ -6,6 +6,9 @@
 #include "SkyBox.h"
 #include "BoneTracker.h"
 #include "CharacterEffectPresets.h"
+#include "FollowCamera/followCamera.h"
+
+class Player;
 
 class GameScene : public BaseScene
 {
@@ -41,6 +44,8 @@ private: // メンバ変数
   // SkyBox
   std::unique_ptr<SkyBox> skyBox_;
   std::unique_ptr<Object3d> ground_;
+  Player* player_;
+  std::unique_ptr<FollowCamera> followCamera_;
 
   Transform groundUvTransform_{};
 

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="MyGame">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
@@ -16,11 +12,11 @@
     <Filter Include="FollowCamera">
       <UniqueIdentifier>{B83E8A0D-6A37-4A88-8BC7-D45E82E0C234}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{c9c423bc-ae11-4ec8-9076-12ef0dc66417}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="MyGame\MyGame.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
@@ -39,6 +35,10 @@
     <ClCompile Include="scene\TitleScene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Player.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame\MyGame.h">
@@ -58,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="scene\TitleScene.h">
       <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
