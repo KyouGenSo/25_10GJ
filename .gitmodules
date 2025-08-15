@@ -1,0 +1,3 @@
+[submodule "Engine/TakoEngine"]
+	path = Engine/TakoEngine
+	url = https://github.com/KyouGenSo/TakoEngine.git
