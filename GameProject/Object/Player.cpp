@@ -8,7 +8,7 @@ void Player::Initialize()
   model_->Initialize();
   model_->SetModel("Player.gltf");
 
-  transform_.translate = Vector3(0.0f, 4.0f, 0.0f);
+  transform_.translate = Vector3(0.0f, 1.5f, 0.0f);
   transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
   transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
 

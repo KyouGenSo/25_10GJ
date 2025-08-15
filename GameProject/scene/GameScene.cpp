@@ -158,6 +158,7 @@ void GameScene::DrawImGui()
 #ifdef _DEBUG
 
   player_->DrawImGui();
+  followCamera_->DrawImGui();
 
 #endif // DEBUG
 }

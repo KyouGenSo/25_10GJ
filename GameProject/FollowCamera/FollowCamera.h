@@ -18,11 +18,14 @@ public: // メンバ関数
 
   void Update();
 
+  void FirstPersonMode();
+  void TopDownMode();
+
   void Reset();
 
   void ResetOffset();
 
-  void ImGuiDraw();
+  void DrawImGui();
 
   // offsetの計算関数
   Vector3 CalculateOffset() const;
@@ -30,9 +33,7 @@ public: // メンバ関数
   // 画面揺れ
   void ShakeScreen(float power);
 
-  /// <summary>
-  /// Setters
-  /// </summary>
+  //-----------------------------Setters------------------------------//
   void SetTarget(const Transform* target);
   void SetOffset(const Vector3& offset)
   {
@@ -43,8 +44,12 @@ public: // メンバ関数
   void SetRotateSpeed(const float speed) { rotateSpeed_ = speed; }
 
   /// <summary>
-  /// Getters
+  /// Set the camera mode.
   /// </summary>
+  /// <param name="mode">true: FirstPersonMode, false: TopDownMode</param>
+  void SetMode(bool mode) { mode_ = mode; } // true: FirstPersonMode, false: TopDownMode
+
+  //-----------------------------Getters------------------------------//
   Camera* GetCamera() { return camera_; }
   const Matrix4x4& GetViewProjection() const { return camera_->GetViewProjectionMatrix(); }
   const Vector3& GetOffset() const { return offset_; }
@@ -55,6 +60,8 @@ private: // メンバ変数
   const Transform* target_ = nullptr;
 
   Input* input_ = nullptr;
+
+  bool mode_ = true; // true: FirstPersonMode, false: TopDownMode
 
   Vector3 interTargetPos_;
 

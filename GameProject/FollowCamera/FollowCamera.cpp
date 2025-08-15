@@ -20,7 +20,20 @@ void FollowCamera::Finalize()
 
 }
 
-void FollowCamera::Update() {
+void FollowCamera::Update()
+{
+  if (mode_)
+  {
+    FirstPersonMode();
+  } else
+  {
+    TopDownMode();
+  }
+
+}
+
+void FollowCamera::FirstPersonMode()
+{
   // ゲームパッドによる回転
   if (!Input::GetInstance()->RStickInDeadZone()) {
     isRotating_ = true;
@@ -63,7 +76,10 @@ void FollowCamera::Update() {
 
     camera_->SetTranslate(interTargetPos_ + offset);
   }
+}
 
+void FollowCamera::TopDownMode()
+{
 }
 
 void FollowCamera::Reset() {
@@ -102,7 +118,7 @@ void FollowCamera::SetTarget(const Transform* target) {
   Reset();
 }
 
-void FollowCamera::ImGuiDraw() {
+void FollowCamera::DrawImGui() {
 #ifdef _DEBUG
   ImGui::Begin("FollowCamera");
 
