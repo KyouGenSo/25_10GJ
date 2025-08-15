@@ -13,13 +13,19 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="FollowCamera">
+      <UniqueIdentifier>{B83E8A0D-6A37-4A88-8BC7-D45E82E0C234}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="MyGame.cpp">
+    <ClCompile Include="MyGame\MyGame.cpp">
       <Filter>MyGame</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowCamera\FollowCamera.cpp">
+      <Filter>FollowCamera</Filter>
     </ClCompile>
     <ClCompile Include="scene\GameScene.cpp">
       <Filter>scene</Filter>
@@ -35,8 +41,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyGame.h">
+    <ClInclude Include="MyGame\MyGame.h">
       <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera\FollowCamera.h">
+      <Filter>FollowCamera</Filter>
     </ClInclude>
     <ClInclude Include="scene\GameScene.h">
       <Filter>scene</Filter>
