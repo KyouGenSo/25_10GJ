@@ -1,10 +1,25 @@
 #pragma once
+
 #include "Input.h"
 #include "Mat4x4Func.h"
 #include "Vec3Func.h"
 #include "Transform.h"
 #include "Camera.h"
+
 #include <math.h>
+#include <DirectXMath.h>
+
+struct TopDownSettings {
+  float baseHeight = 10.0f;
+  float heightMultiplier = 0.6f;
+  float minHeight = 26.0f;
+  float maxHeight = 500.0f;
+  float angleX = DirectX::XMConvertToRadians(25.0f);
+  float baseBackOffset = -10.0f;
+  float backOffsetMultiplier = 1.5f;
+  float minBackOffset = -500.0f;
+  float maxBackOffset = -52.0f;
+};
 
 class FollowCamera {
 
@@ -82,10 +97,7 @@ private: // メンバ変数
   float rotateSpeed_ = 0.05f;
 
   // TopDownMode専用パラメータ
-  float topDownBaseHeight_ = 50.0f;
-  float topDownHeightMultiplier_ = 1.5f;
-  float topDownMinHeight_ = 20.0f;
-  float topDownMaxHeight_ = 500.0f;
+  TopDownSettings topDownSettings_;
 
 };
 

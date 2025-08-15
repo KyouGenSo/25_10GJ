@@ -94,28 +94,38 @@ void FollowCamera::TopDownMode()
   // 中心位置に補間して追従
   interTargetPos_ = Vec3::Lerp(interTargetPos_, centerPos, t_);
 
-  // カメラの高度を計算
-  float cameraHeight = topDownBaseHeight_;
+  // カメラの高度とBackOffsetを計算
+  float cameraHeight = topDownSettings_.baseHeight;
+  float backOffset = topDownSettings_.baseBackOffset;
+  
   if (target2_) {
     // 2つのターゲット間の距離を計算
     Vector3 distance = Vec3::Subtract(target_->translate, target2_->translate);
     float targetDistance = static_cast<float>(Vec3::Length(distance));
     
     // 距離に応じて高度を調整
-    cameraHeight = topDownBaseHeight_ + targetDistance * topDownHeightMultiplier_;
+    cameraHeight = topDownSettings_.baseHeight + targetDistance * topDownSettings_.heightMultiplier;
     
-    // 最小・最大高度で制限
-    if (cameraHeight < topDownMinHeight_) cameraHeight = topDownMinHeight_;
-    if (cameraHeight > topDownMaxHeight_) cameraHeight = topDownMaxHeight_;
+    // 距離に応じてBackOffsetも調整
+    backOffset = topDownSettings_.baseBackOffset - targetDistance * topDownSettings_.backOffsetMultiplier;
+    
+    // 高度の最小・最大制限
+    if (cameraHeight < topDownSettings_.minHeight) cameraHeight = topDownSettings_.minHeight;
+    if (cameraHeight > topDownSettings_.maxHeight) cameraHeight = topDownSettings_.maxHeight;
+    
+    // BackOffsetの最小・最大制限
+    if (backOffset < topDownSettings_.minBackOffset) backOffset = topDownSettings_.minBackOffset;
+    if (backOffset > topDownSettings_.maxBackOffset) backOffset = topDownSettings_.maxBackOffset;
   }
 
-  // カメラの位置を設定（中心の真上）
+  // カメラの位置を設定（俯瞰視点：後方斜め上）
   Vector3 cameraPos = interTargetPos_;
   cameraPos.y = cameraHeight;
+  cameraPos.z += backOffset; // 距離に応じて調整された後方オフセット
   camera_->SetTranslate(cameraPos);
 
-  // カメラの回転を固定（真下を向く）
-  camera_->SetRotate(Vector3(1.5708f, 0.0f, 0.0f)); // 90度（π/2ラジアン）をX軸で回転
+  // カメラの回転を固定（俯瞰視点：斜め下を向く）
+  camera_->SetRotate(Vector3(topDownSettings_.angleX, 0.0f, 0.0f));
 }
 
 void FollowCamera::Reset() {
@@ -180,10 +190,24 @@ void FollowCamera::DrawImGui() {
     // TopDownMode用の設定
     ImGui::Separator();
     ImGui::Text("TopDown Settings");
-    ImGui::DragFloat("Base Height", &topDownBaseHeight_, 0.5f, 5.0f, 100.0f);
-    ImGui::DragFloat("Height Multiplier", &topDownHeightMultiplier_, 0.01f, 0.0f, 2.0f);
-    ImGui::DragFloat("Min Height", &topDownMinHeight_, 0.5f, 1.0f, 50.0f);
-    ImGui::DragFloat("Max Height", &topDownMaxHeight_, 0.5f, 10.0f, 200.0f);
+    ImGui::DragFloat("Base Height", &topDownSettings_.baseHeight, 0.5f, 5.0f, 100.0f);
+    ImGui::DragFloat("Height Multiplier", &topDownSettings_.heightMultiplier, 0.01f, 0.0f, 2.0f);
+    ImGui::DragFloat("Min Height", &topDownSettings_.minHeight, 0.5f, 1.0f, 50.0f);
+    ImGui::DragFloat("Max Height", &topDownSettings_.maxHeight, 0.5f, 10.0f, 200.0f);
+    
+    ImGui::Separator();
+    ImGui::Text("Camera Angle Settings");
+    float angleDegrees = topDownSettings_.angleX * 57.2958f; // ラジアンから度に変換
+    if (ImGui::DragFloat("Angle X (degrees)", &angleDegrees, 1.0f, 0.0f, 90.0f)) {
+      topDownSettings_.angleX = angleDegrees * 0.0174533f; // 度からラジアンに変換
+    }
+    
+    ImGui::Separator();
+    ImGui::Text("Back Offset Settings");
+    ImGui::DragFloat("Base Back Offset", &topDownSettings_.baseBackOffset, 0.5f, topDownSettings_.minBackOffset, topDownSettings_.maxBackOffset);
+    ImGui::DragFloat("Back Offset Multiplier", &topDownSettings_.backOffsetMultiplier, 0.01f, 0.0f, 2.0f);
+    ImGui::DragFloat("Min Back Offset", &topDownSettings_.minBackOffset, 0.5f, -200.0f, 200.0f);
+    ImGui::DragFloat("Max Back Offset", &topDownSettings_.maxBackOffset, 0.5f, -200.0f, 200.0f);
     
     ImGui::Separator();
     ImGui::Text("Target Info");
