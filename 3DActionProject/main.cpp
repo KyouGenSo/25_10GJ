@@ -1,7 +1,15 @@
-﻿#include <iostream>
-#include <windows.h>
+﻿#include"TakoFramework.h"
+#include"MyGame.h"
 
+//Windowsプログラムのエントリーポイント
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-    std::cout << "Hello World!\n";
+
+	TakoFramework* game = new MyGame();
+
+	game->Run();
+
+	delete game;
+
+	return 0;
 }

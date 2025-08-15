@@ -1,11 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36121.58 d17.14
+VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DActionProject", "3DActionProject\3DActionProject.vcxproj", "{19540CF1-6FC6-4A6E-8612-A1E088F1B26E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_3DActionProject", "3DActionProject\3DActionProject.vcxproj", "{19540CF1-6FC6-4A6E-8612-A1E088F1B26E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5667D840-F080-4F39-B016-FD2C1B9375E7} = {5667D840-F080-4F39-B016-FD2C1B9375E7}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\TakoEngine\project\TakoEngine.vcxproj", "{5667D840-F080-4F39-B016-FD2C1B9375E7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_Engine", "Engine\TakoEngine\project\TakoEngine.vcxproj", "{5667D840-F080-4F39-B016-FD2C1B9375E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77} = {371B9FA9-4C90-4AC6-A123-ACED756D6C77}
+		{FFA51982-471D-4530-909E-C8FB8FE4F342} = {FFA51982-471D-4530-909E-C8FB8FE4F342}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "Engine\TakoEngine\project\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui", "Engine\TakoEngine\project\externals\imgui\imgui.vcxproj", "{FFA51982-471D-4530-909E-C8FB8FE4F342}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +37,27 @@ Global
 		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Debug|x64.ActiveCfg = Debug|x64
 		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Debug|x64.Build.0 = Debug|x64
 		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Debug|x86.ActiveCfg = Debug|x64
+		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Debug|x86.Build.0 = Debug|x64
 		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Release|x64.ActiveCfg = Release|x64
 		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Release|x64.Build.0 = Release|x64
 		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Release|x86.ActiveCfg = Release|x64
+		{5667D840-F080-4F39-B016-FD2C1B9375E7}.Release|x86.Build.0 = Release|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x64.ActiveCfg = Debug|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x64.Build.0 = Debug|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x86.ActiveCfg = Debug|Win32
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x86.Build.0 = Debug|Win32
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.ActiveCfg = Release|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.Build.0 = Release|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x86.ActiveCfg = Release|Win32
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x86.Build.0 = Release|Win32
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Debug|x64.ActiveCfg = Debug|x64
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Debug|x64.Build.0 = Debug|x64
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Debug|x86.ActiveCfg = Debug|Win32
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Debug|x86.Build.0 = Debug|Win32
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Release|x64.ActiveCfg = Release|x64
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Release|x64.Build.0 = Release|x64
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Release|x86.ActiveCfg = Release|Win32
+		{FFA51982-471D-4530-909E-C8FB8FE4F342}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
