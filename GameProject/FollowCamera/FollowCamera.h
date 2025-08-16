@@ -84,13 +84,15 @@ private: // メンバ変数
 
   Vector3 interTargetPos_;
 
-  Vector3 offset_ = { 0.0f, 3.0f, -18.0f };
+  Vector3 offset_ = { 0.0f, 2.0f, -40.0f };
 
-  Vector3 offsetOrigin_ = { 0.0f, 3.0f, -18.0f };
+  Vector3 offsetOrigin_ = { 0.0f, 2.0f, -40.0f };
 
   float t_ = 0.18f;
 
   float destinationAngleY_ = 0.0f;
+  float destinationAngleX_ = 15.0f;
+  float destinationAngleZ_ = 0.0f;
 
   bool isRotating_ = false;
 

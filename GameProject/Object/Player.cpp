@@ -51,7 +51,7 @@ void Player::Move()
 
     if (mode_)
     {
-      rotationMatrix = Mat4x4::MakeRotateXYZ(camera_->GetRotate());
+      rotationMatrix = Mat4x4::MakeRotateY(camera_->GetRotateY());
 
       velocity_ = Mat4x4::TransFormNormal(rotationMatrix, velocity_);
     }

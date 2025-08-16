@@ -13,6 +13,8 @@ void FollowCamera::Initialize(Camera* camera) {
   input_ = Input::GetInstance();
 
   camera_ = camera;
+
+  destinationAngleX_ = DirectX::XMConvertToRadians(15.0f);
 }
 
 void FollowCamera::Finalize()
@@ -62,8 +64,10 @@ void FollowCamera::FirstPersonMode()
 
 
   // カメラの角度を目標角度に向けて補間
-  float angle = Vec3::LerpShortAngle(camera_->GetRotate().y, destinationAngleY_, 0.15f);
-  camera_->SetRotate(Vector3(0.0f, angle, 0.0f));
+  float angleY = Vec3::LerpShortAngle(camera_->GetRotate().y, destinationAngleY_, 0.15f);
+  float angleX = Vec3::LerpShortAngle(camera_->GetRotate().x, destinationAngleX_, 0.15f);
+  float angleZ = Vec3::LerpShortAngle(camera_->GetRotate().z, destinationAngleZ_, 0.15f);
+  camera_->SetRotate(Vector3(angleX, angleY, angleZ));
 
 
   // playerの位置に補間して追従
@@ -186,6 +190,22 @@ void FollowCamera::DrawImGui() {
     ImGui::DragFloat("Offset.y", &offset_.y, 0.1f);
     ImGui::DragFloat("Offset.z", &offsetOrigin_.z, 0.1f);
     ImGui::DragFloat("Rotate Speed", &rotateSpeed_, 0.01f);
+    
+    ImGui::Separator();
+    ImGui::Text("Camera Rotation (degrees)");
+    float angleXDegrees = destinationAngleX_ * 57.2958f; // ラジアンから度に変換
+    float angleYDegrees = destinationAngleY_ * 57.2958f;
+    float angleZDegrees = destinationAngleZ_ * 57.2958f;
+    
+    if (ImGui::DragFloat("Angle X", &angleXDegrees, 1.0f, -90.0f, 90.0f)) {
+      destinationAngleX_ = angleXDegrees * 0.0174533f; // 度からラジアンに変換
+    }
+    if (ImGui::DragFloat("Angle Y", &angleYDegrees, 1.0f, -180.0f, 180.0f)) {
+      destinationAngleY_ = angleYDegrees * 0.0174533f;
+    }
+    if (ImGui::DragFloat("Angle Z", &angleZDegrees, 1.0f, -90.0f, 90.0f)) {
+      destinationAngleZ_ = angleZDegrees * 0.0174533f;
+    }
   } else {
     // TopDownMode用の設定
     ImGui::Separator();
