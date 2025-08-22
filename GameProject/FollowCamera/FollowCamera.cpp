@@ -158,7 +158,7 @@ Vector3 FollowCamera::CalculateOffset() const {
   // カメラの角度から回転行列を算出
   Matrix4x4 rotationMatrix = Mat4x4::MakeRotateXYZ(camera_->GetRotate());
 
-  offset = Mat4x4::TransFormNormal(rotationMatrix, offset);
+  offset = Mat4x4::TransformNormal(rotationMatrix, offset);
 
   return offset;
 }

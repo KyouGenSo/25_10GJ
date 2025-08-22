@@ -53,7 +53,7 @@ void Player::Move()
     {
       rotationMatrix = Mat4x4::MakeRotateY(camera_->GetRotateY());
 
-      velocity_ = Mat4x4::TransFormNormal(rotationMatrix, velocity_);
+      velocity_ = Mat4x4::TransformNormal(rotationMatrix, velocity_);
     }
 
     transform_.translate += velocity_;
