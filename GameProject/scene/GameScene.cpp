@@ -67,6 +67,8 @@ void GameScene::Initialize()
   followCamera_->SetTarget(&player_->GetTransform());
   followCamera_->SetTarget2(&enemyTransform_);
 
+
+  ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
 
 void GameScene::Finalize()

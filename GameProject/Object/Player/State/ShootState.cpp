@@ -32,8 +32,8 @@ void ShootState::Update(Player* player, float deltaTime)
 		fireRateTimer_ = fireRate_;
 	}
 	
-	// 移動処理（射撃中は遅く移動）
-	player->Move(0.3f);
+	// 移動処理
+	player->Move(0.5f);
 }
 
 void ShootState::Exit(Player* player)
