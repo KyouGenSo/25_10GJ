@@ -18,6 +18,15 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{d65b8000-b0cc-4fba-a0a9-615e83f5f731}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Player">
+      <UniqueIdentifier>{96f89a17-9a2b-440d-a2aa-684b74ce08fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\Input">
+      <UniqueIdentifier>{450f4fb5-36fd-4024-bcd2-b3db6b3d4f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\State">
+      <UniqueIdentifier>{4cb39fb4-efb0-4602-94cf-025f0769bf0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -38,10 +47,37 @@
     <ClCompile Include="scene\TitleScene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Player.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\Player\Input\InputHandler.cpp">
+      <Filter>Object\Player\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\IdleState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\PlayerState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\PlayerStateMachine.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\MoveState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\Player.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\AttackState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\DashState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\ParryState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player\State\ShootState.cpp">
+      <Filter>Object\Player\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame\MyGame.h">
@@ -62,8 +98,35 @@
     <ClInclude Include="scene\TitleScene.h">
       <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Player.h">
-      <Filter>Object</Filter>
+    <ClInclude Include="Object\Player\Input\InputHandler.h">
+      <Filter>Object\Player\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\IdleState.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\PlayerState.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\PlayerStateMachine.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\MoveState.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\Player.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\AttackState.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\DashState.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\ParryState.h">
+      <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\State\ShootState.h">
+      <Filter>Object\Player\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

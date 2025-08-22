@@ -12,12 +12,10 @@
 #include "EmitterManager.h"
 #include "Object3d.h"
 #include "Model.h"
-#include "Object/Player.h"
+#include "Object/Player/Player.h"
 #include "ShadowRenderer.h"
 
 #include <numbers>
-
-#include "Object/Player.h"
 
 #ifdef _DEBUG
 #include"ImGui.h"

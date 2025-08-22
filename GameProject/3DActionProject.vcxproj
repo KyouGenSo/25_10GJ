@@ -154,7 +154,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGame\MyGame.cpp" />
-    <ClCompile Include="Object\Player.cpp" />
+    <ClCompile Include="Object\Player\Input\InputHandler.cpp" />
+    <ClCompile Include="Object\Player\Player.cpp" />
+    <ClCompile Include="Object\Player\State\AttackState.cpp" />
+    <ClCompile Include="Object\Player\State\DashState.cpp" />
+    <ClCompile Include="Object\Player\State\IdleState.cpp" />
+    <ClCompile Include="Object\Player\State\ParryState.cpp" />
+    <ClCompile Include="Object\Player\State\PlayerState.cpp" />
+    <ClCompile Include="Object\Player\State\PlayerStateMachine.cpp" />
+    <ClCompile Include="Object\Player\State\ShootState.cpp" />
+    <ClCompile Include="Object\Player\State\MoveState.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\SampleScene.cpp" />
     <ClCompile Include="scene\SceneFactory.cpp" />
@@ -174,7 +183,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="FollowCamera\FollowCamera.h" />
     <ClInclude Include="MyGame\MyGame.h" />
-    <ClInclude Include="Object\Player.h" />
+    <ClInclude Include="Object\Player\Input\InputHandler.h" />
+    <ClInclude Include="Object\Player\Player.h" />
+    <ClInclude Include="Object\Player\State\AttackState.h" />
+    <ClInclude Include="Object\Player\State\DashState.h" />
+    <ClInclude Include="Object\Player\State\IdleState.h" />
+    <ClInclude Include="Object\Player\State\ParryState.h" />
+    <ClInclude Include="Object\Player\State\PlayerState.h" />
+    <ClInclude Include="Object\Player\State\PlayerStateMachine.h" />
+    <ClInclude Include="Object\Player\State\ShootState.h" />
+    <ClInclude Include="Object\Player\State\MoveState.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\SampleScene.h" />
     <ClInclude Include="scene\SceneFactory.h" />
