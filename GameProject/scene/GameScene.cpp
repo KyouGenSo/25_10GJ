@@ -13,6 +13,7 @@
 #include "Object3d.h"
 #include "Model.h"
 #include "Object/Player.h"
+#include "ShadowRenderer.h"
 
 #include <numbers>
 
@@ -50,7 +51,7 @@ void GameScene::Initialize()
   ground_->SetUvTransform(groundUvTransform_);
 
   // 敵モデルの初期化
-  enemyTransform_.translate = Vector3(0.0f, 1.5f, 10.0f);
+  enemyTransform_.translate = Vector3(0.0f, 2.5f, 10.0f);
   enemyTransform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
   enemyTransform_.scale = Vector3(1.0f, 1.0f, 1.0f);
   enemy_ = std::make_unique<Object3d>();
@@ -119,6 +120,15 @@ void GameScene::Draw()
 
   skyBox_->Draw();
 
+  if (ShadowRenderer::GetInstance()->IsEnabled())
+  {
+    ShadowRenderer::GetInstance()->BeginShadowPass();
+    ground_->Draw();
+    player_->Draw();
+    enemy_->Draw();
+    ShadowRenderer::GetInstance()->EndShadowPass();
+  }
+
   //------------------背景Spriteの描画------------------//
   // スプライト共通描画設定
   SpriteBasic::GetInstance()->SetCommonRenderSetting();
@@ -173,6 +183,7 @@ void GameScene::DrawImGui()
 
   player_->DrawImGui();
   followCamera_->DrawImGui();
+  ShadowRenderer::GetInstance()->DrawImGui();
 
 #endif // DEBUG
 }

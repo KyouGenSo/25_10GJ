@@ -60,6 +60,7 @@ struct PixelShaderOutput
 ConstantBuffer<Material> gMaterial : register(b0);
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<ShadowConstants> gShadowConstants : register(b4);
 
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
@@ -68,6 +69,55 @@ StructuredBuffer<PointLight> gPointLights : register(t1);
 StructuredBuffer<SpotLight> gSpotLight : register(t2);
 
 TextureCube<float4> gEnvironmentMap : register(t3); // Optional, if environment mapping is used
+Texture2D<float> gShadowMap : register(t4); // シャドウマップ
+SamplerComparisonState gShadowSampler : register(s1); // シャドウマップ用比較サンプラー
+
+// シャドウファクターを計算（動的PCF付き）
+float CalculateShadowFactor(float4 lightSpacePos, float3 normal)
+{
+    // 透視変換の実行
+    float3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
+    
+    // NDC空間からテクスチャ座標に変換
+    float2 shadowTexCoord;
+    shadowTexCoord.x = projCoords.x * 0.5 + 0.5;
+    shadowTexCoord.y = -projCoords.y * 0.5 + 0.5;
+    
+    // シャドウマップの範囲外チェック
+    if (shadowTexCoord.x < 0.0 || shadowTexCoord.x > 1.0 ||
+        shadowTexCoord.y < 0.0 || shadowTexCoord.y > 1.0 ||
+        projCoords.z < 0.0 || projCoords.z > 1.0) {
+        return 1.0; // シャドウマップの範囲外は照明
+    }
+    
+    // 法線オフセットバイアスを適用
+    float3 lightDir = normalize(gDirectionalLight.direction);
+    float NdotL = max(0.0, dot(normal, -lightDir));
+    float bias = gShadowConstants.shadowBias + (1.0 - NdotL) * gShadowConstants.normalOffsetBias;
+    
+    // バイアスを適用
+    float currentDepth = projCoords.z - bias;
+    
+    // 動的PCF（Percentage Closer Filtering）
+    float shadowFactor = 0.0;
+    float2 texelSize = 1.0 / gShadowConstants.shadowMapSize;
+    
+    // カーネルサイズに基づくサンプリング範囲
+    int kernelRadius = int(gShadowConstants.pcfKernelSize) / 2;
+    float sampleCount = 0.0;
+    
+    for (int x = -kernelRadius; x <= kernelRadius; ++x) {
+        for (int y = -kernelRadius; y <= kernelRadius; ++y) {
+            float2 offset = float2(x, y) * texelSize;
+            shadowFactor += gShadowMap.SampleCmpLevelZero(gShadowSampler, 
+                           shadowTexCoord + offset, currentDepth);
+            sampleCount += 1.0;
+        }
+    }
+    shadowFactor /= sampleCount; // サンプル数で平均
+    
+    return shadowFactor;
+}
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
@@ -75,6 +125,12 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     float4 transformedUV = mul(float4(input.texcoord, 0, 1), gMaterial.uvTransform);
     float4 texColor = gTexture.Sample(gSampler, transformedUV.xy);
+    
+    // シャドウファクターを計算
+    float shadowFactor = 1.0; // デフォルトでは影なし
+    if (gShadowConstants.enableShadow != 0) {
+        shadowFactor = CalculateShadowFactor(input.lightSpacePos, normalize(input.normal));
+    }
     
     if (gMaterial.enableLighting != 0)
     {
@@ -88,28 +144,28 @@ PixelShaderOutput main(VertexShaderOutput input)
         {
             float3 halfVector = normalize(-gDirectionalLight.direction + toEye);
             float NdotH = dot(normalize(input.normal), halfVector);
-            float specularPow = pow(saturate(NdotH), gMaterial.shininess); // ���ˋ��x
+            float specularPow = pow(saturate(NdotH), gMaterial.shininess); // ���ˋ��x
             
-            // �g�U����
+            // �g�U����
             float NdotL = saturate(dot(normalize(input.normal), -gDirectionalLight.direction));
-            directionalLightDiffuse = texColor.rgb * gMaterial.color.rgb * gDirectionalLight.color.rgb * gDirectionalLight.intensity * NdotL;
+            directionalLightDiffuse = texColor.rgb * gMaterial.color.rgb * gDirectionalLight.color.rgb * gDirectionalLight.intensity * NdotL * shadowFactor;
             
-            // ���ʔ���
-            directionalLightSpecular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
+            // 鏡面反射
+            directionalLightSpecular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float3(1.0f, 1.0f, 1.0f) * shadowFactor;
         }
         else if (gDirectionalLight.lightType == 1) // half-Lambertian reflection
         {
             float3 halfVector = normalize(-gDirectionalLight.direction + toEye);
             float NdotH = dot(normalize(input.normal), halfVector);
-            float specularPow = pow(saturate(NdotH), gMaterial.shininess); // ���ˋ��x
+            float specularPow = pow(saturate(NdotH), gMaterial.shininess); // ���ˋ��x
             
-            // �g�U����
+            // �g�U����
             float NdotL = saturate(dot(normalize(input.normal), -gDirectionalLight.direction));
             float cos = pow(NdotL * 0.5 + 0.5, 2.0f);
-            directionalLightDiffuse = texColor.rgb * gMaterial.color.rgb * gDirectionalLight.color.rgb * gDirectionalLight.intensity * cos;
+            directionalLightDiffuse = texColor.rgb * gMaterial.color.rgb * gDirectionalLight.color.rgb * gDirectionalLight.intensity * cos * shadowFactor;
             
-            // ���ʔ���
-            directionalLightSpecular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
+            // 鏡面反射
+            directionalLightSpecular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float3(1.0f, 1.0f, 1.0f) * shadowFactor;
         }
         
         //---------------------------------- Point Light ----------------------------------
@@ -130,11 +186,11 @@ PixelShaderOutput main(VertexShaderOutput input)
                 float factor = pow(saturate(-distance / gPointLights[i].radius + 1.0f), gPointLights[i].decay);
                 float3 pointLightColor = gPointLights[i].color.rgb * gPointLights[i].intensity * factor;
         
-                // �g�U����
+                // �g�U����
                 float NdotL = saturate(dot(normalize(input.normal), -pointLightDir));
                 totalPointLightDiffuse += texColor.rgb * gMaterial.color.rgb * pointLightColor * NdotL;
         
-                // ���ʔ���
+                // ���ʔ���
                 totalPointLightSpecular += gPointLights[i].color.rgb * gPointLights[i].intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
             }
         }
@@ -151,21 +207,21 @@ PixelShaderOutput main(VertexShaderOutput input)
                 
                 float3 halfVector = normalize(-spotLightDirOnSurface + toEye);
                 float NdotH = dot(normalize(input.normal), halfVector);
-                float specularPow = pow(saturate(NdotH), gMaterial.shininess); // ���ˋ��x
+                float specularPow = pow(saturate(NdotH), gMaterial.shininess); // ���ˋ��x
                 
                 float distance = length(gSpotLight[j].position - input.worldPos);
-                float factor = pow(saturate(-distance / gSpotLight[j].radius + 1.0f), gSpotLight[j].decay); // �����ɂ�錸��(0.0f ~ 1.0f
+                float factor = pow(saturate(-distance / gSpotLight[j].radius + 1.0f), gSpotLight[j].decay); // �����ɂ�錸��(0.0f ~ 1.0f
                 
                 float cosAngle = dot(spotLightDirOnSurface, gSpotLight[j].direction);
                 float falloffFactor = saturate((cosAngle - gSpotLight[j].cosAngle) / (1.0f - gSpotLight[j].cosAngle));
                 
                 float3 spotLightColor = gSpotLight[j].color.rgb * gSpotLight[j].intensity * factor * falloffFactor;
                 
-                // �g�U����
+                // �g�U����
                 float NdotL = saturate(dot(normalize(input.normal), -spotLightDirOnSurface));
                 spotLightDiffuse += texColor.rgb * gMaterial.color.rgb * spotLightColor * NdotL;
                 
-                // ���ʔ���
+                // ���ʔ���
                 spotLightSpecular += gSpotLight[j].color.rgb * gSpotLight[j].intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
             }
         }
@@ -184,7 +240,7 @@ PixelShaderOutput main(VertexShaderOutput input)
 
         if (gMaterial.enableEnvMap != 0)
         {
-        // ���}�b�s���O��K�p
+        // ���}�b�s���O��K�p
             float3 cameraToPos = normalize(input.worldPos - gCamera.worldPos);
             float3 refelectedVector = reflect(cameraToPos, normalize(input.normal));
             float4 environmentColor = gEnvironmentMap.Sample(gSampler, refelectedVector);
@@ -197,7 +253,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         output.color = texColor * gMaterial.color;
         if (gMaterial.enableEnvMap != 0)
         {
-        // ���}�b�s���O��K�p
+        // ���}�b�s���O��K�p
             float3 cameraToPos = normalize(input.worldPos - gCamera.worldPos);
             float3 refelectedVector = reflect(cameraToPos, normalize(input.normal));
             float4 environmentColor = gEnvironmentMap.Sample(gSampler, refelectedVector);
