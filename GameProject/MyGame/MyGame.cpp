@@ -50,7 +50,8 @@ void MyGame::Finalize()
 {
   winApp_->UnregisterOnResizeFunc(spriteBasicOnresizeId);
 
-  TakoFramework::Finalize();
+  // GPUパーティクルの解放
+  GPUParticle::GetInstance()->Finalize();
 
   // Audioの解放
   Audio::GetInstance()->Finalize();
@@ -58,8 +59,7 @@ void MyGame::Finalize()
   // 入力クラスの解放
   Input::GetInstance()->Finalize();
 
-  // GPUパーティクルの解放
-  GPUParticle::GetInstance()->Finalize();
+  TakoFramework::Finalize();
 }
 
 void MyGame::Update()
