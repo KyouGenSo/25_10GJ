@@ -13,6 +13,8 @@
 #include "Object3d.h"
 #include "Model.h"
 #include "ShadowRenderer.h"
+#include "CollisionManager.h"
+#include "../Collision/CollisionTypeIdDef.h"
 
 #include <numbers>
 
@@ -37,6 +39,10 @@ void GameScene::Initialize()
   skyBox_ = std::make_unique<SkyBox>();
   skyBox_->Initialize("my_skybox.dds");
 
+  // CollisionManagerの初期化（最初に行う）
+  CollisionManager* collisionManager = CollisionManager::GetInstance();
+  collisionManager->Initialize();
+
   // 床モデルのUV変換設定
   groundUvTransform_.translate = Vector3(0.0f, 0.0f, 0.0f);
   groundUvTransform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -60,13 +66,40 @@ void GameScene::Initialize()
   followCamera_->Initialize((*Object3dBasic::GetInstance()->GetCamera()));
   followCamera_->SetTarget(&player_->GetTransform());
   followCamera_->SetTarget2(&boss_->GetTransform());
-
+  
+#ifdef _DEBUG
+  // デバッグビルドではコライダー表示をデフォルトでON
+  collisionManager->SetDebugDrawEnabled(true);
+#endif
+  
+  // 衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
+  collisionManager->SetCollisionMask(
+    static_cast<uint32_t>(CollisionTypeId::kPlayerMeleeAttack),
+    static_cast<uint32_t>(CollisionTypeId::kEnemy),
+    true
+  );
+  
+  collisionManager->SetCollisionMask(
+    static_cast<uint32_t>(CollisionTypeId::kPlayer),
+    static_cast<uint32_t>(CollisionTypeId::kEnemyAttack),
+    true
+  );
 
   ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
 
 void GameScene::Finalize()
 {
+  // オブジェクトの終了処理
+  if (player_) {
+    player_->Finalize();
+  }
+  if (boss_) {
+    boss_->Finalize();
+  }
+  
+  // CollisionManagerのリセット
+  CollisionManager::GetInstance()->Reset();
 }
 
 void GameScene::Update()
@@ -96,6 +129,9 @@ void GameScene::Update()
   player_->Update();
   boss_->Update();
   followCamera_->Update();
+  
+  // 衝突判定の実行
+  CollisionManager::GetInstance()->CheckAllCollisions();
 
   // シーン遷移
   if (Input::GetInstance()->TriggerKey(DIK_RETURN))
@@ -140,6 +176,10 @@ void GameScene::Draw()
   SpriteBasic::GetInstance()->SetCommonRenderSetting();
 
 
+#ifdef _DEBUG
+  // コライダーのデバッグ描画
+  CollisionManager::GetInstance()->DrawColliders();
+#endif
 
 }
 
@@ -165,17 +205,15 @@ void GameScene::DrawWithoutEffect()
   // スプライト共通描画設定
   SpriteBasic::GetInstance()->SetCommonRenderSetting();
 
-
-
 }
 
 void GameScene::DrawImGui()
 {
 #ifdef _DEBUG
-
   player_->DrawImGui();
+  boss_->DrawImGui();
   followCamera_->DrawImGui();
   ShadowRenderer::GetInstance()->DrawImGui();
-
+  CollisionManager::GetInstance()->DrawImGui();
 #endif // DEBUG
 }

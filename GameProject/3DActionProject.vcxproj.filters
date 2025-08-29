@@ -12,6 +12,9 @@
     <Filter Include="FollowCamera">
       <UniqueIdentifier>{B83E8A0D-6A37-4A88-8BC7-D45E82E0C234}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{a8b2c4d5-9e7f-4b8c-9a5e-6f8d9c2e1b3a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{c9c423bc-ae11-4ec8-9076-12ef0dc66417}</UniqueIdentifier>
     </Filter>
@@ -84,8 +87,14 @@
     <ClCompile Include="Object\Boss\Boss.cpp">
       <Filter>Object\Boss</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Player\MeleeAttackCollider.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision\CollisionTypeIdDef.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
     <ClInclude Include="MyGame\MyGame.h">
       <Filter>MyGame</Filter>
     </ClInclude>
@@ -136,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Object\Boss\Boss.h">
       <Filter>Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player\MeleeAttackCollider.h">
+      <Filter>Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

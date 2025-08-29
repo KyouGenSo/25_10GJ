@@ -1,12 +1,16 @@
 #pragma once
 #include <memory>
 
+#include "Collider.h"
 #include "Transform.h"
 
 class Object3d;
 class PlayerStateMachine;
 class InputHandler;
 class Camera;
+class AABBCollider;
+class MeleeAttackCollider;
+class Boss;
 
 class Player
 {
@@ -39,11 +43,23 @@ public: // メンバ関数
   /// </summary>
   /// <param name="speedMultiplier">速度倍率（デフォルト1.0）</param>
   void Move(float speedMultiplier = 1.0f);
+  
+  /// <summary>
+  /// ターゲットへ移動
+  /// </summary>
+  void MoveToTarget(Boss* target, float deltaTime);
 
   /// <summary>
   /// ImGuiの描画
   /// </summary>
   void DrawImGui();
+  
+  /// <summary>
+  /// 攻撃関連
+  /// </summary>
+  void SetupColliders();
+  void UpdateAttackCollider();
+  void OnMeleeAttackHit(Collider* other);
 
   //-----------------------------Getters/Setters------------------------------//
   void SetSpeed(float speed) { speed_ = speed; }
@@ -60,6 +76,8 @@ public: // メンバ関数
   Object3d* GetModel() const { return model_.get(); }
   PlayerStateMachine* GetStateMachine() const { return stateMachine_.get(); }
   InputHandler* GetInputHandler() const { return inputHandler_.get(); }
+  MeleeAttackCollider* GetMeleeAttackCollider() const { return meleeAttackCollider_.get(); }
+  Transform* GetTransformPtr() { return &transform_; }
 
 private: // メンバ変数
 
@@ -76,5 +94,14 @@ private: // メンバ変数
   // システム
   std::unique_ptr<PlayerStateMachine> stateMachine_;
   std::unique_ptr<InputHandler> inputHandler_;
+  
+  // Colliders
+  std::unique_ptr<AABBCollider> bodyCollider_;
+  std::unique_ptr<MeleeAttackCollider> meleeAttackCollider_;
+  
+  // 攻撃関連
+  Boss* targetEnemy_ = nullptr;
+  bool isAttackHit_ = false;
+  float attackMoveSpeed_ = 2.0f;
 };
 
