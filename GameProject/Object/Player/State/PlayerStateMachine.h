@@ -24,8 +24,6 @@ public:
 	PlayerState* GetCurrentState() const { return currentState_; }
 	PlayerState* GetState(const std::string& name) const;
 
-	Player* GetPlayer() const { return player_; }
-
 private:
 	Player* player_;
 	PlayerState* currentState_;

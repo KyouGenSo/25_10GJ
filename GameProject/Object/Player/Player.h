@@ -46,20 +46,17 @@ public: // メンバ関数
 
   //-----------------------------Getters/Setters------------------------------//
   void SetSpeed(float speed) { speed_ = speed; }
-  float GetSpeed() const { return speed_; }
   void SetCamera(Camera* camera) { camera_ = camera; }
-  Camera* GetCamera() const { return camera_; }
   void SetMode(bool mode) { mode_ = mode; } // true: FirstPersonMode, false: TopDownMode
-  bool GetMode() const { return mode_; }
-
-  // 変形情報を取得・設定
-  const Transform& GetTransform() const { return transform_; }
   void SetTransform(const Transform& transform) { transform_ = transform; }
+  void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
 
-  // モデルへのアクセス
+  float GetSpeed() const { return speed_; }
+  Camera* GetCamera() const { return camera_; }
+  bool GetMode() const { return mode_; }
+  float GetHp() const { return hp_; }
+  const Transform& GetTransform() const { return transform_; }
   Object3d* GetModel() const { return model_.get(); }
-
-  // システムへのアクセス
   PlayerStateMachine* GetStateMachine() const { return stateMachine_.get(); }
   InputHandler* GetInputHandler() const { return inputHandler_.get(); }
 
@@ -72,6 +69,7 @@ private: // メンバ変数
   Vector3 velocity_{}; ///< 速度
   float speed_ = 0.5f; ///< 移動速度
   float targetAngle_ = 0.f; ///< 目標角度
+  float hp_ = 100.f; ///< 体力
 
   bool mode_ = false; // true: FirstPersonMode, false: TopDownMode
 

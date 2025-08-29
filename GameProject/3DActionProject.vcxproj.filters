@@ -21,11 +21,11 @@
     <Filter Include="Object\Player">
       <UniqueIdentifier>{96f89a17-9a2b-440d-a2aa-684b74ce08fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Player\Input">
-      <UniqueIdentifier>{450f4fb5-36fd-4024-bcd2-b3db6b3d4f77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Player\State">
       <UniqueIdentifier>{4cb39fb4-efb0-4602-94cf-025f0769bf0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{450f4fb5-36fd-4024-bcd2-b3db6b3d4f77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +48,6 @@
       <Filter>scene</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Object\Player\Input\InputHandler.cpp">
-      <Filter>Object\Player\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Player\State\IdleState.cpp">
       <Filter>Object\Player\State</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     <ClCompile Include="Object\Player\State\ShootState.cpp">
       <Filter>Object\Player\State</Filter>
     </ClCompile>
+    <ClCompile Include="Input\InputHandler.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame\MyGame.h">
@@ -97,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="scene\TitleScene.h">
       <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Player\Input\InputHandler.h">
-      <Filter>Object\Player\Input</Filter>
     </ClInclude>
     <ClInclude Include="Object\Player\State\IdleState.h">
       <Filter>Object\Player\State</Filter>
@@ -127,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Object\Player\State\ShootState.h">
       <Filter>Object\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputHandler.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

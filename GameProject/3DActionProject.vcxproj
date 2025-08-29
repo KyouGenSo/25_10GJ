@@ -152,9 +152,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
+    <ClCompile Include="Input\InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGame\MyGame.cpp" />
-    <ClCompile Include="Object\Player\Input\InputHandler.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="Object\Player\State\AttackState.cpp" />
     <ClCompile Include="Object\Player\State\DashState.cpp" />
@@ -182,8 +182,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FollowCamera\FollowCamera.h" />
+    <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="MyGame\MyGame.h" />
-    <ClInclude Include="Object\Player\Input\InputHandler.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="Object\Player\State\AttackState.h" />
     <ClInclude Include="Object\Player\State\DashState.h" />

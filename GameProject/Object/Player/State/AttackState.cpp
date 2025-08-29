@@ -1,12 +1,12 @@
 #include "AttackState.h"
 #include "PlayerStateMachine.h"
 #include "../Player.h"
-#include "../Input/InputHandler.h"
+#include "Input/InputHandler.h"
 
 void AttackState::Enter(Player* player)
 {
 	// 攻撃アニメーションを再生
-	// TODO: Object3dにアニメーション再生機能を追加後に実装
+  // TODO: アニメーション作成後に実装
 	// player->GetModel()->PlayAnimation("Attack" + std::to_string(comboCount_));
 	
 	attackTimer_ = 0.0f;

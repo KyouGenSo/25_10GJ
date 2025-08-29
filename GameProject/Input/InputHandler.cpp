@@ -1,5 +1,5 @@
 #include "InputHandler.h"
-#include "../Player.h"
+#include "Object/Player/Player.h"
 #include "Input.h"
 #include "Vector2.h"
 

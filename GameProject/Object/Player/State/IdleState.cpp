@@ -2,12 +2,12 @@
 #include "PlayerStateMachine.h"
 #include "../Player.h"
 #include "Input.h"
-#include "Object/Player/Input/InputHandler.h"
+#include "Input/InputHandler.h"
 
 void IdleState::Enter(Player* player)
 {
 	// モデルのアイドルアニメーションを再生
-	// TODO: Object3dにアニメーション再生機能を追加後に実装
+  // TODO: アニメーション作成後に実装
 	// player->GetModel()->PlayAnimation("Idle");
 }
 
