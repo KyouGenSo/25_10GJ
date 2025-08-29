@@ -7,8 +7,8 @@
 #include "BoneTracker.h"
 #include "CharacterEffectPresets.h"
 #include "FollowCamera/followCamera.h"
-
-class Player;
+#include "Object/Player/Player.h"
+#include "Object/Boss/Boss.h"
 
 class GameScene : public BaseScene
 {
@@ -44,12 +44,13 @@ private: // メンバ変数
   // SkyBox
   std::unique_ptr<SkyBox> skyBox_;
   std::unique_ptr<Object3d> ground_;
-  std::unique_ptr<Object3d> enemy_;
-  Player* player_;
+
+  std::unique_ptr<Player> player_;
+  std::unique_ptr<Boss> boss_;
+
   std::unique_ptr<FollowCamera> followCamera_;
 
   Transform groundUvTransform_{};
-  Transform enemyTransform_{};
 
   bool isDebug_ = false;
 

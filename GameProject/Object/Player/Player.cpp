@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Object3d.h"
 #include "Input.h"
 #include "Camera.h"
 #include "State/PlayerStateMachine.h"
@@ -72,8 +73,6 @@ void Player::Update()
   }
 
   // 旧実装
-  //Move();
-  //transform_.rotate.y = Vec3::LerpShortAngle(transform_.rotate.y, targetAngle_, 0.2f);
   model_->SetTransform(transform_);
   model_->Update();
 }

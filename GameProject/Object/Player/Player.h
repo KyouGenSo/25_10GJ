@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
 
-#include "Object3d.h"
+#include "Transform.h"
 
+class Object3d;
 class PlayerStateMachine;
 class InputHandler;
 class Camera;
@@ -63,15 +64,14 @@ public: // メンバ関数
 private: // メンバ変数
 
   std::unique_ptr<Object3d> model_; ///< モデル
-  Camera* camera_ = nullptr; ///< カメラ
+  Camera* camera_ = nullptr;        ///< カメラ
+  Transform transform_{};           ///< 変形情報
+  Vector3 velocity_{};              ///< 速度
+  float speed_ = 0.5f;              ///< 移動速度
+  float targetAngle_ = 0.f;         ///< 目標角度
+  float hp_ = 100.f;                ///< 体力
 
-  Transform transform_{}; ///< 変形情報
-  Vector3 velocity_{}; ///< 速度
-  float speed_ = 0.5f; ///< 移動速度
-  float targetAngle_ = 0.f; ///< 目標角度
-  float hp_ = 100.f; ///< 体力
-
-  bool mode_ = false; // true: FirstPersonMode, false: TopDownMode
+  bool mode_ = false;               ///< true: ThirdPersonMode, false: TopDownMode
 
   // システム
   std::unique_ptr<PlayerStateMachine> stateMachine_;

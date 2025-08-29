@@ -27,6 +27,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{450f4fb5-36fd-4024-bcd2-b3db6b3d4f77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Boss">
+      <UniqueIdentifier>{2eb72ef7-09cc-4ffc-9df7-2ec9f26636ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -78,6 +81,9 @@
     <ClCompile Include="Input\InputHandler.cpp">
       <Filter>Input</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Boss\Boss.cpp">
+      <Filter>Object\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame\MyGame.h">
@@ -127,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Input\InputHandler.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Boss.h">
+      <Filter>Object\Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,6 @@
 #include "EmitterManager.h"
 #include "Object3d.h"
 #include "Model.h"
-#include "Object/Player/Player.h"
 #include "ShadowRenderer.h"
 
 #include <numbers>
@@ -49,23 +48,18 @@ void GameScene::Initialize()
   ground_->SetUvTransform(groundUvTransform_);
 
   // 敵モデルの初期化
-  enemyTransform_.translate = Vector3(0.0f, 2.5f, 10.0f);
-  enemyTransform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
-  enemyTransform_.scale = Vector3(1.0f, 1.0f, 1.0f);
-  enemy_ = std::make_unique<Object3d>();
-  enemy_->Initialize();
-  enemy_->SetModel("enemy.gltf");
-  enemy_->SetTransform(enemyTransform_);
+  boss_ = std::make_unique<Boss>();
+  boss_->Initialize();
 
   // Playerの初期化
-  player_ = new Player();
+  player_ = std::make_unique<Player>();
   player_->Initialize();
   player_->SetCamera((*Object3dBasic::GetInstance()->GetCamera()));
 
   followCamera_ = std::make_unique<FollowCamera>();
   followCamera_->Initialize((*Object3dBasic::GetInstance()->GetCamera()));
   followCamera_->SetTarget(&player_->GetTransform());
-  followCamera_->SetTarget2(&enemyTransform_);
+  followCamera_->SetTarget2(&boss_->GetTransform());
 
 
   ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
@@ -73,7 +67,6 @@ void GameScene::Initialize()
 
 void GameScene::Finalize()
 {
-  delete player_;
 }
 
 void GameScene::Update()
@@ -96,13 +89,12 @@ void GameScene::Update()
   ///              更新処理               ///
   /// ================================== ///
 
-  enemy_->SetTransform(enemyTransform_);
   player_->SetMode(followCamera_->GetMode());
 
   skyBox_->Update();
   ground_->Update();
   player_->Update();
-  enemy_->Update();
+  boss_->Update();
   followCamera_->Update();
 
   // シーン遷移
@@ -125,7 +117,7 @@ void GameScene::Draw()
     ShadowRenderer::GetInstance()->BeginShadowPass();
     ground_->Draw();
     player_->Draw();
-    enemy_->Draw();
+    boss_->Draw();
     ShadowRenderer::GetInstance()->EndShadowPass();
   }
 
@@ -141,7 +133,7 @@ void GameScene::Draw()
 
   ground_->Draw();
   player_->Draw();
-  enemy_->Draw();
+  boss_->Draw();
 
   //------------------前景Spriteの描画------------------//
   // スプライト共通描画設定
