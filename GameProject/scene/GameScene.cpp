@@ -12,12 +12,10 @@
 #include "EmitterManager.h"
 #include "Object3d.h"
 #include "Model.h"
-#include "Object/Player.h"
+#include "Object/Player/Player.h"
 #include "ShadowRenderer.h"
 
 #include <numbers>
-
-#include "Object/Player.h"
 
 #ifdef _DEBUG
 #include"ImGui.h"
@@ -69,6 +67,8 @@ void GameScene::Initialize()
   followCamera_->SetTarget(&player_->GetTransform());
   followCamera_->SetTarget2(&enemyTransform_);
 
+
+  ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
 
 void GameScene::Finalize()
