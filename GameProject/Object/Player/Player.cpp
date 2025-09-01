@@ -93,7 +93,7 @@ void Player::Update()
     stateMachine_->Update(deltaTime);
   }
 
-  // 旧実装
+  // モデルの更新
   model_->SetTransform(transform_);
   model_->Update();
   
