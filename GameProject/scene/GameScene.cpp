@@ -30,6 +30,9 @@ void GameScene::Initialize()
   Object3dBasic::GetInstance()->SetDebug(false);
   Draw2D::GetInstance()->SetDebug(false);
   GPUParticle::GetInstance()->SetIsDebug(false);
+  CollisionManager* collisionManager = CollisionManager::GetInstance();
+  // デバッグビルドではコライダー表示をデフォルトでON
+  collisionManager->SetDebugDrawEnabled(true);
 #endif
   /// ================================== ///
   ///              初期化処理              ///
@@ -40,7 +43,6 @@ void GameScene::Initialize()
   skyBox_->Initialize("my_skybox.dds");
 
   // CollisionManagerの初期化（最初に行う）
-  CollisionManager* collisionManager = CollisionManager::GetInstance();
   collisionManager->Initialize();
 
   // 床モデルのUV変換設定
@@ -67,23 +69,12 @@ void GameScene::Initialize()
   followCamera_->SetTarget(&player_->GetTransform());
   followCamera_->SetTarget2(&boss_->GetTransform());
   
-#ifdef _DEBUG
-  // デバッグビルドではコライダー表示をデフォルトでON
-  collisionManager->SetDebugDrawEnabled(true);
-#endif
-  
   // 衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
-  collisionManager->SetCollisionMask(
-    static_cast<uint32_t>(CollisionTypeId::kPlayerMeleeAttack),
-    static_cast<uint32_t>(CollisionTypeId::kEnemy),
-    true
-  );
-  
-  collisionManager->SetCollisionMask(
-    static_cast<uint32_t>(CollisionTypeId::kPlayer),
-    static_cast<uint32_t>(CollisionTypeId::kEnemyAttack),
-    true
-  );
+  //collisionManager->SetCollisionMask(
+  //  static_cast<uint32_t>(CollisionTypeId::kPlayer),
+  //  static_cast<uint32_t>(CollisionTypeId::kEnemyAttack),
+  //  true
+  //);
 
   ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }

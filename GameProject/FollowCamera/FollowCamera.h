@@ -80,7 +80,7 @@ private: // メンバ変数
 
   Input* input_ = nullptr;
 
-  bool mode_ = false; // true: FirstPersonMode, false: TopDownMode
+  bool mode_ = true; // true: FirstPersonMode, false: TopDownMode
 
   Vector3 interTargetPos_;
 

@@ -33,7 +33,6 @@ void InputHandler::UpdateInputStates()
 	isDashing_ = input->TriggerKey(DIK_SPACE) || input->TriggerButton(XButtons.A);
 	isAttacking_ = input->TriggerKey(DIK_Z) || input->TriggerButton(XButtons.X);
 	isShooting_ = input->PushKey(DIK_LCONTROL) || input->GetRightTrigger() > 0.5f;
-	isParrying_ = input->TriggerKey(DIK_F) || input->TriggerButton(XButtons.B);
 	isPaused_ = input->TriggerKey(DIK_ESCAPE) || input->TriggerButton(XButtons.Start);
 }
 
@@ -55,11 +54,6 @@ bool InputHandler::IsAttacking() const
 bool InputHandler::IsShooting() const
 {
 	return isShooting_;
-}
-
-bool InputHandler::IsParrying() const
-{
-	return isParrying_;
 }
 
 bool InputHandler::IsPaused() const

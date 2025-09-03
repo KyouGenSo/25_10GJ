@@ -20,7 +20,6 @@ public:
 	bool IsDashing() const;
 	bool IsAttacking() const;
 	bool IsShooting() const;
-	bool IsParrying() const;
 	bool IsPaused() const;
 	
 	// 入力方向の取得
@@ -35,7 +34,6 @@ private:
 	bool isDashing_ = false;
 	bool isAttacking_ = false;
 	bool isShooting_ = false;
-	bool isParrying_ = false;
 	bool isPaused_ = false;
 	
 	Vector2 moveDirection_;
