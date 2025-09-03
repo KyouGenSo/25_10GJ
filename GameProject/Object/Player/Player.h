@@ -55,7 +55,7 @@ public: // メンバ関数
   //-----------------------------Getters/Setters------------------------------//
   void SetSpeed(float speed) { speed_ = speed; }
   void SetCamera(Camera* camera) { camera_ = camera; }
-  void SetMode(bool mode) { mode_ = mode; } // true: FirstPersonMode, false: TopDownMode
+  void SetMode(bool mode) { mode_ = mode; } // true: ThirdPersonMode, false: TopDownMode
   void SetTransform(const Transform& transform) { transform_ = transform; }
   void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
 
