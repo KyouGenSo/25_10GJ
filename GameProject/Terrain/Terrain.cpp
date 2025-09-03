@@ -9,6 +9,7 @@ void Terrain::Initialize()
     for (int i = 0; i < kNumBlocks; ++i)
     {
         auto block = std::make_unique<Block>();
+        block->Initialize();
         block->SetPosition(this->ToVector3(i));
         blocks_.emplace_back(std::move(block));
     }
