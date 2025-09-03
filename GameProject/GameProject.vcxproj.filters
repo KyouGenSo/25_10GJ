@@ -30,12 +30,6 @@
     <Filter Include="Object\Boss">
       <UniqueIdentifier>{2eb72ef7-09cc-4ffc-9df7-2ec9f26636ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Terrain">
-      <UniqueIdentifier>{b4552045-0799-467b-baab-78516fe8d28f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Terrain\Block">
-      <UniqueIdentifier>{21d2acd3-3173-49b4-bb5e-2a8100047349}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -65,12 +59,6 @@
     </ClCompile>
     <ClCompile Include="Object\Boss\Boss.cpp">
       <Filter>Object\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\Terrain.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\Block\Block.cpp">
-      <Filter>Terrain\Block</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,12 +91,6 @@
     </ClInclude>
     <ClInclude Include="Object\Boss\Boss.h">
       <Filter>Object\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\Terrain.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\Block\Block.h">
-      <Filter>Terrain\Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

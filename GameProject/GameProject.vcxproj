@@ -161,8 +161,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="scene\SampleScene.cpp" />
     <ClCompile Include="scene\SceneFactory.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
-    <ClCompile Include="Terrain\Block\Block.cpp" />
-    <ClCompile Include="Terrain\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\TakoEngine\project\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -186,8 +184,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="scene\SampleScene.h" />
     <ClInclude Include="scene\SceneFactory.h" />
     <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="Terrain\Block\Block.h" />
-    <ClInclude Include="Terrain\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shaders\2D.PS.hlsl">

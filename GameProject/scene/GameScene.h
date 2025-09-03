@@ -9,7 +9,6 @@
 #include "FollowCamera/followCamera.h"
 #include "Object/Player/Player.h"
 #include "Object/Boss/Boss.h"
-#include <Terrain/Terrain.h>
 
 class GameScene : public BaseScene
 {
@@ -50,7 +49,6 @@ private: // メンバ変数
   std::unique_ptr<Boss> boss_;
 
   std::unique_ptr<FollowCamera> followCamera_;
-  std::unique_ptr<Terrain> terrain_;
 
   Transform groundUvTransform_{};
 
