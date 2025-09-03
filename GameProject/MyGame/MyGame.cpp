@@ -20,7 +20,7 @@ void MyGame::Initialize()
   TakoFramework::Initialize();
 
   winApp_->SetWindowSize(1280, 720);
-  winApp_->SetWindowTitle(L"TakoEngine Sample Game");
+  winApp_->SetWindowTitle(L"10DaysJam");
 
 #pragma region 汎用機能初期化-------------------------------------------------------------------------------------------------------------------
   // 入力クラスの初期化
@@ -34,7 +34,7 @@ void MyGame::Initialize()
   // シーンの初期化
   sceneFactory_ = new SceneFactory();
   SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
-  SceneManager::GetInstance()->ChangeScene("title", 0.0f);
+  SceneManager::GetInstance()->ChangeScene("game", 0.0f);
 
   TextureManager::GetInstance()->LoadTexture("white.png");
   TextureManager::GetInstance()->LoadTexture("circle.png");
