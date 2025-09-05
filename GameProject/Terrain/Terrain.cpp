@@ -105,6 +105,15 @@ void Terrain::SetBlockColorAt(const Vector3& position, Block::Color color)
     }
 }
 
+void Terrain::SetBlockColorAt(uint32_t index, Block::Color color)
+{
+    Block* block = blocks_.at(index).get();
+    if (block)
+    {
+        block->SetColor(color);
+    }
+}
+
 float Terrain::GetMaxYAt(float x, float z)
 {
     int ix = static_cast<int>(x / Block::kScale);

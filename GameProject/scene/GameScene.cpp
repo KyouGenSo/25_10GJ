@@ -15,6 +15,7 @@
 #include "ShadowRenderer.h"
 #include "CollisionManager.h"
 #include "../Collision/CollisionTypeIdDef.h"
+#include <cstdlib>
 
 #include <numbers>
 
@@ -22,6 +23,7 @@
 #include"ImGui.h"
 #include "DebugCamera.h"
 #endif
+#include <ctime>
 
 void GameScene::Initialize()
 {
@@ -37,6 +39,7 @@ void GameScene::Initialize()
     /// ================================== ///
     ///              初期化処理              ///
     /// ================================== ///
+    pInput_ = Input::GetInstance();
 
     // SkyBoxの初期化
     skyBox_ = std::make_unique<SkyBox>();
@@ -78,6 +81,8 @@ void GameScene::Initialize()
 
     terrain_ = std::make_unique<Terrain>();
     terrain_->Initialize();
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
@@ -125,6 +130,23 @@ void GameScene::Update()
     player_->Update();
     boss_->Update();
     followCamera_->Update();
+
+    if (pInput_->PushKey(DIK_A))
+    {
+        uint32_t random = std::rand() % 800;
+        terrain_->SetBlockColorAt(random, Block::Color::Orange);
+    }
+    if (pInput_->PushKey(DIK_B))
+    {
+        uint32_t random = std::rand() % 800;
+        terrain_->SetBlockColorAt(random, Block::Color::Purple);
+    }
+    if (pInput_->PushKey(DIK_C))
+    {
+        uint32_t random = std::rand() % 800;
+        terrain_->SetBlockColorAt(random, Block::Color::Blue);
+    }
+
     terrain_->Update();
 
     // 衝突判定の実行

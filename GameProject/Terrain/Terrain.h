@@ -35,6 +35,9 @@ public:
     // 座標に対応するブロックの色を変更 (範囲外は例外)
     void SetBlockColorAt(const Vector3& position, Block::Color color);
 
+    // インデックスに対応するブロックの色を変更 (範囲外は例外)
+    void SetBlockColorAt(uint32_t index, Block::Color color);
+
     // XZ-座標からY座標の最大値を取得。範囲外は例外
     float GetMaxYAt(float x, float z);
 
