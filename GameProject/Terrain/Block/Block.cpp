@@ -50,7 +50,7 @@ void Block::SetColor(Color color)
     color_ = color;
     if (object_)
     {
-        object_->SetMaterialColor(this->ColorToVector4(color_));
+        object_->SetMaterialColor(Block::ColorToVector4(color_));
     }
 }
 
