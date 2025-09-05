@@ -2,6 +2,8 @@
 #include <vector>
 
 #include "./Block/Block.h"
+#include <InstancedObject3d.h>
+#include <memory>
 
 class Terrain
 {
@@ -37,6 +39,7 @@ public:
     float GetMaxYAt(float x, float z);
 
 private:
+    std::unique_ptr<InstancedObject3d> instancedObjectBlock_;
     std::vector <std::unique_ptr<Block>> blocks_;
     static const uint32_t kSize = 20;
     static const uint32_t kHeight = 2;

@@ -164,7 +164,7 @@ void GameScene::Draw()
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
 
-    ground_->Draw();
+    //ground_->Draw();
     player_->Draw();
     boss_->Draw();
     terrain_->Draw();

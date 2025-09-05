@@ -5,39 +5,50 @@
 #include <vector>
 #include <memory>
 #include "AABB.h"
+#include <Input.h>
 
 class TitleScene : public BaseScene
 {
 public: // メンバ関数
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize() override;
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    void Initialize() override;
 
-	/// <summary>
-	/// 終了処理
-	/// </summary>
-	void Finalize() override;
+    /// <summary>
+    /// 終了処理
+    /// </summary>
+    void Finalize() override;
 
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update() override;
+    /// <summary>
+    /// 更新
+    /// </summary>
+    void Update() override;
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw() override;
-	void DrawWithoutEffect() override;
+    /// <summary>
+    /// 描画
+    /// </summary>
+    void Draw() override;
+    void DrawWithoutEffect() override;
 
-	/// <summary>
-	/// ImGuiの描画
-	/// </summary>
-	void DrawImGui() override;
+    /// <summary>
+    /// ImGuiの描画
+    /// </summary>
+    void DrawImGui() override;
 
 private: // メンバ変数
 
-	bool isDebug_ = false;
+    void SpritesInitialize();
+    void SpritesUpdate();
 
+    bool isDebug_ = false;
+
+    // Sprites
+    std::unique_ptr<Sprite> spriteToon_;
+    std::unique_ptr<Sprite> spriteRaider_;
+
+    uint8_t currentTitleSpriteNumber_ = 0;
+
+    Input* input_ = nullptr;
 };
