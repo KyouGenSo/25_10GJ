@@ -6,12 +6,8 @@
 #include "AABBCollider.h"
 #include "CollisionManager.h"
 #include "../../Collision/CollisionTypeIdDef.h"
-#include "../Boss/Boss.h"
 #include <cmath>
-
-#ifdef _DEBUG
 #include "ImGui.h"
-#endif
 
 Player::Player()
   : camera_(nullptr)
