@@ -9,15 +9,19 @@ void Terrain::Initialize()
 
     const float blockScale = Block::kScale;
 
+    // Initialize InstancedObject3d
+    instancedObjectBlock_ = std::make_unique<InstancedObject3d>();
+    instancedObjectBlock_->Initialize("cube.obj");
+
     // Initialize terrain blocks
+    Transform tf = {};
     for (int i = 0; i < kNumBlocks; ++i)
     {
-        Vector3 position = this->ToVector3(i) * blockScale;
-        position.y -= blockScale * .5f;
+        tf.translate = this->ToVector3(i) * blockScale;
+        tf.translate.y -= blockScale * .5f;
 
         auto block = std::make_unique<Block>();
-        block->Initialize();
-        block->SetPosition(position);
+        block->Initialize(instancedObjectBlock_->CreateInstance(tf));
         blocks_.emplace_back(std::move(block));
     }
 }
@@ -29,6 +33,8 @@ void Terrain::Finalize()
 
 void Terrain::Update()
 {
+    instancedObjectBlock_->Update();
+
     for (auto& block : blocks_)
     {
         block->Update();
@@ -37,6 +43,8 @@ void Terrain::Update()
 
 void Terrain::Draw()
 {
+    instancedObjectBlock_->Draw();
+
     for (auto& block : blocks_)
     {
         block->Draw();

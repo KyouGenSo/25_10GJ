@@ -21,43 +21,37 @@ const Vector4& Block::ColorToVector4(Color color)
     return colors.at(color);
 }
 
-void Block::Initialize()
+void Block::Initialize(std::unique_ptr<ModelInstance> modelInstance)
 {
-    object_ = std::make_unique<Object3d>();
-    object_->Initialize();
-    object_->SetModel("Cube.obj");
-    object_->SetScale(Vector3(kScale, kScale, kScale));
+    modelInstance_ = std::move(modelInstance);
+    modelInstance_->SetScale(Vector3(kScale, kScale, kScale));
 }
 
 void Block::Update()
 {
-    if (object_)
-    {
-        object_->Update();
-    }
+
 }
 
 void Block::Draw()
 {
-    if (object_)
-    {
-        object_->Draw();
-    }
+
 }
 
 void Block::SetColor(Color color)
 {
     color_ = color;
-    if (object_)
+    if (modelInstance_)
     {
-        object_->SetMaterialColor(Block::ColorToVector4(color_));
+        modelInstance_->SetColor(Block::ColorToVector4(color_));
     }
 }
 
 void Block::SetPosition(const Vector3& position)
 {
-    if (object_)
+    if (modelInstance_)
     {
-        object_->SetTranslate(position);
+        auto tf = modelInstance_->GetTransform();
+        tf.translate = position;
+        modelInstance_->SetTransform(tf);
     }
 }
