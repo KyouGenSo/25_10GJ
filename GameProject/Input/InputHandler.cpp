@@ -30,7 +30,8 @@ void InputHandler::UpdateInputStates()
 	isMoving_ = !input->LStickInDeadZone();
 	
 	// 各アクションの入力状態を更新
-	isDashing_ = input->TriggerKey(DIK_SPACE) || input->TriggerButton(XButtons.A);
+	isDashing_ = input->TriggerKey(DIK_LSHIFT) || input->TriggerButton(XButtons.B);
+    isJumping_ = input->TriggerKey(DIK_SPACE) || input->TriggerButton(XButtons.A);
 	isAttacking_ = input->TriggerKey(DIK_Z) || input->TriggerButton(XButtons.X);
 	isShooting_ = input->PushKey(DIK_LCONTROL) || input->GetRightTrigger() > 0.5f;
 	isPaused_ = input->TriggerKey(DIK_ESCAPE) || input->TriggerButton(XButtons.Start);
@@ -59,6 +60,10 @@ bool InputHandler::IsShooting() const
 bool InputHandler::IsPaused() const
 {
 	return isPaused_;
+}
+
+bool InputHandler::IsJumping() const {
+    return isJumping_;
 }
 
 Vector2 InputHandler::GetMoveDirection() const

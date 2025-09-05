@@ -21,6 +21,7 @@ public:
 	bool IsAttacking() const;
 	bool IsShooting() const;
 	bool IsPaused() const;
+    bool IsJumping() const;
 	
 	// 入力方向の取得
 	Vector2 GetMoveDirection() const;
@@ -32,6 +33,7 @@ private:
 	// 入力状態のキャッシュ
 	bool isMoving_ = false;
 	bool isDashing_ = false;
+    bool isJumping_ = false;
 	bool isAttacking_ = false;
 	bool isShooting_ = false;
 	bool isPaused_ = false;
