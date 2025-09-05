@@ -15,6 +15,26 @@ public:
     void Draw();
 
     static Vector3 ToVector3(uint32_t index);
+    static uint32_t ToIndex(const Vector3& position);
+
+    /// Getters
+
+    // 座標に対応するブロックの色を取得 (範囲外は例外)
+    Block::Color GetBlockColorAt(const Vector3& position);
+
+    // positionにあるBlockを取得。範囲外は例外
+    Block* GetBlockAt(const Vector3& position);
+
+    // positionにBlockがあるか
+    bool HasBlockAt(const Vector3& position);
+
+    /// Setters
+
+    // 座標に対応するブロックの色を変更 (範囲外は例外)
+    void SetBlockColorAt(const Vector3& position, Block::Color color);
+
+    // XZ-座標からY座標の最大値を取得。範囲外は例外
+    float GetMaxYAt(float x, float z);
 
 private:
     std::vector <std::unique_ptr<Block>> blocks_;

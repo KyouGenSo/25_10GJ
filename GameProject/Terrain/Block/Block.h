@@ -23,6 +23,9 @@ public:
     static const Vector4& ColorToVector4(Color color);
 
 public:
+    // Blockの1辺のスケール
+    static const float kScale;
+
     Block() = default;
     ~Block() = default;
 
