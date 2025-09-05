@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+const float Block::kScale = 10.0f;
+
 const Vector4& Block::ColorToVector4(Color color)
 {
     static const std::unordered_map<Color, Vector4> colors =
@@ -23,7 +25,8 @@ void Block::Initialize()
 {
     object_ = std::make_unique<Object3d>();
     object_->Initialize();
-    object_->SetModel("Box.obj");
+    object_->SetModel("Cube.obj");
+    object_->SetScale(Vector3(kScale, kScale, kScale));
 }
 
 void Block::Update()
