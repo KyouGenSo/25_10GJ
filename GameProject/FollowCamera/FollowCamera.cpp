@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "followCamera.h"
 #include "imgui.h"
 #ifdef DEBUG
@@ -26,7 +28,7 @@ void FollowCamera::Update()
 {
   if (mode_)
   {
-    FirstPersonMode();
+    ThirdPersonMode();
   } else
   {
     TopDownMode();
@@ -34,7 +36,7 @@ void FollowCamera::Update()
 
 }
 
-void FollowCamera::FirstPersonMode()
+void FollowCamera::ThirdPersonMode()
 {
   // ゲームパッドによる回転
   if (!Input::GetInstance()->RStickInDeadZone()) {
@@ -114,12 +116,12 @@ void FollowCamera::TopDownMode()
     backOffset = topDownSettings_.baseBackOffset - targetDistance * topDownSettings_.backOffsetMultiplier;
     
     // 高度の最小・最大制限
-    if (cameraHeight < topDownSettings_.minHeight) cameraHeight = topDownSettings_.minHeight;
-    if (cameraHeight > topDownSettings_.maxHeight) cameraHeight = topDownSettings_.maxHeight;
-    
+    cameraHeight = max(cameraHeight, topDownSettings_.minHeight);
+    cameraHeight = min(cameraHeight, topDownSettings_.maxHeight);
+
     // BackOffsetの最小・最大制限
-    if (backOffset < topDownSettings_.minBackOffset) backOffset = topDownSettings_.minBackOffset;
-    if (backOffset > topDownSettings_.maxBackOffset) backOffset = topDownSettings_.maxBackOffset;
+    backOffset = max(backOffset, topDownSettings_.minBackOffset);
+    backOffset = min(backOffset, topDownSettings_.maxBackOffset);
   }
 
   // カメラの位置を設定（俯瞰視点：後方斜め上）
@@ -177,7 +179,7 @@ void FollowCamera::DrawImGui() {
   ImGui::Begin("FollowCamera");
 
   // モード選択
-  bool modeChanged = ImGui::Checkbox("FirstPersonMode", &mode_);
+  bool modeChanged = ImGui::Checkbox("ThirdPersonMode", &mode_);
   if (modeChanged) {
     Reset();
   }
@@ -185,7 +187,7 @@ void FollowCamera::DrawImGui() {
   if (mode_) {
     // FirstPersonMode用の設定
     ImGui::Separator();
-    ImGui::Text("FirstPerson Settings");
+    ImGui::Text("ThirdPerson Settings");
     ImGui::DragFloat("Offset.x", &offset_.x, 0.1f);
     ImGui::DragFloat("Offset.y", &offset_.y, 0.1f);
     ImGui::DragFloat("Offset.z", &offsetOrigin_.z, 0.1f);

@@ -33,7 +33,7 @@ public: // メンバ関数
 
   void Update();
 
-  void FirstPersonMode();
+  void ThirdPersonMode();
   void TopDownMode();
 
   void Reset();
@@ -62,15 +62,15 @@ public: // メンバ関数
   /// <summary>
   /// Set the camera mode.
   /// </summary>
-  /// <param name="mode">true: FirstPersonMode, false: TopDownMode</param>
-  void SetMode(bool mode) { mode_ = mode; } // true: FirstPersonMode, false: TopDownMode
+  /// <param name="mode">true: ThirdPersonMode, false: TopDownMode</param>
+  void SetMode(bool mode) { mode_ = mode; } // true: ThirdPersonMode, false: TopDownMode
 
   //-----------------------------Getters------------------------------//
   Camera* GetCamera() { return camera_; }
   const Matrix4x4& GetViewProjection() const { return camera_->GetViewProjectionMatrix(); }
   const Vector3& GetOffset() const { return offset_; }
   const Transform* GetTarget2() const { return target2_; }
-  bool GetMode() const { return mode_; } // true: FirstPersonMode, false: TopDownMode
+  bool GetMode() const { return mode_; } // true: ThirdPersonMode, false: TopDownMode
 
 private: // メンバ変数
   Camera* camera_;
@@ -80,7 +80,7 @@ private: // メンバ変数
 
   Input* input_ = nullptr;
 
-  bool mode_ = true; // true: FirstPersonMode, false: TopDownMode
+  bool mode_ = true; // true: ThirdPersonMode, false: TopDownMode
 
   Vector3 interTargetPos_;
 
