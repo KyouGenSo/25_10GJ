@@ -34,21 +34,20 @@ public:
     }
 
     // アニメーションの更新
-    void Update(float currentTime);
+    void Update(float currentTime, ValueType& currentValue);
 
 private:
     const float     startSec_       = 0.0f;
     const float     durationSec_    = 0.0f;
     const ValueType targetValue_    = {};
     const ValueType startValue_     = {};
-    ValueType       currentValue_   = {};
 
     // 補間関数
     std::function<float(float)> transitionFunction_ = nullptr;
 };
 
 template<typename ValueType>
-inline void AnimationTween<ValueType>::Update(float currentTime)
+inline void AnimationTween<ValueType>::Update(float currentTime, ValueType& currentValue)
 {
     if (currentTime < startSec_) return;
 
@@ -61,5 +60,5 @@ inline void AnimationTween<ValueType>::Update(float currentTime)
         t = transitionFunction_(t);
     }
 
-    currentValue_ = startValue_ + (targetValue_ - startValue_) * t; // ここでは単純な線形補間を仮定
+    currentValue = startValue_ + (targetValue_ - startValue_) * t; // ここでは単純な線形補間を仮定
 }
