@@ -39,6 +39,12 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{b52400f3-9b91-45c8-9340-d8d964b85845}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features">
+      <UniqueIdentifier>{7567c556-1fec-4ab0-bded-9a7674100854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\TimeMeasurer">
+      <UniqueIdentifier>{4113e5d2-99a3-45cf-8aa7-9168d397aecb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -74,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Terrain\Block\Block.cpp">
       <Filter>Terrain\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp">
+      <Filter>Features\TimeMeasurer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="Animation\AnimationTween.hpp">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h">
+      <Filter>Features\TimeMeasurer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

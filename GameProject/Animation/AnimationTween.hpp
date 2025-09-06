@@ -1,6 +1,9 @@
 #pragma once
 #include <functional>
 
+// アニメーションの補間を管理するクラス
+//   ValueTypeはUpdate関数内で+-*を使用するため、演算子オーバーロードが必要
+
 template <typename ValueType>
 class AnimationTween
 {
@@ -9,8 +12,7 @@ public:
         startSec_(startSec),
         durationSec_(durationSec),
         targetValue_(targetValue),
-        startValue_(startValue),
-        currentValue_(startValue)
+        startValue_(startValue)
     {};
 
     ~AnimationTween() = default;
@@ -22,10 +24,7 @@ public:
     }
 
     // アニメーションの開始時間を取得
-    inline uint32_t GetDuration() const { return durationSec_; }
-
-    // 現在の値を取得
-    const ValueType& GetValue() const { return currentValue_; }
+    inline float GetStartSec() const { return startSec_; }
 
     // アニメーションが終了したかどうかを判定
     bool IsFinished(float currentTime) const
