@@ -177,7 +177,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation\AnimationTimeline.h" />
-    <ClInclude Include="Animation\AnimationTween.h" />
+    <ClInclude Include="Animation\AnimationTween.hpp" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
     <ClInclude Include="FollowCamera\FollowCamera.h" />
     <ClInclude Include="Input\InputHandler.h" />

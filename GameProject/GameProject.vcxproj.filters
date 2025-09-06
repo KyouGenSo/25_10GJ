@@ -116,7 +116,7 @@
     <ClInclude Include="Animation\AnimationTimeline.h">
       <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Animation\AnimationTween.h">
+    <ClInclude Include="Animation\AnimationTween.hpp">
       <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
