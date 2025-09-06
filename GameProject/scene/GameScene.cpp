@@ -131,22 +131,6 @@ void GameScene::Update()
     boss_->Update();
     followCamera_->Update();
 
-    if (pInput_->PushKey(DIK_A))
-    {
-        uint32_t random = std::rand() % 800;
-        terrain_->SetBlockColorAt(random, Block::Color::Orange);
-    }
-    if (pInput_->PushKey(DIK_B))
-    {
-        uint32_t random = std::rand() % 800;
-        terrain_->SetBlockColorAt(random, Block::Color::Purple);
-    }
-    if (pInput_->PushKey(DIK_C))
-    {
-        uint32_t random = std::rand() % 800;
-        terrain_->SetBlockColorAt(random, Block::Color::Blue);
-    }
-
     terrain_->Update();
 
     // 衝突判定の実行

@@ -28,6 +28,9 @@ void TitleScene::Initialize()
     ///              初期化処理              ///
     /// ================================== ///
     this->SpritesInitialize();
+
+    terrain_ = std::make_unique<Terrain>();
+    terrain_->Initialize();
 }
 
 void TitleScene::Finalize()
@@ -55,6 +58,8 @@ void TitleScene::Update()
     /// ================================== ///
 
     this->SpritesUpdate();
+    this->TerrainUpdate();
+
 
     if (Input::GetInstance()->TriggerKey(DIK_RETURN))
     {
@@ -78,7 +83,7 @@ void TitleScene::Draw()
     //-------------------Modelの描画-------------------//
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
-
+    terrain_->Draw();
 
 
 
@@ -177,4 +182,16 @@ void TitleScene::SpritesUpdate()
 
     spriteToon_->Update();
     spriteRaider_->Update();
+}
+
+void TitleScene::TerrainUpdate()
+{
+    uint32_t random = std::rand() % Terrain::kNumBlocks;
+    terrain_->SetBlockColorAt(random, Block::Color::Orange);
+    random = std::rand() % Terrain::kNumBlocks;
+    terrain_->SetBlockColorAt(random, Block::Color::Purple);
+    random = std::rand() % Terrain::kNumBlocks;
+    terrain_->SetBlockColorAt(random, Block::Color::Blue);
+
+    terrain_->Update();
 }

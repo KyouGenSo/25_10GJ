@@ -8,6 +8,10 @@
 class Terrain
 {
 public:
+    static const uint32_t kSize = 20;
+    static const uint32_t kHeight = 2;
+    static const uint32_t kNumBlocks = kSize * kHeight * kSize;
+
     Terrain() = default;
     ~Terrain() = default;
 
@@ -44,7 +48,4 @@ public:
 private:
     std::unique_ptr<InstancedObject3d> instancedObjectBlock_;
     std::vector <std::unique_ptr<Block>> blocks_;
-    static const uint32_t kSize = 20;
-    static const uint32_t kHeight = 2;
-    static const uint32_t kNumBlocks = kSize * kHeight * kSize;
 };
