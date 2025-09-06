@@ -16,10 +16,10 @@
 
 void MyGame::Initialize()
 {
+    winApp_->SetWindowSize(1600, 900);
 
     TakoFramework::Initialize();
 
-    winApp_->SetWindowSize(1280, 720);
     winApp_->SetWindowTitle(L"10DaysJam");
 
     #pragma region 汎用機能初期化-------------------------------------------------------------------------------------------------------------------
