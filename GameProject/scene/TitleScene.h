@@ -6,6 +6,7 @@
 #include <memory>
 #include "AABB.h"
 #include <Input.h>
+#include <Terrain/Terrain.h>
 
 class TitleScene : public BaseScene
 {
@@ -41,12 +42,15 @@ private: // メンバ変数
 
     void SpritesInitialize();
     void SpritesUpdate();
+    void TerrainUpdate();
 
     bool isDebug_ = false;
 
     // Sprites
     std::unique_ptr<Sprite> spriteToon_;
     std::unique_ptr<Sprite> spriteRaider_;
+
+    std::unique_ptr<Terrain> terrain_;
 
     uint8_t currentTitleSpriteNumber_ = 0;
 

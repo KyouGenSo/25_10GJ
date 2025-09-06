@@ -36,7 +36,7 @@
     <Filter Include="Terrain\Block">
       <UniqueIdentifier>{21d2acd3-3173-49b4-bb5e-2a8100047349}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AnimationChain">
+    <Filter Include="Animation">
       <UniqueIdentifier>{b52400f3-9b91-45c8-9340-d8d964b85845}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -113,11 +113,11 @@
     <ClInclude Include="Terrain\Block\Block.h">
       <Filter>Terrain\Block</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationChain\AnimationChain.h">
-      <Filter>AnimationChain</Filter>
+    <ClInclude Include="Animation\AnimationTimeline.h">
+      <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationChain\AnimationKeyframeBase.h">
-      <Filter>AnimationChain</Filter>
+    <ClInclude Include="Animation\AnimationTween.hpp">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
