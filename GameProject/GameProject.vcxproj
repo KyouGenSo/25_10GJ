@@ -151,6 +151,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp" />
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
@@ -179,6 +180,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="Animation\AnimationTimeline.h" />
     <ClInclude Include="Animation\AnimationTween.hpp" />
+    <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
     <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h" />
     <ClInclude Include="FollowCamera\FollowCamera.h" />
