@@ -1,6 +1,9 @@
 #pragma once
 #include <functional>
 
+// アニメーションの補間を管理するクラス
+//   ValueTypeはUpdate関数内で+-*を使用するため、演算子オーバーロードが必要
+
 template <typename ValueType>
 class AnimationTween
 {
@@ -9,8 +12,7 @@ public:
         startSec_(startSec),
         durationSec_(durationSec),
         targetValue_(targetValue),
-        startValue_(startValue),
-        currentValue_(startValue)
+        startValue_(startValue)
     {};
 
     ~AnimationTween() = default;
@@ -22,10 +24,7 @@ public:
     }
 
     // アニメーションの開始時間を取得
-    inline uint32_t GetDuration() const { return durationSec_; }
-
-    // 現在の値を取得
-    const ValueType& GetValue() const { return currentValue_; }
+    inline float GetStartSec() const { return startSec_; }
 
     // アニメーションが終了したかどうかを判定
     bool IsFinished(float currentTime) const
@@ -34,21 +33,20 @@ public:
     }
 
     // アニメーションの更新
-    void Update(float currentTime);
+    void Update(float currentTime, ValueType& currentValue);
 
 private:
     const float     startSec_       = 0.0f;
     const float     durationSec_    = 0.0f;
     const ValueType targetValue_    = {};
     const ValueType startValue_     = {};
-    ValueType       currentValue_   = {};
 
     // 補間関数
     std::function<float(float)> transitionFunction_ = nullptr;
 };
 
 template<typename ValueType>
-inline void AnimationTween<ValueType>::Update(float currentTime)
+inline void AnimationTween<ValueType>::Update(float currentTime, ValueType& currentValue)
 {
     if (currentTime < startSec_) return;
 
@@ -61,5 +59,5 @@ inline void AnimationTween<ValueType>::Update(float currentTime)
         t = transitionFunction_(t);
     }
 
-    currentValue_ = startValue_ + (targetValue_ - startValue_) * t; // ここでは単純な線形補間を仮定
+    currentValue = startValue_ + (targetValue_ - startValue_) * t; // ここでは単純な線形補間を仮定
 }
