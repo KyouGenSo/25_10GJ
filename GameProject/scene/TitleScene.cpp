@@ -31,6 +31,8 @@ void TitleScene::Initialize()
 
     terrain_ = std::make_unique<Terrain>();
     terrain_->Initialize();
+
+    this->AnimationsInitialize();
 }
 
 void TitleScene::Finalize()
@@ -57,9 +59,9 @@ void TitleScene::Update()
     ///              更新処理               ///
     /// ================================== ///
 
+    this->AnimationsUpdate();
     this->SpritesUpdate();
     this->TerrainUpdate();
-
 
     if (Input::GetInstance()->TriggerKey(DIK_RETURN))
     {
@@ -119,15 +121,9 @@ void TitleScene::DrawWithoutEffect()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
-    if (currentTitleSpriteNumber_ == 0)
-    {
-        spriteToon_->Draw();
-    }
-    else
-    {
-        spriteRaider_->Draw();
-    }
-
+    pSpriteBackground_->Draw();
+    pSpriteToonRaider1_->Draw();
+    pSpriteToonRaider2_->Draw();
 }
 
 void TitleScene::DrawImGui()
@@ -137,13 +133,15 @@ void TitleScene::DrawImGui()
     /// ================================== ///
     ///             ImGuiの描画              ///
     /// ================================== ///
-
+    pTitleAnimation_->ImGui();
 
     #endif // _DEBUG
 }
 
 void TitleScene::SpritesInitialize()
 {
+    float screenRatio = static_cast<float>(WinApp::clientWidth) / 1920.0f;
+
     const Vector2 screenSize =
     {
         static_cast<float>(WinApp::clientWidth),
@@ -156,32 +154,40 @@ void TitleScene::SpritesInitialize()
         screenSize.y / 2.0f
     };
 
-    TextureManager::GetInstance()->LoadTexture("Toon.png");
-    TextureManager::GetInstance()->LoadTexture("raider.png");
+    TextureManager::GetInstance()->LoadTexture("ToonRaider.png");
+    TextureManager::GetInstance()->LoadTexture("ToonRaiderBordered.png");
 
-    spriteToon_ = std::make_unique<Sprite>();
-    spriteToon_->Initialize("Toon.png");
-    spriteToon_->SetSize(screenSize);
-    spriteToon_->SetPos(position);
-    spriteToon_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+    {
+        pSpriteToonRaider1_ = std::make_unique<Sprite>();
+        pSpriteToonRaider1_->Initialize("ToonRaider.png");
+        const auto size = pSpriteToonRaider1_->GetSize();
+        pSpriteToonRaider1_->SetSize(Vector2(size.x * screenRatio, size.y * screenRatio));
+        pSpriteToonRaider1_->SetPos(position);
+        pSpriteToonRaider1_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+        pSpriteToonRaider1_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+    }
 
-    spriteRaider_ = std::make_unique<Sprite>();
-    spriteRaider_->Initialize("raider.png");
-    spriteRaider_->SetSize(screenSize);
-    spriteRaider_->SetPos(position);
-    spriteRaider_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+    {
+        pSpriteToonRaider2_ = std::make_unique<Sprite>();
+        pSpriteToonRaider2_->Initialize("ToonRaiderBordered.png");
+        const auto size = pSpriteToonRaider2_->GetSize();
+        pSpriteToonRaider2_->SetSize(Vector2(size.x * screenRatio, size.y * screenRatio));
+        pSpriteToonRaider2_->SetPos(position);
+        pSpriteToonRaider2_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+        pSpriteToonRaider2_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+    }
+
+    pSpriteBackground_ = std::make_unique<Sprite>();
+    pSpriteBackground_->Initialize("white.png");
+    pSpriteBackground_->SetSize(screenSize);
+    pSpriteBackground_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 void TitleScene::SpritesUpdate()
 {
-    if (input_->TriggerKey(DIK_SPACE))
-    {
-        currentTitleSpriteNumber_++;
-        currentTitleSpriteNumber_ %= 2;
-    }
-
-    spriteToon_->Update();
-    spriteRaider_->Update();
+    pSpriteToonRaider1_->Update();
+    pSpriteToonRaider2_->Update();
+    pSpriteBackground_->Update();
 }
 
 void TitleScene::TerrainUpdate()
@@ -195,3 +201,19 @@ void TitleScene::TerrainUpdate()
 
     terrain_->Update();
 }
+
+void TitleScene::AnimationsInitialize()
+{
+    pTitleAnimation_ = std::make_unique<TitleAnimation>(
+        pSpriteToonRaider1_.get(),
+        pSpriteToonRaider2_.get(),
+        pSpriteBackground_.get()
+    );
+    pTitleAnimation_->Initialize();
+}
+
+void TitleScene::AnimationsUpdate()
+{
+    pTitleAnimation_->Update();
+}
+

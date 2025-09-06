@@ -45,6 +45,9 @@
     <Filter Include="Features\TimeMeasurer">
       <UniqueIdentifier>{4113e5d2-99a3-45cf-8aa7-9168d397aecb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation\TitleAnimation">
+      <UniqueIdentifier>{4f8ea091-0172-4f36-84f7-c6d844bedd4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -84,6 +87,7 @@
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp">
       <Filter>Features\TimeMeasurer</Filter>
     </ClCompile>
+    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -130,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h">
       <Filter>Features\TimeMeasurer</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h">
+      <Filter>Animation\TitleAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

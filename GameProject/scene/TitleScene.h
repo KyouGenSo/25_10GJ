@@ -7,6 +7,7 @@
 #include "AABB.h"
 #include <Input.h>
 #include <Terrain/Terrain.h>
+#include <Animation/TitleAnimation/TitleAnimation.h>
 
 class TitleScene : public BaseScene
 {
@@ -43,16 +44,19 @@ private: // メンバ変数
     void SpritesInitialize();
     void SpritesUpdate();
     void TerrainUpdate();
+    void AnimationsInitialize();
+    void AnimationsUpdate();
 
     bool isDebug_ = false;
 
     // Sprites
-    std::unique_ptr<Sprite> spriteToon_;
-    std::unique_ptr<Sprite> spriteRaider_;
+    std::unique_ptr<Sprite> pSpriteToonRaider1_;
+    std::unique_ptr<Sprite> pSpriteToonRaider2_;
+    std::unique_ptr<Sprite> pSpriteBackground_;
 
+    // Direction resources
     std::unique_ptr<Terrain> terrain_;
-
-    uint8_t currentTitleSpriteNumber_ = 0;
+    std::unique_ptr<TitleAnimation> pTitleAnimation_;
 
     Input* input_ = nullptr;
 };

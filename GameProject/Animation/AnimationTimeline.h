@@ -29,7 +29,29 @@ public:
         currentValue_ = initValue;
     }
 
-    void Update();
+    const ValueType& Update();
+
+    inline void ImGui(const std::string& name = "Timeline")
+    {
+        #ifdef _DEBUG
+
+        if (ImGui::TreeNode(name.c_str()))
+        {
+            ImGui::Indent(15.0f);
+
+            uint32_t index = 0;
+            for (auto& tween : tweens_)
+            {
+                tween.ImGui("Tween " + std::to_string(index));
+                index++;
+            }
+
+            ImGui::Unindent(15.0f);
+            ImGui::TreePop();
+        }
+
+        #endif // _DEBUG
+    }
 
 
 private:
@@ -39,17 +61,19 @@ private:
 };
 
 template<typename ValueType>
-inline void AnimationTimeline<ValueType>::Update()
+inline const ValueType& AnimationTimeline<ValueType>::Update()
 {
-    if (!currentTime_) return;
+    if (!currentTime_) return currentValue_;
 
     float time = currentTime_->GetNow<float>();
     for (auto& tween : tweens_)
     {
+        tween.Update(time, currentValue_);
         if (!tween.IsFinished(time) && tween.GetStartSec() < time)
         {
-            tween.Update(time, currentValue_);
             break;
         }
     }
+
+    return currentValue_;
 }
