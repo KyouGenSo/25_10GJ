@@ -36,6 +36,18 @@
     <Filter Include="Terrain\Block">
       <UniqueIdentifier>{21d2acd3-3173-49b4-bb5e-2a8100047349}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{b52400f3-9b91-45c8-9340-d8d964b85845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features">
+      <UniqueIdentifier>{7567c556-1fec-4ab0-bded-9a7674100854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\TimeMeasurer">
+      <UniqueIdentifier>{4113e5d2-99a3-45cf-8aa7-9168d397aecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\TitleAnimation">
+      <UniqueIdentifier>{4f8ea091-0172-4f36-84f7-c6d844bedd4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -72,6 +84,10 @@
     <ClCompile Include="Terrain\Block\Block.cpp">
       <Filter>Terrain\Block</Filter>
     </ClCompile>
+    <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp">
+      <Filter>Features\TimeMeasurer</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -109,6 +125,18 @@
     </ClInclude>
     <ClInclude Include="Terrain\Block\Block.h">
       <Filter>Terrain\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationTimeline.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationTween.hpp">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h">
+      <Filter>Features\TimeMeasurer</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h">
+      <Filter>Animation\TitleAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

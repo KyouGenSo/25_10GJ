@@ -15,6 +15,7 @@
 #include "ShadowRenderer.h"
 #include "CollisionManager.h"
 #include "../Collision/CollisionTypeIdDef.h"
+#include <cstdlib>
 
 #include <numbers>
 
@@ -22,6 +23,7 @@
 #include"ImGui.h"
 #include "DebugCamera.h"
 #endif
+#include <ctime>
 
 void GameScene::Initialize()
 {
@@ -37,6 +39,7 @@ void GameScene::Initialize()
     /// ================================== ///
     ///              初期化処理              ///
     /// ================================== ///
+    pInput_ = Input::GetInstance();
 
     // SkyBoxの初期化
     skyBox_ = std::make_unique<SkyBox>();
@@ -78,6 +81,8 @@ void GameScene::Initialize()
 
     terrain_ = std::make_unique<Terrain>();
     terrain_->Initialize();
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
@@ -125,6 +130,7 @@ void GameScene::Update()
     player_->Update();
     boss_->Update();
     followCamera_->Update();
+
     terrain_->Update();
 
     // 衝突判定の実行
@@ -164,7 +170,7 @@ void GameScene::Draw()
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
 
-    ground_->Draw();
+    //ground_->Draw();
     player_->Draw();
     boss_->Draw();
     terrain_->Draw();
