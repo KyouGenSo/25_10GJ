@@ -70,7 +70,7 @@ uint32_t Terrain::ToIndex(const Vector3& position)
     return y * kSize * kSize + x * kSize + z;
 }
 
-Block::Color Terrain::GetBlockColorAt(const Vector3& position)
+Block::Colors Terrain::GetBlockColorAt(const Vector3& position)
 {
     Block* block = this->GetBlockAt(position);
     if (block)
@@ -79,7 +79,7 @@ Block::Color Terrain::GetBlockColorAt(const Vector3& position)
     }
 
     // 見つからなかったとき
-    return Block::Color::White;
+    return Block::Colors::White;
 }
 
 Block* Terrain::GetBlockAt(const Vector3& position)
@@ -96,7 +96,7 @@ bool Terrain::HasBlockAt(const Vector3& position)
     return i < kNumBlocks;
 }
 
-void Terrain::SetBlockColorAt(const Vector3& position, Block::Color color)
+void Terrain::SetBlockColorAt(const Vector3& position, Block::Colors color)
 {
     Block* block = this->GetBlockAt(position);
     if (block)
@@ -105,7 +105,7 @@ void Terrain::SetBlockColorAt(const Vector3& position, Block::Color color)
     }
 }
 
-void Terrain::SetBlockColorAt(uint32_t index, Block::Color color)
+void Terrain::SetBlockColorAt(uint32_t index, Block::Colors color)
 {
     Block* block = blocks_.at(index).get();
     if (block)

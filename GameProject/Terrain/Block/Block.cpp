@@ -1,24 +1,24 @@
 #include "./Block.h"
-
+#include <Features/Color/Color.h>
 #include <unordered_map>
 
 const float Block::kScale = 10.0f;
 
-const Vector4& Block::ColorToVector4(Color color)
+const Vector4& Block::ColorToVector4(Block::Colors color)
 {
-    static const std::unordered_map<Color, Vector4> colors =
+    static const std::unordered_map<Block::Colors, Color> colors =
     {
-        {Color::White, {1.0f, 1.0f, 1.0f, 1.0f}}, // White
-        {Color::Gray, {0.5f, 0.5f, 0.5f, 1.0f}},  // Gray
-        {Color::Blue, {0.0f, 0.0f, 1.0f, 1.0f}},  // Blue
-        {Color::Green, {0.0f, 1.0f, 0.0f, 1.0f}}, // Green
-        {Color::Red, {1.0f, 0.0f, 0.0f, 1.0f}},   // Red
-        {Color::Yellow, {1.0f, 1.0f, 0.0f, 1.0f}},// Yellow
-        {Color::Purple, {1.0f, 0.0f, 1.0f, 1.0f}},// Purple
-        {Color::Orange, {1.0f, 0.5f, 0.0f, 1.0f}},// Orange
+        {Colors::White,     0xffffffff},    // White
+        {Colors::Gray,      0x787878ff},    // Gray
+        {Colors::Blue,      0x2234ddff},    // Blue
+        {Colors::Green,     0x33e11eff},    // Green
+        {Colors::Red,       0xd52a2fff},    // Red
+        {Colors::Yellow,    0xf1f20dff},    // Yellow
+        {Colors::Purple,    0x9e16e9ff},    // Purple
+        {Colors::Orange,    0xe1751eff},    // Orange
     };
 
-    return colors.at(color);
+    return colors.at(color).Vec4();
 }
 
 void Block::Initialize(std::unique_ptr<ModelInstance> modelInstance)
@@ -37,7 +37,7 @@ void Block::Draw()
 
 }
 
-void Block::SetColor(Color color)
+void Block::SetColor(Colors color)
 {
     color_ = color;
     if (modelInstance_)

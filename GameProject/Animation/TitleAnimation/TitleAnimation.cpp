@@ -26,7 +26,7 @@ void TitleAnimation::Initialize()
         tween.SetTransitionFunction([](float t) { return t * (2 - t); }); // Ease Out Quad
         animPositionY_.AddTween(tween);
     }
-    // Background Color Animation
+    // Background Colors Animation
     {
         AnimationTween<float> tween(0.0f, 5.0f, 0.0f, 1.0f);
         tween.SetTransitionFunction([](float t) { return t * t; }); // Ease In Quad

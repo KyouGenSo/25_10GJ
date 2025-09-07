@@ -199,11 +199,11 @@ void TitleScene::SpritesUpdate()
 void TitleScene::TerrainUpdate()
 {
     uint32_t random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Color::Orange);
+    terrain_->SetBlockColorAt(random, Block::Colors::Orange);
     random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Color::Purple);
+    terrain_->SetBlockColorAt(random, Block::Colors::Purple);
     random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Color::Blue);
+    terrain_->SetBlockColorAt(random, Block::Colors::Blue);
 
     terrain_->Update();
 }
