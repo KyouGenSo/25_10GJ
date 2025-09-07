@@ -22,7 +22,7 @@ void Boss::Initialize()
   model_->Initialize();
   model_->SetModel("Boss.gltf");
 
-  transform_.translate = Vector3(95.0f, -9.5f, 95.0f);
+  transform_.translate = Vector3(95.0f, 0.0f, 95.0f);
   transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
   transform_.scale = Vector3(3.0f, 3.0f, 3.0f);
 
