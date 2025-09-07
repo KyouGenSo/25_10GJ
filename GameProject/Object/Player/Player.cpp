@@ -73,14 +73,27 @@ void Player::Draw()
 
 void Player::Move(float speedMultiplier)
 {
-  if (!inputHandler_) return;
-  
-  Vector2 moveDir = inputHandler_->GetMoveDirection();
-  if (moveDir.Length() < 0.1f) return;
-  
-  // 3Dベクトルに変換
-  velocity_ = { moveDir.x, velocity_.y, moveDir.y };
-  velocity_ = velocity_.Normalize() * speed_ * speedMultiplier;
+
+    if (!inputHandler_) return;
+      
+    Vector2 moveDir = inputHandler_->GetMoveDirection();
+    if (moveDir.Length() < 0.1f) return;
+      
+    // 3Dベクトルに変換
+    velocity_ = { moveDir.x, velocity_.y, moveDir.y };
+    velocity_ = velocity_.Normalize() * speed_ * speedMultiplier;
+
+    // カメラモードに応じて移動方向を調整
+    if (mode_ && camera_){
+        Matrix4x4 rotationMatrix = Mat4x4::MakeRotateY(camera_->GetRotateY());
+        velocity_ = Mat4x4::TransformNormal(rotationMatrix, velocity_);
+    }
+
+    // 移動方向を向く
+    if (velocity_.Length() > 0.01f){
+        targetAngle_ = std::atan2(velocity_.x, velocity_.z);
+        transform_.rotate.y = Vec3::LerpShortAngle(transform_.rotate.y, targetAngle_, 0.2f);
+    }
 }
 
 void Player::Action() {
@@ -95,12 +108,6 @@ void Player::Action() {
 }
 
 void Player::Apply() {
-    // カメラモードに応じて移動方向を調整
-    if (mode_ && camera_){
-        Matrix4x4 rotationMatrix = Mat4x4::MakeRotateY(camera_->GetRotateY());
-        velocity_ = Mat4x4::TransformNormal(rotationMatrix, velocity_);
-    }
-
     // 位置を更新
     transform_.translate += velocity_;
 
@@ -110,12 +117,6 @@ void Player::Apply() {
     if (transform_.translate.y <= 1.5f){
         transform_.translate.y = 1.5f;
         velocity_.y = 0.f;
-    }
-
-    // 移動方向を向く
-    if (velocity_.Length() > 0.01f){
-        targetAngle_ = std::atan2(velocity_.x, velocity_.z);
-        transform_.rotate.y = Vec3::LerpShortAngle(transform_.rotate.y, targetAngle_, 0.2f);
     }
 }
 
