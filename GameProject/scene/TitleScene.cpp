@@ -12,6 +12,7 @@
 #include"ImGui.h"
 #include "DebugCamera.h"
 #endif
+#include <ShadowRenderer.h>
 
 void TitleScene::Initialize()
 {
@@ -75,6 +76,12 @@ void TitleScene::Draw()
     ///              描画処理               ///
     /// ================================== ///
 
+    if (ShadowRenderer::GetInstance()->IsEnabled())
+    {
+        ShadowRenderer::GetInstance()->BeginShadowPass();
+        ShadowRenderer::GetInstance()->EndShadowPass();
+    }
+
     //------------------背景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
@@ -92,8 +99,9 @@ void TitleScene::Draw()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
-
-
+    pSpriteBackground_->Draw();
+    pSpriteToonRaider1_->Draw();
+    pSpriteToonRaider2_->Draw();
 
 }
 
@@ -121,9 +129,7 @@ void TitleScene::DrawWithoutEffect()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
-    pSpriteBackground_->Draw();
-    pSpriteToonRaider1_->Draw();
-    pSpriteToonRaider2_->Draw();
+
 }
 
 void TitleScene::DrawImGui()
@@ -193,11 +199,11 @@ void TitleScene::SpritesUpdate()
 void TitleScene::TerrainUpdate()
 {
     uint32_t random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Color::Orange);
+    terrain_->SetBlockColorAt(random, Block::Colors::Orange);
     random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Color::Purple);
+    terrain_->SetBlockColorAt(random, Block::Colors::Purple);
     random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Color::Blue);
+    terrain_->SetBlockColorAt(random, Block::Colors::Blue);
 
     terrain_->Update();
 }

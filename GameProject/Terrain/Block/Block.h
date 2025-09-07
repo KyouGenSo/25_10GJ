@@ -8,7 +8,7 @@
 class Block
 {
 public:
-    enum class Color
+    enum class Colors
     {
         White,
         Gray,
@@ -21,7 +21,7 @@ public:
     };
 
     /// ColorからVector4への変換
-    static const Vector4& ColorToVector4(Color color);
+    static const Vector4& ColorToVector4(Block::Colors color);
 
 public:
     // Blockの1辺のスケール
@@ -34,11 +34,11 @@ public:
     void Update();
     void Draw();
 
-    Color GetColor() const { return color_; }
-    void SetColor(Color color);
+    Colors GetColor() const { return color_; }
+    void SetColor(Colors color);
     void SetPosition(const Vector3& position);
 
 private:
-    Color color_ = Color::White;
+    Colors color_ = Colors::White;
     std::unique_ptr<ModelInstance> modelInstance_;
 };

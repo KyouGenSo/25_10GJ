@@ -26,7 +26,7 @@ public:
     /// Getters
 
     // 座標に対応するブロックの色を取得 (範囲外は例外)
-    Block::Color GetBlockColorAt(const Vector3& position);
+    Block::Colors GetBlockColorAt(const Vector3& position);
 
     // positionにあるBlockを取得。範囲外は例外
     Block* GetBlockAt(const Vector3& position);
@@ -37,10 +37,10 @@ public:
     /// Setters
 
     // 座標に対応するブロックの色を変更 (範囲外は例外)
-    void SetBlockColorAt(const Vector3& position, Block::Color color);
+    void SetBlockColorAt(const Vector3& position, Block::Colors color);
 
     // インデックスに対応するブロックの色を変更 (範囲外は例外)
-    void SetBlockColorAt(uint32_t index, Block::Color color);
+    void SetBlockColorAt(uint32_t index, Block::Colors color);
 
     // XZ-座標からY座標の最大値を取得。範囲外は例外
     float GetMaxYAt(float x, float z);

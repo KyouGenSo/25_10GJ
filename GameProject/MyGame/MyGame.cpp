@@ -16,9 +16,9 @@
 
 void MyGame::Initialize()
 {
-    winApp_->SetWindowSize(1600, 900);
+    winApp_->WinApp::SetWindowSize(1600, 900);
 
-    winApp_->SetWindowTitle(L"10DaysJam");
+    winApp_->WinApp::SetWindowTitle(L"10DaysJam");
 
     TakoFramework::Initialize();
 
@@ -34,7 +34,7 @@ void MyGame::Initialize()
     // シーンの初期化
     sceneFactory_ = new SceneFactory();
     SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
-    SceneManager::GetInstance()->ChangeScene("game", 0.0f);
+    SceneManager::GetInstance()->ChangeScene("title", 0.0f);
 
     TextureManager::GetInstance()->LoadTexture("white.png");
     TextureManager::GetInstance()->LoadTexture("circle.png");

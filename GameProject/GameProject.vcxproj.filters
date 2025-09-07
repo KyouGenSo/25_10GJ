@@ -48,6 +48,9 @@
     <Filter Include="Animation\TitleAnimation">
       <UniqueIdentifier>{4f8ea091-0172-4f36-84f7-c6d844bedd4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Color">
+      <UniqueIdentifier>{7c81723f-2cc9-4a4c-915b-9560e0f809d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -88,6 +91,9 @@
       <Filter>Features\TimeMeasurer</Filter>
     </ClCompile>
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
+    <ClCompile Include="Features\Color\Color.cpp">
+      <Filter>Features\Color</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -137,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h">
       <Filter>Animation\TitleAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Color\Color.h">
+      <Filter>Features\Color</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
