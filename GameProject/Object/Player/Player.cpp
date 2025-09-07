@@ -74,7 +74,6 @@ void Player::Draw()
 
 void Player::Move(float speedMultiplier)
 {
-
     if (!inputHandler_) return;
       
     Vector2 moveDir = inputHandler_->GetMoveDirection();
@@ -101,11 +100,14 @@ void Player::Action() {
     //床の色を判別する
     Block::Color blockColor = Block::Color::White;
 
+    if (terrain_) {
+        blockColor = terrain_->GetBlockColorAt(transform_.translate);
+    }
 
     if (inputHandler_) Move();
-    if (inputHandler_->IsAttacking()) Attack();
-    if (inputHandler_->IsDashing()) Dash();
-    if (inputHandler_->IsJumping()) Jump();
+    if (blockColor == Block::Color::Red && inputHandler_->IsAttacking()) Attack();
+    if (blockColor == Block::Color::Blue && inputHandler_->IsDashing()) Dash();
+    if (blockColor == Block::Color::Yellow && inputHandler_->IsJumping()) Jump();
 
     Apply();
 }
@@ -138,7 +140,20 @@ void Player::Attack() {
 void Player::DrawImGui()
 {
 #ifdef _DEBUG
-
+    ImGui::Begin("Player");
+    
+    const char* colorNames[] = { "White", "Gray", "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
+    int currentColor = static_cast<int>(color_);
+    
+    if (ImGui::Combo("Color", &currentColor, colorNames, IM_ARRAYSIZE(colorNames))) {
+        color_ = static_cast<Block::Color>(currentColor);
+    }
+    
+    if (ImGui::Button("SetColor")){
+        terrain_->SetBlockColorAt(transform_.translate, color_);
+    }
+    
+    ImGui::End();
 #endif
 }
 

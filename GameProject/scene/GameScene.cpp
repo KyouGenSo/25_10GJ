@@ -82,6 +82,8 @@ void GameScene::Initialize()
     terrain_ = std::make_unique<Terrain>();
     terrain_->Initialize();
 
+    player_->SetTerrain(terrain_.get());
+
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
