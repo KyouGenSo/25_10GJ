@@ -125,8 +125,8 @@ void TitleAnimation::ImGui()
         ImGui::Text("Background RGB = %f", backgroundRGB_);
         ImGui::Text("Background Alpha = %f", backgroundAlpha_);
         animScale_.ImGui("Scale");
-        animAlpha1_.ImGui("Alpha");
-        animAlpha2_.ImGui("Alpha");
+        animAlpha1_.ImGui("Alpha1");
+        animAlpha2_.ImGui("Alpha2");
         animPositionY_.ImGui("Position Y");
         animBackgroundRGB_.ImGui("Background RGB");
         animBackgroundAlpha_.ImGui("Background Alpha");
