@@ -35,7 +35,7 @@ class Player
     bool isAttackHit_ = false;
     float attackMoveSpeed_ = 2.0f;
 
-    Block::Color color_;
+    Block::Colors color_;
 public: // メンバ関数
     Player();
     ~Player();
