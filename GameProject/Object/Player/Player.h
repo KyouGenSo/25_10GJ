@@ -36,6 +36,7 @@ class Player
     float attackMoveSpeed_ = 2.0f;
 
     Block::Colors color_;
+
 public: // メンバ関数
     Player();
     ~Player();
