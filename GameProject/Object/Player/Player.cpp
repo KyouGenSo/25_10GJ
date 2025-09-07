@@ -130,7 +130,12 @@ void Player::Jump() {
 }
 
 void Player::Dash() {
-
+    float dashForce = 3.0f;
+    float currentY = velocity_.y;
+    
+    velocity_.x = std::sin(transform_.rotate.y) * dashForce;
+    velocity_.z = std::cos(transform_.rotate.y) * dashForce;
+    velocity_.y = currentY;
 }
 
 void Player::Attack() {
