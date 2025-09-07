@@ -26,7 +26,10 @@ void InputHandler::UpdateInputStates()
 	Input* input = Input::GetInstance();
 	
 	// 移動入力
-	moveDirection_ = input->GetLeftStick();
+    moveDirection_ = {static_cast<float>(input->PushKey(DIK_D) - input->PushKey(DIK_A)), static_cast<float>(input->PushKey(DIK_W) - input->PushKey(DIK_S)) };
+    if (input->IsConnect()){
+        moveDirection_ = input->GetLeftStick();
+    }
 	isMoving_ = !input->LStickInDeadZone();
 	
 	// 各アクションの入力状態を更新
