@@ -149,7 +149,7 @@ void Player::Dash()
 
 void Player::Attack()
 {
-
+    // WIP
 }
 
 void Player::DrawImGui()
