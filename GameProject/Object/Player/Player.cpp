@@ -6,12 +6,8 @@
 #include "AABBCollider.h"
 #include "CollisionManager.h"
 #include "../../Collision/CollisionTypeIdDef.h"
-#include "../Boss/Boss.h"
 #include <cmath>
-
-#ifdef _DEBUG
 #include "ImGui.h"
-#endif
 
 Player::Player()
   : camera_(nullptr)
@@ -63,6 +59,8 @@ void Player::Update()
     inputHandler_->Update(this);
   }
 
+  Action();
+
   // モデルの更新
   model_->SetTransform(transform_);
   model_->Update();
@@ -81,25 +79,56 @@ void Player::Move(float speedMultiplier)
   if (moveDir.Length() < 0.1f) return;
   
   // 3Dベクトルに変換
-  velocity_ = { moveDir.x, 0.0f, moveDir.y };
+  velocity_ = { moveDir.x, velocity_.y, moveDir.y };
   velocity_ = velocity_.Normalize() * speed_ * speedMultiplier;
-  
-  // カメラモードに応じて移動方向を調整
-  if (mode_ && camera_)
-  {
-    Matrix4x4 rotationMatrix = Mat4x4::MakeRotateY(camera_->GetRotateY());
-    velocity_ = Mat4x4::TransformNormal(rotationMatrix, velocity_);
-  }
-  
-  // 位置を更新
-  transform_.translate += velocity_;
-  
-  // 移動方向を向く
-  if (velocity_.Length() > 0.01f)
-  {
-    targetAngle_ = std::atan2(velocity_.x, velocity_.z);
-    transform_.rotate.y = Vec3::LerpShortAngle(transform_.rotate.y, targetAngle_, 0.2f);
-  }
+}
+
+void Player::Action() {
+    //床の色を判別する
+
+    if (inputHandler_) Move();
+    if (inputHandler_->IsAttacking()) Attack();
+    if (inputHandler_->IsDashing()) Dash();
+    if (inputHandler_->IsJumping()) Jump();
+
+    Apply();
+}
+
+void Player::Apply() {
+    // カメラモードに応じて移動方向を調整
+    if (mode_ && camera_){
+        Matrix4x4 rotationMatrix = Mat4x4::MakeRotateY(camera_->GetRotateY());
+        velocity_ = Mat4x4::TransformNormal(rotationMatrix, velocity_);
+    }
+
+    // 位置を更新
+    transform_.translate += velocity_;
+
+    velocity_ *= 0.8f; // 摩擦
+    velocity_.y -= 0.1f; // 重力
+
+    if (transform_.translate.y <= 1.5f){
+        transform_.translate.y = 1.5f;
+        velocity_.y = 0.f;
+    }
+
+    // 移動方向を向く
+    if (velocity_.Length() > 0.01f){
+        targetAngle_ = std::atan2(velocity_.x, velocity_.z);
+        transform_.rotate.y = Vec3::LerpShortAngle(transform_.rotate.y, targetAngle_, 0.2f);
+    }
+}
+
+void Player::Jump() {
+    velocity_.y = 1.f;
+}
+
+void Player::Dash() {
+
+}
+
+void Player::Attack() {
+
 }
 
 void Player::DrawImGui()

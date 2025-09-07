@@ -138,7 +138,6 @@ void MyGame::Draw()
     #ifdef _DEBUG
 
     imguiManager_->Begin();
-
     TakoFramework::Draw();
 
     SceneManager::GetInstance()->DrawImGui();

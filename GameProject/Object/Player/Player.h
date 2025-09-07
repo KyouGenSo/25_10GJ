@@ -12,6 +12,26 @@ class Boss;
 
 class Player
 {
+  std::unique_ptr<Object3d> model_; ///< モデル
+  Camera* camera_ = nullptr;        ///< カメラ
+  Transform transform_{};           ///< 変形情報
+  Vector3 velocity_{};              ///< 速度
+  float speed_ = 0.5f;              ///< 移動速度
+  float targetAngle_ = 0.f;         ///< 目標角度
+  float hp_ = 100.f;                ///< 体力
+
+  bool mode_ = true;               ///< true: ThirdPersonMode, false: TopDownMode
+
+  // システム
+  std::unique_ptr<InputHandler> inputHandler_;
+  
+  // Colliders
+  std::unique_ptr<AABBCollider> bodyCollider_;
+  
+  // 攻撃関連
+  Boss* targetEnemy_ = nullptr;
+  bool isAttackHit_ = false;
+  float attackMoveSpeed_ = 2.0f;
 public: // メンバ関数
   Player();
   ~Player();
@@ -35,12 +55,6 @@ public: // メンバ関数
   /// 描画
   /// </summary>
   void Draw();
-
-  /// <summary>
-  /// 移動
-  /// </summary>
-  /// <param name="speedMultiplier">速度倍率（デフォルト1.0）</param>
-  void Move(float speedMultiplier = 1.0f);
 
   /// <summary>
   /// ImGuiの描画
@@ -68,27 +82,22 @@ public: // メンバ関数
   InputHandler* GetInputHandler() const { return inputHandler_.get(); }
   Transform* GetTransformPtr() { return &transform_; }
 
-private: // メンバ変数
+private:
 
-  std::unique_ptr<Object3d> model_; ///< モデル
-  Camera* camera_ = nullptr;        ///< カメラ
-  Transform transform_{};           ///< 変形情報
-  Vector3 velocity_{};              ///< 速度
-  float speed_ = 0.5f;              ///< 移動速度
-  float targetAngle_ = 0.f;         ///< 目標角度
-  float hp_ = 100.f;                ///< 体力
+      /// <summary>
+      /// 移動
+      /// </summary>
+      /// <param name="speedMultiplier">速度倍率（デフォルト1.0）</param>
+    void Move(float speedMultiplier = 1.0f);
 
-  bool mode_ = true;               ///< true: ThirdPersonMode, false: TopDownMode
+    void Jump();
 
-  // システム
-  std::unique_ptr<InputHandler> inputHandler_;
-  
-  // Colliders
-  std::unique_ptr<AABBCollider> bodyCollider_;
-  
-  // 攻撃関連
-  Boss* targetEnemy_ = nullptr;
-  bool isAttackHit_ = false;
-  float attackMoveSpeed_ = 2.0f;
+    void Dash();
+
+    void Attack();
+
+    void Action();
+
+    void Apply();
 };
 
