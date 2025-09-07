@@ -44,71 +44,62 @@
 						"node":3,
 						"path":"translation"
 					}
-				}
-			],
-			"name":"body\u30a2\u30af\u30b7\u30e7\u30f3.001",
-			"samplers":[
+				},
 				{
-					"input":15,
-					"interpolation":"LINEAR",
-					"output":16
-				}
-			]
-		},
-		{
-			"channels":[
+					"sampler":1,
+					"target":{
+						"node":0,
+						"path":"translation"
+					}
+				},
 				{
-					"sampler":0,
+					"sampler":2,
 					"target":{
 						"node":0,
 						"path":"rotation"
 					}
-				}
-			],
-			"name":"head\u30a2\u30af\u30b7\u30e7\u30f3.001",
-			"samplers":[
+				},
 				{
-					"input":15,
-					"interpolation":"LINEAR",
-					"output":17
-				}
-			]
-		},
-		{
-			"channels":[
-				{
-					"sampler":0,
+					"sampler":3,
 					"target":{
 						"node":1,
 						"path":"translation"
 					}
-				}
-			],
-			"name":"left_arm\u30a2\u30af\u30b7\u30e7\u30f3.005",
-			"samplers":[
+				},
 				{
-					"input":15,
-					"interpolation":"LINEAR",
-					"output":18
-				}
-			]
-		},
-		{
-			"channels":[
-				{
-					"sampler":0,
+					"sampler":4,
 					"target":{
 						"node":2,
 						"path":"translation"
 					}
 				}
 			],
-			"name":"right_arm\u30a2\u30af\u30b7\u30e7\u30f3.005",
+			"name":"BossIdleAnimation_All",
 			"samplers":[
 				{
 					"input":15,
 					"interpolation":"LINEAR",
+					"output":16
+				},
+				{
+					"input":17,
+					"interpolation":"STEP",
+					"output":18
+				},
+				{
+					"input":15,
+					"interpolation":"LINEAR",
 					"output":19
+				},
+				{
+					"input":15,
+					"interpolation":"LINEAR",
+					"output":20
+				},
+				{
+					"input":15,
+					"interpolation":"LINEAR",
+					"output":21
 				}
 			]
 		}
@@ -381,17 +372,35 @@
 		{
 			"bufferView":17,
 			"componentType":5126,
+			"count":2,
+			"max":[
+				2.5416666666666665
+			],
+			"min":[
+				0.041666666666666664
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":18,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":19,
+			"componentType":5126,
 			"count":61,
 			"type":"VEC4"
 		},
 		{
-			"bufferView":18,
+			"bufferView":20,
 			"componentType":5126,
 			"count":61,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":19,
+			"bufferView":21,
 			"componentType":5126,
 			"count":61,
 			"type":"VEC3"
@@ -500,23 +509,33 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":976,
+			"byteLength":8,
 			"byteOffset":4264
 		},
 		{
 			"buffer":0,
-			"byteLength":732,
-			"byteOffset":5240
+			"byteLength":24,
+			"byteOffset":4272
+		},
+		{
+			"buffer":0,
+			"byteLength":976,
+			"byteOffset":4296
 		},
 		{
 			"buffer":0,
 			"byteLength":732,
-			"byteOffset":5972
+			"byteOffset":5272
+		},
+		{
+			"buffer":0,
+			"byteLength":732,
+			"byteOffset":6004
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":6704,
+			"byteLength":6736,
 			"uri":"Boss.bin"
 		}
 	]
