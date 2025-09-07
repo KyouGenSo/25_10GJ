@@ -8,12 +8,13 @@
 #include "../../Collision/CollisionTypeIdDef.h"
 #include <cmath>
 #include "ImGui.h"
+#include "Terrain/Block/Block.h"
 
 Player::Player()
-  : camera_(nullptr)
-  , speed_(1.0f)
-  , targetAngle_(0.0f)
-  , mode_(false)
+    :camera_(nullptr)
+    ,speed_(1.0f)
+    ,targetAngle_(0.0f)
+    ,mode_(false)
 {
 }
 
@@ -23,52 +24,52 @@ Player::~Player()
 
 void Player::Initialize()
 {
-  model_ = std::make_unique<Object3d>();
-  model_->Initialize();
-  model_->SetModel("Player.gltf");
-
-  transform_.translate = Vector3(0.0f, 2.5f, 0.0f);
-  transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
-  transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
-
-  model_->SetTransform(transform_);
-
-  // Input Handlerの初期化
-  inputHandler_ = std::make_unique<InputHandler>();
-  inputHandler_->Initialize();
-
-  // Colliderの設定
-  SetupColliders();
+    model_ = std::make_unique<Object3d>();
+    model_->Initialize();
+    model_->SetModel("Player.gltf");
+    
+    transform_.translate = Vector3(0.0f, 2.5f, 0.0f);
+    transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
+    transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
+    
+    model_->SetTransform(transform_);
+    
+    // Input Handlerの初期化
+    inputHandler_ = std::make_unique<InputHandler>();
+    inputHandler_->Initialize();
+    
+    // Colliderの設定
+    SetupColliders();
 }
 
 void Player::Finalize()
 {
-  // Colliderを削除
-  if (bodyCollider_) {
-    CollisionManager::GetInstance()->RemoveCollider(bodyCollider_.get());
-  }
+    // Colliderを削除
+    if (bodyCollider_) {
+      CollisionManager::GetInstance()->RemoveCollider(bodyCollider_.get());
+    }
 }
 
 void Player::Update()
 {
-  float deltaTime = 1.0f / 60.0f; // 60FPSを仮定
-
-  // Inputの更新（StateのHandleInputより前に実行）
-  if (inputHandler_)
-  {
-    inputHandler_->Update(this);
-  }
-
-  Action();
-
-  // モデルの更新
-  model_->SetTransform(transform_);
-  model_->Update();
+    float deltaTime = 1.0f / 60.0f; // 60FPSを仮定
+    
+    // Inputの更新（StateのHandleInputより前に実行）
+    if (inputHandler_)
+    {
+      inputHandler_->Update(this);
+    }
+    
+    Action();
+    
+    // モデルの更新
+    model_->SetTransform(transform_);
+    model_->Update();
 }
 
 void Player::Draw()
 {
-  model_->Draw();
+    model_->Draw();
 }
 
 void Player::Move(float speedMultiplier)
@@ -98,6 +99,8 @@ void Player::Move(float speedMultiplier)
 
 void Player::Action() {
     //床の色を判別する
+    Block::Color blockColor = Block::Color::White;
+
 
     if (inputHandler_) Move();
     if (inputHandler_->IsAttacking()) Attack();
@@ -141,15 +144,15 @@ void Player::DrawImGui()
 
 void Player::SetupColliders()
 {
-  // 本体のCollider
-  bodyCollider_ = std::make_unique<AABBCollider>();
-  bodyCollider_->SetTransform(&transform_);
-  bodyCollider_->SetSize(Vector3(1.5f, 1.5f, 1.5f));
-  bodyCollider_->SetOffset(Vector3(0.0f, 0.0f, 0.0f));
-  bodyCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kPlayer));
-  bodyCollider_->SetOwner(this);
-
-  // CollisionManagerに登録
-  CollisionManager* collisionManager = CollisionManager::GetInstance();
-  collisionManager->AddCollider(bodyCollider_.get());
+    // 本体のCollider
+    bodyCollider_ = std::make_unique<AABBCollider>();
+    bodyCollider_->SetTransform(&transform_);
+    bodyCollider_->SetSize(Vector3(1.5f, 1.5f, 1.5f));
+    bodyCollider_->SetOffset(Vector3(0.0f, 0.0f, 0.0f));
+    bodyCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kPlayer));
+    bodyCollider_->SetOwner(this);
+    
+    // CollisionManagerに登録
+    CollisionManager* collisionManager = CollisionManager::GetInstance();
+    collisionManager->AddCollider(bodyCollider_.get());
 }
