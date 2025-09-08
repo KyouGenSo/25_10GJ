@@ -14,6 +14,9 @@ class Boss;
 
 class Player
 {
+public:
+    const float kSize = 1.5f;
+private:
     std::unique_ptr<Object3d> model_; ///< モデル
     Camera* camera_ = nullptr;        ///< カメラ
     Terrain* terrain_ = nullptr;      ///< 床

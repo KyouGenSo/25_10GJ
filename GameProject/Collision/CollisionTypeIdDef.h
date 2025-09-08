@@ -6,4 +6,5 @@ enum class CollisionTypeId : uint32_t {
 	kPlayer,
 	kEnemy,
     kColorBall,
+    kTerrain,
 };

@@ -202,7 +202,7 @@ void Player::SetupColliders()
     // 本体のCollider
     bodyCollider_ = std::make_unique<AABBCollider>();
     bodyCollider_->SetTransform(&transform_);
-    bodyCollider_->SetSize(Vector3(1.5f, 1.5f, 1.5f));
+    bodyCollider_->SetSize(Vector3(kSize, kSize, kSize));
     bodyCollider_->SetOffset(Vector3(0.0f, 0.0f, 0.0f));
     bodyCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kPlayer));
     bodyCollider_->SetOwner(this);

@@ -44,4 +44,5 @@ void ColorBall::SetCollider() {
     collider_->SetOwner(this);
 
     CollisionManager::GetInstance()->AddCollider(collider_.get());
+    CollisionManager::GetInstance()->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kColorBall), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
 }
