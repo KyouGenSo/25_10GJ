@@ -21,6 +21,12 @@ public:
         tweens_.emplace_back(tween);
     }
 
+    // Tweenを追加
+    inline void AddTween(float startSec, float durationSec, const ValueType& startValue, const ValueType& targetValue)
+    {
+        tweens_.emplace_back(startSec, durationSec, startValue, targetValue);
+    }
+
     void Start(ValueType initValue = {})
     {
         if (!currentTime_) return;
