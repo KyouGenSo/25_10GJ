@@ -33,6 +33,7 @@ public:
     void Initialize(std::unique_ptr<ModelInstance> modelInstance);
     void Update();
     void Draw();
+    void ImGui();
 
     Colors GetColor() const { return color_; }
     void SetColor(Colors color);
