@@ -207,7 +207,7 @@ void Boss::Collapse()
             collapseTimer += FrameTimer::GetInstance()->GetDeltaTime();
         }
 
-        if (collapseTimer >= kCollapseTime)
+        if (collapseTimer >= collapseDuration_)
         {
             model_->GetModel()->SetAnimation("BossIdleAnimation_All", 0.8f);
             isColliderActive = false;
