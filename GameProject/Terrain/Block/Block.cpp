@@ -1,6 +1,7 @@
 #include "./Block.h"
 #include <Features/Color/Color.h>
 #include <unordered_map>
+#include <imgui.h>
 
 const float Block::kScale = 10.0f;
 
@@ -35,6 +36,27 @@ void Block::Update()
 void Block::Draw()
 {
 
+}
+
+void Block::ImGui()
+{
+    #ifdef _DEBUG
+
+    if (modelInstance_)
+    {
+        const char* colorNames[] = { "White", "Gray", "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
+        int currentColor = static_cast<int>(color_);
+        if (ImGui::Combo("Color", &currentColor, colorNames, IM_ARRAYSIZE(colorNames)))
+        {
+            this->SetColor(static_cast<Colors>(currentColor));
+        }
+
+        ImGui::SeparatorText("Detail");
+        const auto& position = modelInstance_->GetTransform().translate;
+        ImGui::Text("Position: (%.2f, %.2f, %.2f)", position.x, position.y, position.z);
+    }
+
+    #endif // _DEBUG
 }
 
 void Block::SetColor(Colors color)

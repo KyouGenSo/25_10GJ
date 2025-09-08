@@ -198,12 +198,15 @@ void TitleScene::SpritesUpdate()
 
 void TitleScene::TerrainUpdate()
 {
-    uint32_t random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Colors::Orange);
-    random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Colors::Purple);
-    random = std::rand() % Terrain::kNumBlocks;
-    terrain_->SetBlockColorAt(random, Block::Colors::Blue);
+    float x = static_cast<float>(std::rand() % Terrain::kWidth);
+    float z = static_cast<float>(std::rand() % Terrain::kWidth);
+    terrain_->SetBlockColorAt({x, 0.0f, z}, Block::Colors::Orange);
+    x = static_cast<float>(std::rand() % Terrain::kWidth);
+    z = static_cast<float>(std::rand() % Terrain::kWidth);
+    terrain_->SetBlockColorAt({x, 0.0f, z}, Block::Colors::Purple);
+    x = static_cast<float>(std::rand() % Terrain::kWidth);
+    z = static_cast<float>(std::rand() % Terrain::kWidth);
+    terrain_->SetBlockColorAt({x, 0.0f, z}, Block::Colors::Blue);
 
     terrain_->Update();
 }

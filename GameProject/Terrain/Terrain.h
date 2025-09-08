@@ -8,8 +8,9 @@
 class Terrain
 {
 public:
-    static const uint32_t kSize = 20;
+    static const uint32_t kWidth = 10;
     static const uint32_t kHeight = 2;
+    static const uint32_t kSize = kWidth * 2;
     static const uint32_t kNumBlocks = kSize * kHeight * kSize;
 
     Terrain() = default;
@@ -19,10 +20,9 @@ public:
     void Finalize();
     void Update();
     void Draw();
+    void ImGui();
 
     static Vector3 ToLocalVector3(uint32_t index);
-    static Vector3 ToWorldVector3(uint32_t index);
-    static uint32_t ToIndex(const Vector3& position);
 
     /// Getters
 
@@ -40,13 +40,18 @@ public:
     // 座標に対応するブロックの色を変更 (範囲外は例外)
     void SetBlockColorAt(const Vector3& position, Block::Colors color);
 
-    // インデックスに対応するブロックの色を変更 (範囲外は例外)
-    void SetBlockColorAt(uint32_t index, Block::Colors color);
-
     // XZ-座標からY座標の最大値を取得。範囲外は例外
     float GetMaxYAt(float x, float z);
 
 private:
     std::unique_ptr<InstancedObject3d> instancedObjectBlock_;
-    std::vector <std::unique_ptr<Block>> blocks_;
+
+    template <class type, int sx, int sy, int sz>
+    using Array3D = std::array<std::array<std::array<type, sz>, sy>, sx>;
+
+    Array3D<std::unique_ptr<Block>, kSize, kHeight, kSize> blocks_;
+
+    #ifdef _DEBUG
+    Vector3 selectPosition_ = { 0.0f, 0.0f, 0.0f };
+    #endif // _DEBUG
 };
