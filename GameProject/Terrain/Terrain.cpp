@@ -17,7 +17,7 @@ void Terrain::Initialize()
     Transform tf = {};
     for (int i = 0; i < kNumBlocks; ++i)
     {
-        tf.translate = this->ToVector3(i) * blockScale;
+        tf.translate = this->ToWorldVector3(i);
         tf.translate.y -= blockScale * .5f;
 
         auto block = std::make_unique<Block>();
@@ -51,7 +51,7 @@ void Terrain::Draw()
     }
 }
 
-Vector3 Terrain::ToVector3(uint32_t index)
+Vector3 Terrain::ToLocalVector3(uint32_t index)
 {
     // kSize * kHeight * kSize
     int y = -static_cast<int>(index / (kSize * kSize));
@@ -59,6 +59,11 @@ Vector3 Terrain::ToVector3(uint32_t index)
     int z = index % kSize;
 
     return Vector3(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+}
+
+Vector3 Terrain::ToWorldVector3(uint32_t index)
+{
+    return ToLocalVector3(index) * Block::kScale;
 }
 
 uint32_t Terrain::ToIndex(const Vector3& position)

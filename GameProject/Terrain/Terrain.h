@@ -20,7 +20,8 @@ public:
     void Update();
     void Draw();
 
-    static Vector3 ToVector3(uint32_t index);
+    static Vector3 ToLocalVector3(uint32_t index);
+    static Vector3 ToWorldVector3(uint32_t index);
     static uint32_t ToIndex(const Vector3& position);
 
     /// Getters
