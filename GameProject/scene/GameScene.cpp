@@ -219,6 +219,7 @@ void GameScene::DrawImGui()
     player_->DrawImGui();
     boss_->DrawImGui();
     followCamera_->DrawImGui();
+    terrain_->ImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
     #endif // DEBUG
