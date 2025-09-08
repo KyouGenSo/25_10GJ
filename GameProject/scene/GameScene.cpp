@@ -72,12 +72,12 @@ void GameScene::Initialize()
     followCamera_->SetTarget(&player_->GetTransform());
     followCamera_->SetTarget2(&boss_->GetTransform());
 
-    // 衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
-    //collisionManager->SetCollisionMask(
-    //  static_cast<uint32_t>(CollisionTypeId::kPlayer),
-    //  static_cast<uint32_t>(CollisionTypeId::kEnemyAttack),
-    //  true
-    //);
+     //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
+    collisionManager->SetCollisionMask(
+      static_cast<uint32_t>(CollisionTypeId::kPlayer),
+      static_cast<uint32_t>(CollisionTypeId::kBossBody),
+      true
+    );
 
     terrain_ = std::make_unique<Terrain>();
     terrain_->Initialize();

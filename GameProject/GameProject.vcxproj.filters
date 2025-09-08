@@ -94,6 +94,9 @@
     <ClCompile Include="Features\Color\Color.cpp">
       <Filter>Features\Color</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\BossBodyCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\BossBodyCollider.h">
+      <Filter>Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

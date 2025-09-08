@@ -1,8 +1,11 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 #include "Transform.h"
 
+class BossBodyCollider;
+class OBBCollider;
 class Object3d;
 class AABBCollider;
 
@@ -37,22 +40,47 @@ public:
     /// </summary>
     void DrawImGui();
 
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
+    void Damage(float damage);
+
     //-----------------------------Getters/Setters------------------------------//
     void SetTransform(const Transform& transform) { transform_ = transform; }
     void SetHp(float hp) { hp_ = hp; }
+    void SetIsCollapse(bool collapse) { isCollapse = collapse; }
 
     const Transform& GetTransform() const { return transform_; }
     Transform* GetTransformPtr() { return &transform_; }
     float GetHp() const { return hp_; }
-    AABBCollider* GetCollider() const { return bodyCollider_.get(); }
+    bool GetIsCollapse() const { return isCollapse; }
 
+private: // プライベート関数
+    /// <summary>
+    /// コライダーの初期化
+    /// </summary>
+    void InitializeColliders();
+
+    /// <summary>
+    /// コライダーの更新
+    /// </summary>
+    void UpdateColliders();
+
+    /// <summary>
+    /// 倒れる処理
+    /// </summary>
+    void Collapse();
 private:
     std::unique_ptr<Object3d> model_; ///< モデル
     Transform transform_{};           ///< 変形情報
 
     float hp_ = 200.0f;               ///< 体力
+    bool isColliderActive = false;    ///< コライダーの有効フラグ
+    bool isCollapse = false;          ///< 崩壊フラグ
+    float collapseTimer = 0;       ///< 崩壊タイマー
+    const float kCollapseTime = 5.0f;  ///< 崩壊時間
 
     // Collider
-    std::unique_ptr<AABBCollider> bodyCollider_;
+    std::vector<std::unique_ptr<BossBodyCollider>> bodyColliders_;
+    std::vector<Transform> bodyColliderTransforms_;
 };
-
