@@ -156,7 +156,6 @@ void GameScene::Draw()
     if (ShadowRenderer::GetInstance()->IsEnabled())
     {
         ShadowRenderer::GetInstance()->BeginShadowPass();
-        ground_->Draw();
         player_->Draw();
         boss_->Draw();
         ShadowRenderer::GetInstance()->EndShadowPass();
@@ -176,6 +175,7 @@ void GameScene::Draw()
     player_->Draw();
     boss_->Draw();
     terrain_->Draw();
+    player_->InstancedDraw();
 
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定

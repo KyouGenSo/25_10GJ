@@ -3,6 +3,7 @@
 
 #include "Collider.h"
 #include "Transform.h"
+#include "ColorBall/Dispenser.hpp"
 #include "Terrain/Terrain.h"
 
 class Object3d;
@@ -37,6 +38,8 @@ class Player
 
     Block::Colors color_;
 
+    std::unique_ptr<Dispenser> dispenser_;
+
 public: // メンバ関数
     Player();
     ~Player();
@@ -60,7 +63,12 @@ public: // メンバ関数
     /// 描画
     /// </summary>
     void Draw();
-    
+
+    /// <summary>
+    /// InstancedModel用描画
+    /// </summary>
+    void InstancedDraw();
+
     /// <summary>
     /// ImGuiの描画
     /// </summary>
@@ -100,6 +108,8 @@ private:
     void Dash();
 
     void Attack();
+
+    void Dispense();
 
     void Action();
 

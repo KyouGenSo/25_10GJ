@@ -38,6 +38,9 @@ void Player::Initialize()
     inputHandler_ = std::make_unique<InputHandler>();
     inputHandler_->Initialize();
 
+    dispenser_ = std::make_unique<Dispenser>();
+    dispenser_->Initialize().SetOwner(this);
+
     // Colliderの設定
     SetupColliders();
 }
@@ -63,6 +66,8 @@ void Player::Update()
 
     Action();
 
+    dispenser_->Update();
+
     // モデルの更新
     model_->SetTransform(transform_);
     model_->Update();
@@ -72,6 +77,11 @@ void Player::Draw()
 {
     model_->Draw();
 }
+
+void Player::InstancedDraw()
+{
+    dispenser_->Draw();
+    }
 
 void Player::Move(float speedMultiplier)
 {
@@ -101,6 +111,12 @@ void Player::Move(float speedMultiplier)
 
 void Player::Action()
 {
+    if (inputHandler_) dispenser_->SelectColor(inputHandler_->GetColor());
+
+    //空中は操作させない(例外アリ)
+
+    
+
     //床の色を判別する
     Block::Colors blockColor = Block::Colors::White;
 
@@ -109,10 +125,13 @@ void Player::Action()
         blockColor = terrain_->GetBlockColorAt(transform_.translate);
     }
 
-    if (inputHandler_) Move();
+    if (blockColor == Block::Colors::Gray) Move();
     if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
     if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
     if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
+
+    if (inputHandler_->IsDispense())
+        Dispense();
 
     Apply();
 }
@@ -150,6 +169,10 @@ void Player::Dash()
 void Player::Attack()
 {
 
+}
+
+void Player::Dispense() {
+    dispenser_->Dispense();
 }
 
 void Player::DrawImGui()
