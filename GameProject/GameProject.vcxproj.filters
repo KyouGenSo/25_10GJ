@@ -94,6 +94,8 @@
     <ClCompile Include="Features\Color\Color.cpp">
       <Filter>Features\Color</Filter>
     </ClCompile>
+    <ClCompile Include="ColorBall\ColorBall.cpp" />
+    <ClCompile Include="ColorBall\Dispenser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -146,6 +148,12 @@
     </ClInclude>
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBall\ColorBall.hpp">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBall\Dispenser.hpp">
+      <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
