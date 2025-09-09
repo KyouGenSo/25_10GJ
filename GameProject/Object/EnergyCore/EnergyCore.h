@@ -141,18 +141,18 @@ private:
     float shakeDuration_ = 2.0f;                          ///< シェーク時間
     
     // ダメージフラッシュ関連
-    bool isFlashing_ = false;                              ///< フラッシュ中フラグ
-    float flashTimer_ = 0.0f;                              ///< フラッシュタイマー
-    float flashDuration_ = 0.1f;                           ///< フラッシュ時間（秒）
-    Vector4 originalColor_{ 1.0f, 1.0f, 1.0f, 1.0f };     ///< 元の色
-    Vector4 flashColor_{ 1.0f, 1.0f, 1.0f, 1.0f };        ///< フラッシュ色（白）
+    bool isFlashing_ = false;                                      ///< フラッシュ中フラグ
+    float flashTimer_ = 0.0f;                                      ///< フラッシュタイマー
+    float flashDuration_ = 0.1f;                                   ///< フラッシュ時間（秒）
+    Vector4 originalColor_{ 1.0f, 1.0f, 1.0f, 1.0f }; ///< 元の色
+    Vector4 flashColor_{ 1.0f, 1.0f, 1.0f, 1.0f };    ///< フラッシュ色（白）
     
     // ダメージシェーク関連
-    bool isDamageShaking_ = false;                         ///< ダメージシェーク中フラグ
-    float damageShakeTimer_ = 0.0f;                        ///< ダメージシェークタイマー
-    float damageShakeDuration_ = 0.3f;                     ///< ダメージシェーク時間
+    bool isDamageShaking_ = false;                                 ///< ダメージシェーク中フラグ
+    float damageShakeTimer_ = 0.0f;                                ///< ダメージシェークタイマー
+    float damageShakeDuration_ = 0.3f;                             ///< ダメージシェーク時間
     Vector3 damageShakeAmplitude_{ 0.3f, 0.1f, 0.3f };    ///< ダメージシェーク振動幅
-    Vector3 damageShakeOffset_{};                          ///< ダメージシェークオフセット
+    Vector3 damageShakeOffset_{};                                  ///< ダメージシェークオフセット
     
     // パーティクルエフェクト関連
     std::unique_ptr<EmitterManager> emitterManager_;       ///< エミッターマネージャー
