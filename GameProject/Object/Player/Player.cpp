@@ -156,6 +156,7 @@ void Player::Action()
     if (onGround_)
     {
         velocity_.y = 0;
+        jumpCount_ = 1;
         //床の色を判別する
         Block::Colors blockColor = Block::Colors::White;
 
@@ -174,9 +175,9 @@ void Player::Action()
         }
 
         if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
-        if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
-        if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
-        if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
+        if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack(false);
+        if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash(false);
+        if ((blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange) && inputHandler_->IsJumping()) Jump(blockColor == Block::Colors::Orange);
 
         if (inputHandler_->IsDispense())
         {
@@ -196,13 +197,16 @@ void Player::Apply()
     velocity_.y -= 0.1f; // 重力
 }
 
-void Player::Jump()
+void Player::Jump(bool _isBuffed)
 {
     velocity_.y = 1.f;
+
+    if (_isBuffed) velocity_.y *= 2.f;
+
     onGround_ = false;
 }
 
-void Player::Dash()
+void Player::Dash(bool _isBuffed)
 {
     float dashForce = 3.0f;
     float currentY = velocity_.y;
@@ -212,7 +216,7 @@ void Player::Dash()
     velocity_.y = currentY;
 }
 
-void Player::Attack()
+void Player::Attack(bool _isBuffed)
 {
     if (!isAttacking_)
     {
@@ -220,6 +224,9 @@ void Player::Attack()
         isAttacking_ = true;
         attackCollider_->SetOffset({ sinf(transform_.rotate.y) * 2.f, 0.f, cosf(transform_.rotate.y) * 2.f });
         CollisionManager::GetInstance()->AddCollider(attackCollider_.get());
+        damage_ = kDamage;
+
+        if (_isBuffed) damage_ *= 2.f;
     }
 }
 
