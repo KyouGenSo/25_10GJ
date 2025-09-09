@@ -16,7 +16,7 @@ class Boss;
 class Player
 {
 public:
-    const float kSize = 1.5f;
+    const float kSize = 3.0f;
 private:
     bool isDebug_ = false;            ///< デバッグ
     std::unique_ptr<Object3d> model_; ///< モデル
@@ -42,10 +42,13 @@ private:
     float timer_ = 0.f;
     const float kMotionTime = 0.55f;
     std::unique_ptr<AABBCollider> attackCollider_;
+    float damage_ = 10.f;
+    const float kDamage = 10.f;
 
     std::unique_ptr<Dispenser> dispenser_;
 
     bool onGround_ = true;
+    uint16_t jumpCount_ = 0;
 
     std::unique_ptr<EmitterManager> emitter_;
     std::string emitterName_ = "PlayerOnBuffedFloor";
@@ -116,11 +119,11 @@ private:
     /// <param name="speedMultiplier">速度倍率（デフォルト1.0）</param>
     void Move(float speedMultiplier = 1.0f);
 
-    void Jump();
+    void Jump(bool _isBuffed);
 
-    void Dash();
+    void Dash(bool _isBuffed);
 
-    void Attack();
+    void Attack(bool _isBuffed);
 
     void Dispense();
 
