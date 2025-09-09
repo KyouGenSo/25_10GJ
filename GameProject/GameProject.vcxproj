@@ -167,6 +167,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="MyGame\MyGame.cpp" />
     <ClCompile Include="Object\Boss\Boss.cpp" />
     <ClCompile Include="Object\EnergyCore\EnergyCore.cpp" />
+    <ClCompile Include="Object\EnergyCore\EnergyCoreManager.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\SampleScene.cpp" />
@@ -202,6 +203,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="MyGame\MyGame.h" />
     <ClInclude Include="Object\Boss\Boss.h" />
     <ClInclude Include="Object\EnergyCore\EnergyCore.h" />
+    <ClInclude Include="Object\EnergyCore\EnergyCoreManager.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\SampleScene.h" />

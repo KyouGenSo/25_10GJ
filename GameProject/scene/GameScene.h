@@ -9,7 +9,7 @@
 #include "FollowCamera/followCamera.h"
 #include "Object/Player/Player.h"
 #include "Object/Boss/Boss.h"
-#include "Object/EnergyCore/EnergyCore.h"
+#include "Object/EnergyCore/EnergyCoreManager.h"
 #include <Terrain/Terrain.h>
 
 class GameScene : public BaseScene
@@ -49,7 +49,7 @@ private: // メンバ変数
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Boss> boss_;
-    std::vector<std::unique_ptr<EnergyCore>> energyCores_;
+    std::unique_ptr<EnergyCoreManager> energyCoreManager_;
 
     std::unique_ptr<FollowCamera> followCamera_;
     std::unique_ptr<Terrain> terrain_;

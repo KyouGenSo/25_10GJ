@@ -110,6 +110,9 @@
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp">
       <Filter>Animation\TitleAnimation</Filter>
     </ClCompile>
+    <ClCompile Include="Object\EnergyCore\EnergyCoreManager.cpp">
+      <Filter>Object\EnergyCore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -174,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="ColorBall\ColorBall.hpp" />
     <ClInclude Include="ColorBall\Dispenser.hpp" />
+    <ClInclude Include="Object\EnergyCore\EnergyCoreManager.h">
+      <Filter>Object\EnergyCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shaders\2D.PS.hlsl">

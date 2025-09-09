@@ -53,6 +53,7 @@ public:
 
     const Transform& GetTransform() const { return transform_; }
     Transform* GetTransformPtr() { return &transform_; }
+    float GetMaxHp() const { return kMaxHp; }
     float GetHp() const { return hp_; }
     bool GetIsCollapse() const { return isCollapse; }
     float GetCollapseDuration() const { return collapseDuration_; }
@@ -76,6 +77,7 @@ private:
     std::unique_ptr<Object3d> model_; ///< モデル
     Transform transform_{};           ///< 変形情報
 
+    const float kMaxHp = 200.0f;      ///< 最大体力
     float hp_ = 200.0f;               ///< 体力
     bool isColliderActive = false;    ///< コライダーの有効フラグ
     bool isCollapse = false;          ///< 崩壊フラグ
