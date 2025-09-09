@@ -22,8 +22,9 @@ void EnergyCoreManager::Initialize(Boss* boss, Terrain* terrain)
     pBoss_ = boss;
     pTerrain_ = terrain;
     
-    // 乱数初期化
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    // 乱数生成器の初期化（現在時刻をシードに使用）
+    std::random_device rd;
+    randomEngine_ = std::mt19937(rd());
     
     // エネルギーコアの初期化（4つ生成）
     energyCores_.resize(kCoreCount);
@@ -118,9 +119,12 @@ void EnergyCoreManager::PlaceRandomly()
     // 各エリアでランダムにブロックを選んでエネルギーコアを配置
     for (int i = 0; i < kCoreCount; i++)
     {
-        // エリア内でランダムな座標を選択
-        int xIndex = areas[i].xMin + std::rand() % (areas[i].xMax - areas[i].xMin + 1);
-        int zIndex = areas[i].zMin + std::rand() % (areas[i].zMax - areas[i].zMin + 1);
+        // エリア内でランダムな座標を選択（uniform_int_distribution使用）
+        std::uniform_int_distribution<int> distX(areas[i].xMin, areas[i].xMax);
+        std::uniform_int_distribution<int> distZ(areas[i].zMin, areas[i].zMax);
+        
+        int xIndex = distX(randomEngine_);
+        int zIndex = distZ(randomEngine_);
         
         // ワールド座標に変換
         float worldX = xIndex * Block::kScale;

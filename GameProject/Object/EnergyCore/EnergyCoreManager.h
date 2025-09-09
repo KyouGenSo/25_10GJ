@@ -1,8 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
+#include <random>
 #include "Transform.h"
 
 class Boss;
@@ -66,4 +65,5 @@ private:
     std::vector<std::unique_ptr<EnergyCore>> energyCores_;  ///< エネルギーコア
     Boss* pBoss_ = nullptr;                                 ///< ボスへの参照
     Terrain* pTerrain_ = nullptr;                          ///< Terrainへの参照
+    std::mt19937 randomEngine_;                            ///< 乱数生成器（メルセンヌツイスター）
 };
