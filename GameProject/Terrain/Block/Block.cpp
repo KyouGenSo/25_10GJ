@@ -5,7 +5,7 @@
 
 const float Block::kScale = 10.0f;
 
-const Vector4& Block::ColorToVector4(Block::Colors color)
+Vector4 Block::ColorToVector4(Block::Colors color)
 {
     static const std::unordered_map<Block::Colors, Color> colors =
     {
