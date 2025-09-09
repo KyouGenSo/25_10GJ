@@ -3,7 +3,7 @@
 
 #include "Transform.h"
 #include "Collision/Collider/Player/PlayerCollider.hpp"
-#include "ColorBall/Dispenser.hpp"
+#include "Object/Dispenser/Dispenser.hpp"
 #include "Terrain/Terrain.h"
 
 class Object3d;

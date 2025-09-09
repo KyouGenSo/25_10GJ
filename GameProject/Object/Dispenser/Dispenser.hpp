@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "ColorBall.hpp"
+#include "../ColorBall/ColorBall.hpp"
 #include "Vector4.h"
 
 class Player;

@@ -3,7 +3,7 @@
 #include "dinput.h"
 #include "vector2.h"
 #include "Xinput.h"
-#include "ColorBall/Dispenser.hpp"
+#include "Object/Dispenser/Dispenser.hpp"
 
 class Player;
 
