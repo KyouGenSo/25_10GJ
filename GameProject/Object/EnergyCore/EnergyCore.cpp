@@ -48,49 +48,9 @@ void EnergyCore::Initialize(Boss* boss)
     
     // CollisionManagerに登録
     CollisionManager::GetInstance()->AddCollider(collider_.get());
-    
-    // パーティクルエフェクトの初期化
-    emitterManager_ = std::make_unique<EmitterManager>(GPUParticle::GetInstance());
-    
-    // ユニークなエミッター名を生成（ポインタのアドレスを使用）
-    emitterName_ = "EnergyCore_" + std::to_string(reinterpret_cast<uintptr_t>(this));
-    
-    // BoxEmitterを作成（コライダーと同じサイズ）
-    Vector3 emitterSize = collider_->GetSize();
-    emitterManager_->CreateBoxEmitter(
-        emitterName_,
-        transform_.translate + collider_->GetOffset(),  // コライダーと同じ位置
-        emitterSize,                                     // コライダーと同じサイズ  
-        Vector3(0.0f, 0.0f, 0.0f),                      // 回転なし
-        30,                                              // パーティクル数
-        0.2f                                             // 生成頻度（0.2秒ごと）
-    );
-    
-    // パーティクルの色を赤系に設定
-    Vector4 startColor(1.0f, 0.2f, 0.0f, 1.0f);  // 明るい赤
-    Vector4 endColor(0.8f, 0.0f, 0.0f, 0.0f);    // 暗い赤（フェードアウト）
-    emitterManager_->SetEmitterColors(emitterName_, startColor, endColor);
-    
-    // パーティクルの速度を設定（ゆっくり上昇）
-    emitterManager_->SetEmitterVelocityRange(
-        emitterName_,
-        Vector2(-0.05f, 0.05f),   // X軸の速度範囲
-        Vector2(0.05f, 0.3f),    // Y軸の速度範囲（上昇）
-        Vector2(-0.05f, 0.05f)    // Z軸の速度範囲
-    );
-    
-    // パーティクルのサイズを設定（小さめ）
-    emitterManager_->SetEmitterScaleRange(
-        emitterName_,
-        Vector2(0.3f, 0.3f),    // X軸のスケール範囲
-        Vector2(0.3f, 0.3f)     // Y軸のスケール範囲
-    );
-    
-    // パーティクルの寿命を設定
-    emitterManager_->SetEmitterLifeTimeRange(
-        emitterName_,
-        Vector2(1.0f, 2.0f)     // 1〜2秒の寿命
-    );
+
+    // パーティクルエミッターの初期化
+    InitParticleEmitter();
 }
 
 void EnergyCore::Finalize()
@@ -522,6 +482,52 @@ void EnergyCore::StartSpawnAnimation(const Vector3& targetPosition)
     {
         emitterManager_->SetEmitterActive(emitterName_, false);
     }
+}
+
+void EnergyCore::InitParticleEmitter()
+{
+    // パーティクルエフェクトの初期化
+    emitterManager_ = std::make_unique<EmitterManager>(GPUParticle::GetInstance());
+
+    // ユニークなエミッター名を生成（ポインタのアドレスを使用）
+    emitterName_ = "EnergyCore_" + std::to_string(reinterpret_cast<uintptr_t>(this));
+
+    // BoxEmitterを作成（コライダーと同じサイズ）
+    Vector3 emitterSize = collider_->GetSize();
+    emitterManager_->CreateBoxEmitter(
+        emitterName_,
+        transform_.translate + collider_->GetOffset(),  // コライダーと同じ位置
+        emitterSize,                                     // コライダーと同じサイズ  
+        Vector3(0.0f, 0.0f, 0.0f),                      // 回転なし
+        30,                                              // パーティクル数
+        0.2f                                             // 生成頻度（0.2秒ごと）
+    );
+
+    // パーティクルの色を赤系に設定
+    Vector4 startColor(1.0f, 0.2f, 0.0f, 1.0f);  // 明るい赤
+    Vector4 endColor(0.8f, 0.0f, 0.0f, 0.0f);    // 暗い赤（フェードアウト）
+    emitterManager_->SetEmitterColors(emitterName_, startColor, endColor);
+
+    // パーティクルの速度を設定（ゆっくり上昇）
+    emitterManager_->SetEmitterVelocityRange(
+        emitterName_,
+        Vector2(-0.05f, 0.05f),   // X軸の速度範囲
+        Vector2(0.05f, 0.3f),    // Y軸の速度範囲（上昇）
+        Vector2(-0.05f, 0.05f)    // Z軸の速度範囲
+    );
+
+    // パーティクルのサイズを設定（小さめ）
+    emitterManager_->SetEmitterScaleRange(
+        emitterName_,
+        Vector2(0.3f, 0.3f),    // X軸のスケール範囲
+        Vector2(0.3f, 0.3f)     // Y軸のスケール範囲
+    );
+
+    // パーティクルの寿命を設定
+    emitterManager_->SetEmitterLifeTimeRange(
+        emitterName_,
+        Vector2(1.0f, 2.0f)     // 1〜2秒の寿命
+    );
 }
 
 void EnergyCore::UpdateSpawnAnimation()

@@ -74,7 +74,7 @@ public:
     /// ダメージフラッシュ開始
     /// </summary>
     /// <param name="duration">フラッシュ時間（秒）</param>
-    void StartDamageFlash(float duration = 0.1f);
+    void StartDamageFlash(float duration = 0.05f);
 
     /// <summary>
     /// ダメージシェーク開始
@@ -95,6 +95,11 @@ public:
     float GetFlashDuration() const { return flashDuration_; }
 
 private:
+    /// <summary>
+    /// パーティクルの初期化
+    /// </summary>
+    void InitParticleEmitter();
+
     /// <summary>
     /// 出現アニメーション更新
     /// </summary>
