@@ -51,6 +51,9 @@
     <Filter Include="Features\Color">
       <UniqueIdentifier>{7c81723f-2cc9-4a4c-915b-9560e0f809d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\EnergyCore">
+      <UniqueIdentifier>{4b991d12-5d66-45d7-8a95-d7296dd738b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -95,6 +98,12 @@
       <Filter>Features\Color</Filter>
     </ClCompile>
     <ClCompile Include="Collision\BossBodyCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EnergyCore\EnergyCore.cpp">
+      <Filter>Object\EnergyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\EnergyCoreCollider.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,6 +160,12 @@
       <Filter>Features\Color</Filter>
     </ClInclude>
     <ClInclude Include="Collision\BossBodyCollider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\EnergyCore\EnergyCore.h">
+      <Filter>Object\EnergyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\EnergyCoreCollider.h">
       <Filter>Collision</Filter>
     </ClInclude>
   </ItemGroup>

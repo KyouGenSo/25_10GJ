@@ -156,6 +156,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
   <ItemGroup>
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
     <ClCompile Include="Collision\BossBodyCollider.cpp" />
+    <ClCompile Include="Collision\EnergyCoreCollider.cpp" />
     <ClCompile Include="Features\Color\Color.cpp" />
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp" />
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
@@ -163,6 +164,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGame\MyGame.cpp" />
     <ClCompile Include="Object\Boss\Boss.cpp" />
+    <ClCompile Include="Object\EnergyCore\EnergyCore.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\SampleScene.cpp" />
@@ -188,12 +190,14 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h" />
     <ClInclude Include="Collision\BossBodyCollider.h" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
+    <ClInclude Include="Collision\EnergyCoreCollider.h" />
     <ClInclude Include="Features\Color\Color.h" />
     <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h" />
     <ClInclude Include="FollowCamera\FollowCamera.h" />
     <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="MyGame\MyGame.h" />
     <ClInclude Include="Object\Boss\Boss.h" />
+    <ClInclude Include="Object\EnergyCore\EnergyCore.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\SampleScene.h" />

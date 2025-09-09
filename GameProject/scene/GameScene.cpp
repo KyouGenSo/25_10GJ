@@ -62,6 +62,39 @@ void GameScene::Initialize()
     boss_ = std::make_unique<Boss>();
     boss_->Initialize();
 
+    // エネルギーコアの初期化（4つ生成）
+    energyCores_.resize(4);
+    for (int i = 0; i < 4; i++)
+    {
+        energyCores_[i] = std::make_unique<EnergyCore>();
+        energyCores_[i]->Initialize(boss_.get());
+    }
+    
+    // ボスの周りにエネルギーコアを配置
+    Transform coreTransform;
+    coreTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+    coreTransform.scale = Vector3(1.5f, 1.5f, 1.5f);
+    
+    // 4つのコアをボスの周りに配置（四角形の頂点）
+    float distance = 30.0f; // ボスからの距離
+    Vector3 bossPos = boss_->GetTransform().translate;
+    
+    // 前方
+    coreTransform.translate = Vector3(bossPos.x, 0.0f, bossPos.z - distance);
+    energyCores_[0]->SetTransform(coreTransform);
+    
+    // 後方
+    coreTransform.translate = Vector3(bossPos.x, 0.0f, bossPos.z + distance);
+    energyCores_[1]->SetTransform(coreTransform);
+    
+    // 左側
+    coreTransform.translate = Vector3(bossPos.x - distance, 0.0f, bossPos.z);
+    energyCores_[2]->SetTransform(coreTransform);
+    
+    // 右側
+    coreTransform.translate = Vector3(bossPos.x + distance, 0.0f, bossPos.z);
+    energyCores_[3]->SetTransform(coreTransform);
+
     // Playerの初期化
     player_ = std::make_unique<Player>();
     player_->Initialize();
@@ -76,6 +109,13 @@ void GameScene::Initialize()
     collisionManager->SetCollisionMask(
       static_cast<uint32_t>(CollisionTypeId::kPlayer),
       static_cast<uint32_t>(CollisionTypeId::kBossBody),
+      true
+    );
+    
+    // プレイヤーとエネルギーコアの衝突判定を有効化
+    collisionManager->SetCollisionMask(
+      static_cast<uint32_t>(CollisionTypeId::kPlayer),
+      static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
       true
     );
 
@@ -99,6 +139,15 @@ void GameScene::Finalize()
     if (boss_)
     {
         boss_->Finalize();
+    }
+    
+    // エネルギーコアの終了処理
+    for (auto& core : energyCores_)
+    {
+        if (core)
+        {
+            core->Finalize();
+        }
     }
 
     // CollisionManagerのリセット
@@ -131,6 +180,33 @@ void GameScene::Update()
     ground_->Update();
     player_->Update();
     boss_->Update();
+    
+    // エネルギーコアの更新
+    for (auto& core : energyCores_)
+    {
+        core->Update();
+    }
+    
+    // 全エネルギーコアが破壊されたかチェック
+    bool allDestroyed = true;
+    for (const auto& core : energyCores_)
+    {
+        if (!core->GetIsDestroyed())
+        {
+            allDestroyed = false;
+            break;
+        }
+    }
+    
+    // 全て破壊されたら再生成
+    if (allDestroyed)
+    {
+        for (auto& core : energyCores_)
+        {
+            core->Respawn();
+        }
+    }
+    
     followCamera_->Update();
 
     terrain_->Update();
@@ -159,6 +235,10 @@ void GameScene::Draw()
         ground_->Draw();
         player_->Draw();
         boss_->Draw();
+        for (auto& core : energyCores_)
+        {
+            core->Draw();
+        }
         ShadowRenderer::GetInstance()->EndShadowPass();
     }
 
@@ -175,6 +255,13 @@ void GameScene::Draw()
     //ground_->Draw();
     player_->Draw();
     boss_->Draw();
+    
+    // エネルギーコアの描画
+    for (auto& core : energyCores_)
+    {
+        core->Draw();
+    }
+    
     terrain_->Draw();
 
     //------------------前景Spriteの描画------------------//
@@ -218,6 +305,21 @@ void GameScene::DrawImGui()
     #ifdef _DEBUG
     player_->DrawImGui();
     boss_->DrawImGui();
+    
+    // エネルギーコアのImGui描画
+    ImGui::Begin("Energy Cores");
+    for (int i = 0; i < energyCores_.size(); i++)
+    {
+        ImGui::PushID(i);
+        if (ImGui::TreeNode(("Energy Core " + std::to_string(i)).c_str()))
+        {
+            energyCores_[i]->DrawImGui();
+            ImGui::TreePop();
+        }
+        ImGui::PopID();
+    }
+    ImGui::End();
+    
     followCamera_->DrawImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
