@@ -158,6 +158,8 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
     <ClCompile Include="ColorBall\ColorBall.cpp" />
     <ClCompile Include="ColorBall\Dispenser.cpp" />
+    <ClCompile Include="Bar2d\Bar2d.cpp" />
+    <ClCompile Include="Bar3d\Bar3d.cpp" />
     <ClCompile Include="Features\Color\Color.cpp" />
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp" />
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
@@ -170,8 +172,10 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="scene\SampleScene.cpp" />
     <ClCompile Include="scene\SceneFactory.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="scene\TutorialScene.cpp" />
     <ClCompile Include="Terrain\Block\Block.cpp" />
     <ClCompile Include="Terrain\Terrain.cpp" />
+    <ClCompile Include="Tutorial\TutorialSection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\TakoEngine\project\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -189,6 +193,8 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Animation\AnimationTween.hpp" />
     <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h" />
     <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp" />
+    <ClInclude Include="Bar2d\Bar2d.h" />
+    <ClInclude Include="Bar3d\Bar3d.h" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
     <ClInclude Include="ColorBall\ColorBall.hpp" />
     <ClInclude Include="ColorBall\Dispenser.hpp" />
@@ -203,8 +209,10 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="scene\SampleScene.h" />
     <ClInclude Include="scene\SceneFactory.h" />
     <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="scene\TutorialScene.h" />
     <ClInclude Include="Terrain\Block\Block.h" />
     <ClInclude Include="Terrain\Terrain.h" />
+    <ClInclude Include="Tutorial\TutorialSection.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shaders\2D.PS.hlsl">

@@ -68,6 +68,10 @@ void TitleScene::Update()
     {
         SceneManager::GetInstance()->ChangeScene("game");
     }
+    if (Input::GetInstance()->TriggerKey(DIK_T))
+    {
+        SceneManager::GetInstance()->ChangeScene("tutorial");
+    }
 }
 
 void TitleScene::Draw()
