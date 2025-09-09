@@ -55,13 +55,6 @@ void EnergyCore::Initialize(Boss* boss)
 
 void EnergyCore::Finalize()
 {
-    // パーティクルエミッターを削除
-    if (emitterManager_)
-    {
-        emitterManager_->RemoveEmitter(emitterName_);
-        emitterManager_.reset();
-    }
-    
     // Colliderを削除
     if (collider_)
     {
