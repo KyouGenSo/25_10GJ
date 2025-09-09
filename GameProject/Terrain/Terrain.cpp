@@ -138,8 +138,8 @@ void Terrain::ImGui()
 
         ImGui::Unindent(15.0f);
         ImGui::Unindent(15.0f);
-        ImGui::End();
     }
+    ImGui::End();
 };
 
 Vector3 Terrain::ToLocalVector3(uint32_t index)

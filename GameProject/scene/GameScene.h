@@ -46,7 +46,6 @@ private: // メンバ変数
 
     // SkyBox
     std::unique_ptr<SkyBox> skyBox_;
-    std::unique_ptr<Object3d> ground_;
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Boss> boss_;
@@ -54,8 +53,6 @@ private: // メンバ変数
 
     std::unique_ptr<FollowCamera> followCamera_;
     std::unique_ptr<Terrain> terrain_;
-
-    Transform groundUvTransform_{};
 
     bool isDebug_ = false;
 

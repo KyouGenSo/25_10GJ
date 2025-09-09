@@ -48,16 +48,6 @@ void GameScene::Initialize()
     // CollisionManagerの初期化（最初に行う）
     collisionManager->Initialize();
 
-    // 床モデルのUV変換設定
-    groundUvTransform_.translate = Vector3(0.0f, 0.0f, 0.0f);
-    groundUvTransform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
-    groundUvTransform_.scale = Vector3(100.0f, 100.0f, 100.0f);
-    // 床モデルの初期化
-    ground_ = std::make_unique<Object3d>();
-    ground_->Initialize();
-    ground_->SetModel("ground_black.gltf");
-    ground_->SetUvTransform(groundUvTransform_);
-
     // 敵モデルの初期化
     boss_ = std::make_unique<Boss>();
     boss_->Initialize();
@@ -105,7 +95,7 @@ void GameScene::Initialize()
         
         // エネルギーコアの位置を設定（ブロックの上に浮かせる）
         Transform coreTransform;
-        coreTransform.translate = Vector3(worldX, worldY + Block::kScale * 0.5f + 5.0f, worldZ);
+        coreTransform.translate = Vector3(worldX, worldY + Block::kScale * 0.5f, worldZ);
         coreTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
         coreTransform.scale = Vector3(1.5f, 1.5f, 1.5f);
         
@@ -189,7 +179,6 @@ void GameScene::Update()
     player_->SetMode(followCamera_->GetMode());
 
     skyBox_->Update();
-    ground_->Update();
     player_->Update();
     boss_->Update();
     
@@ -263,7 +252,6 @@ void GameScene::Draw()
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
 
-    //ground_->Draw();
     player_->Draw();
     boss_->Draw();
     
