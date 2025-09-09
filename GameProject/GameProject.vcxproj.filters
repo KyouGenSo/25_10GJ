@@ -93,7 +93,6 @@
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp">
       <Filter>Features\TimeMeasurer</Filter>
     </ClCompile>
-    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
     <ClCompile Include="Features\Color\Color.cpp">
       <Filter>Features\Color</Filter>
     </ClCompile>
@@ -108,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="ColorBall\ColorBall.cpp" />
     <ClCompile Include="ColorBall\Dispenser.cpp" />
+    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp">
+      <Filter>Animation\TitleAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -161,12 +163,6 @@
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
     </ClInclude>
-    <ClInclude Include="ColorBall\ColorBall.hpp">
-      <Filter>MyGame</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorBall\Dispenser.hpp">
-      <Filter>MyGame</Filter>
-    </ClInclude>
     <ClInclude Include="Collision\BossBodyCollider.h">
       <Filter>Collision</Filter>
     </ClInclude>
@@ -176,6 +172,8 @@
     <ClInclude Include="Collision\EnergyCoreCollider.h">
       <Filter>Collision</Filter>
     </ClInclude>
+    <ClInclude Include="ColorBall\ColorBall.hpp" />
+    <ClInclude Include="ColorBall\Dispenser.hpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shaders\2D.PS.hlsl">
