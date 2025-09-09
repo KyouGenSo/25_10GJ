@@ -2,7 +2,7 @@
 #include <WinApp.h>
 #include <TextureManager.h>
 
-void TutorialSection::Initialize()
+void TutorialSection::Initialize(float targetProgress)
 {
     pInput_ = Input::GetInstance();
     TextureManager::GetInstance()->LoadTexture("tutorial/bg.png");
@@ -11,6 +11,7 @@ void TutorialSection::Initialize()
     progressBar_->Initialize("", { 766.0f, 17.0f }, false);
     progressBar_->SetAnchorPoint({ 0.5f, 0.0f });
     progressBar_->SetPosition({ static_cast<float>(WinApp::clientWidth / 2.0f), 205.0f });
+    progressBar_->SetMaxValue(targetProgress);
 
     background_ = std::make_unique<Sprite>();
     background_->Initialize("tutorial/bg.png");
@@ -28,10 +29,7 @@ void TutorialSection::Update()
         text->Update();
     }
 
-    if (textButton_)
-    {
-        textButton_->Update();
-    }
+    this->KeyTextUpdate();
 }
 
 void TutorialSection::Draw()
@@ -44,13 +42,35 @@ void TutorialSection::Draw()
         text->Draw();
     }
 
-    if (textButton_)
+    for (auto& textButton : textsButton_)
     {
-        textButton_->Draw();
+        textButton.second->Draw();
     }
 }
 
 void TutorialSection::ImGui()
 {
     progressBar_->ImGui();
+}
+
+void TutorialSection::Progress(float numProgress)
+{
+    *progressBar_ += numProgress;
+}
+
+void TutorialSection::KeyTextUpdate()
+{
+    for (auto& [numDik, textButton] : textsButton_)
+    {
+        if (pInput_->PushKey(numDik))
+        {
+            textButton->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+        }
+        else
+        {
+            textButton->SetColor({ 0.5f, 0.5f, 0.5f, 1.0f });
+        }
+
+        textButton->Update();
+    }
 }

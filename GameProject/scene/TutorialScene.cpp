@@ -45,7 +45,7 @@ void TutorialScene::Initialize()
     /// ================================== ///
     this->InitializeGameScene();
     section_ = std::make_unique<TutorialSection>();
-    section_->Initialize();
+    section_->Initialize(100.0f);
 
 }
 
