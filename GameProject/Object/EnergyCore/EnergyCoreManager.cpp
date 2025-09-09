@@ -78,9 +78,50 @@ void EnergyCoreManager::Draw()
 void EnergyCoreManager::DrawImGui()
 {
 #ifdef _DEBUG
-    ImGui::Begin("Energy Cores");
+    ImGui::Begin("Energy Core Manager");
     
-    // Destroy Allボタン
+    // ===== 統計情報 =====
+    int activeCount = 0;
+    int destroyedCount = 0;
+    float totalHp = 0.0f;
+    float totalMaxHp = 0.0f;
+    
+    for (const auto& core : energyCores_)
+    {
+        if (core->GetIsDestroyed())
+        {
+            destroyedCount++;
+        }
+        else
+        {
+            activeCount++;
+            totalHp += core->GetHp();
+        }
+        totalMaxHp += core->GetMaxHp();
+    }
+    
+    // 統計情報表示
+    ImGui::Text("Status Overview");
+    ImGui::Text("Active Cores: %d / %d", activeCount, static_cast<int>(energyCores_.size()));
+    ImGui::Text("Destroyed: %d", destroyedCount);
+    
+    // 総HPバー
+    float hpRatio = totalMaxHp > 0 ? totalHp / totalMaxHp : 0.0f;
+    ImVec4 hpColor = hpRatio > 0.5f ? ImVec4(0.2f, 0.8f, 0.2f, 1.0f) :
+                     hpRatio > 0.25f ? ImVec4(0.8f, 0.8f, 0.2f, 1.0f) :
+                     ImVec4(0.8f, 0.2f, 0.2f, 1.0f);
+    
+    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hpColor);
+    ImGui::ProgressBar(hpRatio, ImVec2(-1, 0), 
+                      (std::string("Total HP: ") + std::to_string(static_cast<int>(totalHp)) + 
+                       " / " + std::to_string(static_cast<int>(totalMaxHp))).c_str());
+    ImGui::PopStyleColor();
+    
+    ImGui::Separator();
+    
+    // ===== 一括操作ボタン =====
+    ImGui::Text("Batch Operations");
+    
     if (ImGui::Button("Destroy All"))
     {
         for (auto& core : energyCores_)
@@ -89,19 +130,105 @@ void EnergyCoreManager::DrawImGui()
         }
     }
     
+    ImGui::SameLine();
+    if (ImGui::Button("Respawn All"))
+    {
+        RespawnAll();
+    }
+    
+    ImGui::SameLine();
+    if (ImGui::Button("Damage All (20)"))
+    {
+        for (auto& core : energyCores_)
+        {
+            core->Damage(20.0f);
+        }
+    }
+    
+    ImGui::SameLine();
+    if (ImGui::Button("Randomize Positions"))
+    {
+        PlaceRandomly();
+    }
+    
     ImGui::Separator();
     
-    // 各エネルギーコアの詳細
-    for (size_t i = 0; i < energyCores_.size(); i++)
+    // ===== コアの2x2グリッド表示 =====
+    ImGui::Text("Energy Cores Grid");
+    
+    // グリッドレイアウト（2列）
+    if (ImGui::BeginTable("CoreGrid", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit))
     {
-        ImGui::PushID(static_cast<int>(i));
-        if (ImGui::TreeNode(("Energy Core " + std::to_string(i)).c_str()))
+        for (size_t i = 0; i < energyCores_.size(); i++)
         {
-            energyCores_[i]->DrawImGui();
-            ImGui::TreePop();
+            ImGui::TableNextColumn();
+            
+            auto& core = energyCores_[i];
+            ImGui::PushID(static_cast<int>(i));
+            
+            // コアのヘッダー
+            bool isDestroyed = core->GetIsDestroyed();
+            ImVec4 textColor = isDestroyed ? ImVec4(0.5f, 0.5f, 0.5f, 1.0f) : ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+            ImGui::PushStyleColor(ImGuiCol_Text, textColor);
+            
+            std::string header = "Core " + std::to_string(i);
+            if (isDestroyed)
+            {
+                header += " [DESTROYED]";
+            }
+            ImGui::Text("%s", header.c_str());
+            ImGui::PopStyleColor();
+            
+            // HPバー
+            float hp = core->GetHp();
+            float maxHp = core->GetMaxHp();
+            float ratio = maxHp > 0 ? hp / maxHp : 0.0f;
+            
+            ImVec4 barColor = ratio > 0.5f ? ImVec4(0.2f, 0.8f, 0.2f, 1.0f) :
+                             ratio > 0.25f ? ImVec4(0.8f, 0.8f, 0.2f, 1.0f) :
+                             ImVec4(0.8f, 0.2f, 0.2f, 1.0f);
+            
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, barColor);
+            std::string hpText = std::to_string(static_cast<int>(hp)) + "/" + std::to_string(static_cast<int>(maxHp));
+            ImGui::ProgressBar(ratio, ImVec2(150, 0), hpText.c_str());
+            ImGui::PopStyleColor();
+            
+            // クイックアクション
+            if (isDestroyed)
+            {
+                if (ImGui::SmallButton("Respawn"))
+                {
+                    core->Respawn();
+                    // 位置を再設定
+                    core->StartSpawnAnimation(core->GetTransform().translate);
+                }
+            }
+            else
+            {
+                if (ImGui::SmallButton("Destroy"))
+                {
+                    core->Destroy();
+                }
+                ImGui::SameLine();
+                if (ImGui::SmallButton("Damage"))
+                {
+                    core->Damage(20.0f);
+                }
+            }
+            
+            // 詳細表示
+            if (ImGui::TreeNode(("Details##" + std::to_string(i)).c_str()))
+            {
+                core->DrawImGui();
+                ImGui::TreePop();
+            }
+            
+            ImGui::PopID();
         }
-        ImGui::PopID();
+        
+        ImGui::EndTable();
     }
+    
     ImGui::End();
 #endif
 }

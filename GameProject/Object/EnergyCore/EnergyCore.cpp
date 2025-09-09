@@ -62,7 +62,7 @@ void EnergyCore::Initialize(Boss* boss)
         transform_.translate + collider_->GetOffset(),  // コライダーと同じ位置
         emitterSize,                                     // コライダーと同じサイズ  
         Vector3(0.0f, 0.0f, 0.0f),                      // 回転なし
-        10,                                              // パーティクル数
+        30,                                              // パーティクル数
         0.2f                                             // 生成頻度（0.2秒ごと）
     );
     
@@ -170,103 +170,263 @@ void EnergyCore::Draw()
 void EnergyCore::DrawImGui()
 {
 #ifdef _DEBUG
-    // Transform設定
-    ImGui::Text("Transform");
-    ImGui::DragFloat3("Position", &transform_.translate.x, 0.1f);
-    ImGui::DragFloat3("Rotation", &transform_.rotate.x, 0.1f);
-    ImGui::DragFloat3("Scale", &transform_.scale.x, 0.1f, 0.1f, 10.0f);
-    
-    ImGui::Separator();
-    
-    // HP表示
-    ImGui::Text("HP: %.1f / %.1f", hp_, maxHp_);
-    ImGui::ProgressBar(hp_ / maxHp_, ImVec2(0, 0), "");
-    
-    // HP調整
-    if (ImGui::DragFloat("HP", &hp_, 1.0f, 0.0f, maxHp_))
+    // タブバーを使用して情報を整理
+    if (ImGui::BeginTabBar("EnergyCoreTabs"))
     {
-        // HPが0になったら破壊
-        if (hp_ <= 0.0f && !isDestroyed_)
+        // ===== Overviewタブ =====
+        if (ImGui::BeginTabItem("Overview"))
         {
-            Destroy();
-        }
-    }
-    if (ImGui::DragFloat("Max HP", &maxHp_, 1.0f, 1.0f, 1000.0f))
-    {
-        // 最大HPが変更されたら、現在のHPも調整
-        hp_ = std::min(hp_, maxHp_);
-    }
-    
-    ImGui::Separator();
-    
-    // フラッシュ設定
-    ImGui::Text("Flash Settings");
-    if (ImGui::DragFloat("Flash Duration", &flashDuration_, 0.01f, 0.01f, 1.0f))
-    {
-        // フラッシュ時間の調整
-    }
-    if (ImGui::Button("Test Flash"))
-    {
-        StartDamageFlash(flashDuration_);
-    }
-    
-    ImGui::Separator();
-    
-    // ダメージシェーク設定
-    ImGui::Text("Damage Shake Settings");
-    ImGui::DragFloat3("Shake Amplitude", &damageShakeAmplitude_.x, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Shake Duration", &damageShakeDuration_, 0.01f, 0.01f, 2.0f);
-    if (ImGui::Button("Test Damage Shake"))
-    {
-        StartDamageShake(damageShakeDuration_);
-    }
-    
-    ImGui::Separator();
-    
-    // 状態表示
-    ImGui::Text("Destroyed: %s", isDestroyed_ ? "True" : "False");
-    
-    if (ImGui::Button("Destroy"))
-    {
-        Destroy();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Respawn"))
-    {
-        Respawn();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Damage (20)"))
-    {
-        Damage(20.0f);
-    }
-    
-    // Collider設定
-    if (collider_)
-    {
-        ImGui::Separator();
-        ImGui::Text("Collider Settings");
-        
-        // Size
-        Vector3 size = collider_->GetSize();
-        if (ImGui::DragFloat3("Size", &size.x, 0.1f, 0.1f, 100.0f))
-        {
-            collider_->SetSize(size);
+            // 状態表示
+            ImVec4 statusColor = isDestroyed_ ? ImVec4(0.8f, 0.2f, 0.2f, 1.0f) : ImVec4(0.2f, 0.8f, 0.2f, 1.0f);
+            ImGui::PushStyleColor(ImGuiCol_Text, statusColor);
+            ImGui::Text("Status: %s", isDestroyed_ ? "DESTROYED" : "ACTIVE");
+            ImGui::PopStyleColor();
+            
+            ImGui::Spacing();
+            
+            // HP表示（色付きバー）
+            float hpRatio = maxHp_ > 0 ? hp_ / maxHp_ : 0.0f;
+            ImVec4 hpBarColor = hpRatio > 0.5f ? ImVec4(0.2f, 0.8f, 0.2f, 1.0f) :
+                               hpRatio > 0.25f ? ImVec4(0.8f, 0.8f, 0.2f, 1.0f) :
+                               ImVec4(0.8f, 0.2f, 0.2f, 1.0f);
+            
+            ImGui::Text("Health Points");
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hpBarColor);
+            ImGui::ProgressBar(hpRatio, ImVec2(-1, 20), "");
+            ImGui::PopStyleColor();
+            
+            ImGui::Text("HP: %.0f / %.0f (%.1f%%)", hp_, maxHp_, hpRatio * 100.0f);
+            
+            // HP調整
+            ImGui::SetNextItemWidth(150);
+            if (ImGui::DragFloat("Current HP", &hp_, 1.0f, 0.0f, maxHp_))
+            {
+                if (hp_ <= 0.0f && !isDestroyed_)
+                {
+                    Destroy();
+                }
+            }
+            
+            ImGui::SetNextItemWidth(150);
+            if (ImGui::DragFloat("Max HP", &maxHp_, 1.0f, 1.0f, 1000.0f))
+            {
+                hp_ = std::min(hp_, maxHp_);
+            }
+            
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+            
+            // クイックアクション
+            ImGui::Text("Quick Actions");
+            
+            if (isDestroyed_)
+            {
+                if (ImGui::Button("Respawn", ImVec2(100, 0)))
+                {
+                    Respawn();
+                }
+            }
+            else
+            {
+                if (ImGui::Button("Destroy", ImVec2(100, 0)))
+                {
+                    Destroy();
+                }
+                
+                ImGui::SameLine();
+                if (ImGui::Button("Damage (20)", ImVec2(100, 0)))
+                {
+                    Damage(20.0f);
+                }
+                
+                ImGui::SameLine();
+                if (ImGui::Button("Heal Full", ImVec2(100, 0)))
+                {
+                    hp_ = maxHp_;
+                }
+            }
+            
+            ImGui::EndTabItem();
         }
         
-        // Offset
-        Vector3 offset = collider_->GetOffset();
-        if (ImGui::DragFloat3("Offset", &offset.x, 0.1f))
+        // ===== Transformタブ =====
+        if (ImGui::BeginTabItem("Transform"))
         {
-            collider_->SetOffset(offset);
+            ImGui::Text("Position, Rotation, and Scale");
+            ImGui::Spacing();
+            
+            // Position
+            ImGui::Text("Position");
+            ImGui::SetNextItemWidth(200);
+            ImGui::DragFloat3("##Position", &transform_.translate.x, 0.1f);
+            
+            // Rotation
+            ImGui::Text("Rotation");
+            ImGui::SetNextItemWidth(200);
+            ImGui::DragFloat3("##Rotation", &transform_.rotate.x, 0.1f);
+            
+            // Scale
+            ImGui::Text("Scale");
+            ImGui::SetNextItemWidth(200);
+            ImGui::DragFloat3("##Scale", &transform_.scale.x, 0.1f, 0.1f, 10.0f);
+            
+            ImGui::Spacing();
+            
+            // Reset buttons
+            if (ImGui::Button("Reset Position"))
+            {
+                transform_.translate = Vector3(0.0f, 0.0f, 0.0f);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Reset Rotation"))
+            {
+                transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Reset Scale"))
+            {
+                transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
+            }
+            
+            ImGui::EndTabItem();
         }
         
-        // Active状態
-        bool isActive = collider_->IsActive();
-        if (ImGui::Checkbox("Active", &isActive))
+        // ===== Effectsタブ =====
+        if (ImGui::BeginTabItem("Effects"))
         {
-            collider_->SetActive(isActive);
+            // ダメージフラッシュ
+            ImGui::Text("Damage Flash Effect");
+            ImGui::Spacing();
+            
+            ImGui::SetNextItemWidth(150);
+            ImGui::DragFloat("Flash Duration", &flashDuration_, 0.01f, 0.01f, 1.0f);
+            
+            if (ImGui::Button("Test Flash", ImVec2(120, 0)))
+            {
+                StartDamageFlash(flashDuration_);
+            }
+            
+            if (isFlashing_)
+            {
+                ImGui::SameLine();
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "[Flashing]");
+            }
+            
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+            
+            // ダメージシェーク
+            ImGui::Text("Damage Shake Effect");
+            ImGui::Spacing();
+            
+            ImGui::SetNextItemWidth(200);
+            ImGui::DragFloat3("Shake Amplitude", &damageShakeAmplitude_.x, 0.01f, 0.0f, 1.0f);
+            
+            ImGui::SetNextItemWidth(150);
+            ImGui::DragFloat("Shake Duration", &damageShakeDuration_, 0.01f, 0.01f, 2.0f);
+            
+            if (ImGui::Button("Test Shake", ImVec2(120, 0)))
+            {
+                StartDamageShake(damageShakeDuration_);
+            }
+            
+            if (isDamageShaking_)
+            {
+                ImGui::SameLine();
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "[Shaking]");
+            }
+            
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+            
+            // パーティクルエフェクト情報
+            ImGui::Text("Particle Effects");
+            ImGui::Spacing();
+            
+            if (emitterManager_)
+            {
+                ImGui::Text("Emitter: %s", emitterName_.c_str());
+                ImGui::Text("Status: %s", 
+                           (isDestroyed_ || isSpawning_) ? "Inactive" : "Active");
+            }
+            else
+            {
+                ImGui::Text("No particle emitter");
+            }
+            
+            ImGui::EndTabItem();
         }
+        
+        // ===== Debugタブ =====
+        if (ImGui::BeginTabItem("Debug"))
+        {
+            // Collider設定
+            if (collider_)
+            {
+                ImGui::Text("Collider Settings");
+                ImGui::Spacing();
+                
+                Vector3 size = collider_->GetSize();
+                ImGui::SetNextItemWidth(200);
+                if (ImGui::DragFloat3("Collider Size", &size.x, 0.1f, 0.1f, 100.0f))
+                {
+                    collider_->SetSize(size);
+                }
+                
+                Vector3 offset = collider_->GetOffset();
+                ImGui::SetNextItemWidth(200);
+                if (ImGui::DragFloat3("Collider Offset", &offset.x, 0.1f))
+                {
+                    collider_->SetOffset(offset);
+                }
+                
+                bool isActive = collider_->IsActive();
+                if (ImGui::Checkbox("Collider Active", &isActive))
+                {
+                    collider_->SetActive(isActive);
+                }
+            }
+            else
+            {
+                ImGui::Text("No collider attached");
+            }
+            
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+            
+            // 内部状態
+            ImGui::Text("Internal States");
+            ImGui::Spacing();
+            
+            ImGui::Text("Flags:");
+            ImGui::BulletText("isDestroyed: %s", isDestroyed_ ? "true" : "false");
+            ImGui::BulletText("isSpawning: %s", isSpawning_ ? "true" : "false");
+            ImGui::BulletText("isFlashing: %s", isFlashing_ ? "true" : "false");
+            ImGui::BulletText("isDamageShaking: %s", isDamageShaking_ ? "true" : "false");
+            
+            ImGui::Spacing();
+            
+            ImGui::Text("Timers:");
+            ImGui::BulletText("spawnTimer: %.2f / %.2f", spawnTimer_, spawnDuration_);
+            ImGui::BulletText("flashTimer: %.2f / %.2f", flashTimer_, flashDuration_);
+            ImGui::BulletText("damageShakeTimer: %.2f / %.2f", damageShakeTimer_, damageShakeDuration_);
+            
+            ImGui::Spacing();
+            
+            ImGui::Text("Spawn Animation:");
+            ImGui::BulletText("Start Pos: (%.1f, %.1f, %.1f)", 
+                             spawnStartPos_.x, spawnStartPos_.y, spawnStartPos_.z);
+            ImGui::BulletText("Target Pos: (%.1f, %.1f, %.1f)", 
+                             spawnTargetPos_.x, spawnTargetPos_.y, spawnTargetPos_.z);
+            
+            ImGui::EndTabItem();
+        }
+        
+        ImGui::EndTabBar();
     }
 #endif
 }
