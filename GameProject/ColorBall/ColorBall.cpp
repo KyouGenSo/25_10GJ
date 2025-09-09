@@ -4,11 +4,19 @@
 #include "Mat4x4Func.h"
 #include "Collision/CollisionTypeIdDef.h"
 
+ColorBall::~ColorBall()
+{
+    if (collider_){
+        CollisionManager::GetInstance()->RemoveCollider(collider_.get());
+    }
+}
+
 void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model)
 {
     model_ = std::move(_model);
     
-    if (model_) {
+    if (model_)
+    {
         transform_ = model_->GetTransform();
         
         // 回転行列を作成
@@ -24,9 +32,13 @@ void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model)
     }
 }
 
-void ColorBall::Update() {
-    //velocity_.x *= 0.86f;
-    //velocity_.z *= 0.86f;
+void ColorBall::Update()
+{
+    lifetime_ -= 1.f / 60.f;
+
+    if (lifetime_ <= 0.f){
+        dead_ = true;
+    }
 
     velocity_.y += -0.1f;
 
@@ -35,7 +47,13 @@ void ColorBall::Update() {
     model_->SetTransform(transform_);
 }
 
-void ColorBall::SetCollider() {
+bool ColorBall::IsDead() const
+{
+    return dead_;
+}
+
+void ColorBall::SetCollider()
+{
     collider_ = std::make_unique<SphereCollider>();
     Transform transform = model_->GetTransform();
     collider_->SetTransform(&transform);

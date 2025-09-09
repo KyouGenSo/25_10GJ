@@ -44,6 +44,8 @@ void Player::Initialize()
     weapon_ = std::make_unique<Object3d>();
     weapon_->Initialize();
     weapon_->SetModel("weapon_stick.gltf");
+    weapon_->SetTransform(transform_);
+    weapon_->SetScale({2.f,2.f,2.f});
 
     // Colliderの設定
     SetupColliders();
@@ -51,6 +53,11 @@ void Player::Initialize()
 
 void Player::Finalize()
 {
+
+    if (attackCollider_){
+        CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
+    }
+
     // Colliderを削除
     if (bodyCollider_)
     {
@@ -69,6 +76,7 @@ void Player::Update()
     if (isAttacking_){
         if (timer_ <= kMotionTime){ // InProgress
             timer_ += 1.f / 60.f;
+
             weapon_->SetTransform(transform_);
             weapon_->Update();
         } else{
