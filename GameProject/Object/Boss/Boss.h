@@ -55,7 +55,7 @@ public:
     Transform* GetTransformPtr() { return &transform_; }
     float GetHp() const { return hp_; }
     bool GetIsCollapse() const { return isCollapse; }
-    float GetCollapseTime() const { return collapseDuration_; }
+    float GetCollapseDuration() const { return collapseDuration_; }
 
 private: // プライベート関数
     /// <summary>
@@ -80,7 +80,7 @@ private:
     bool isColliderActive = false;    ///< コライダーの有効フラグ
     bool isCollapse = false;          ///< 崩壊フラグ
     float collapseTimer = 0;          ///< 崩壊タイマー
-    float collapseDuration_ = 5.0f;       ///< 崩壊時間
+    float collapseDuration_ = 5.0f;   ///< 崩壊時間
 
     // Collider
     std::vector<std::unique_ptr<BossBodyCollider>> bodyColliders_;
