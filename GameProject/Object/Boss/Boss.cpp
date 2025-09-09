@@ -37,7 +37,7 @@ void Boss::Initialize()
     model_->Initialize();
     model_->SetModel("Boss.gltf");
 
-    transform_.translate = Vector3(95.0f, 0.0f, 95.0f);
+    transform_.translate = Vector3(95.0f, 5.0f, 95.0f);
     transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
     transform_.scale = Vector3(3.0f, 3.0f, 3.0f);
 
@@ -65,6 +65,7 @@ void Boss::Update()
 {
     Collapse();
 
+    model_->SetTransform(transform_);
     model_->Update();
     UpdateColliders();
 }
@@ -158,19 +159,19 @@ void Boss::InitializeColliders()
     bodyColliders_.resize(4);
     bodyColliderTransforms_.resize(4);
 
-    bodyColliderTransforms_[0].translate = Vector3(94.85f, 0.0f, 71.4f);
+    bodyColliderTransforms_[0].translate = Vector3(94.85f, 5.0f, 71.4f);
     bodyColliderTransforms_[0].rotate = Vector3(0.0f, 0.0f, 0.0f);
     bodyColliderTransforms_[0].scale = Vector3(7.3f, 7.4f, 6.7f);
 
-    bodyColliderTransforms_[1].translate = Vector3(95.0f, 0.0f, 85.2f);
+    bodyColliderTransforms_[1].translate = Vector3(95.0f, 5.0f, 85.2f);
     bodyColliderTransforms_[1].rotate = Vector3(0.0f, 0.0f, 0.0f);
     bodyColliderTransforms_[1].scale = Vector3(12.1f, 9.2f, 18.0f);
 
-    bodyColliderTransforms_[2].translate = Vector3(108.7f, 0.0f, 84.5f);
+    bodyColliderTransforms_[2].translate = Vector3(108.7f, 5.0f, 84.5f);
     bodyColliderTransforms_[2].rotate = Vector3(0.0f, 1.05f, 0.0f);
     bodyColliderTransforms_[2].scale = Vector3(4.4f, 4.8f, 14.2f);
 
-    bodyColliderTransforms_[3].translate = Vector3(81.4f, 0.0f, 84.5f);
+    bodyColliderTransforms_[3].translate = Vector3(81.4f, 5.0f, 84.5f);
     bodyColliderTransforms_[3].rotate = Vector3(0.0f, -1.05f, 0.0f);
     bodyColliderTransforms_[3].scale = Vector3(4.4f, 4.8f, 14.2f);
 
