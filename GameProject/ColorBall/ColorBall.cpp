@@ -18,6 +18,7 @@ void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model)
         Vector3 forward = {0.0f, 0.0f, 1.0f};
         velocity_ = (Mat4x4::TransformNormal(rotationMatrix, forward)/3.f);
         velocity_.y = 1.3f;
+        SetCollider();
     } else {
         velocity_ = {0.0f, 0.0f, 1.0f};
     }
@@ -44,5 +45,5 @@ void ColorBall::SetCollider() {
     collider_->SetOwner(this);
 
     CollisionManager::GetInstance()->AddCollider(collider_.get());
-    CollisionManager::GetInstance()->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kColorBall), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
+    CollisionManager::GetInstance()->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kColorBall), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
 }

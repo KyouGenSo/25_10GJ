@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 
-#include "Collider.h"
 #include "Transform.h"
+#include "Collision/Collider/Player/PlayerCollider.hpp"
 #include "ColorBall/Dispenser.hpp"
 #include "Terrain/Terrain.h"
 
@@ -22,7 +22,7 @@ private:
     Terrain* terrain_ = nullptr;      ///< 床
     Transform transform_{};           ///< 変形情報
     Vector3 velocity_{};              ///< 速度
-    float speed_ = 0.5f;              ///< 移動速度
+    float speed_ = 0.2f;              ///< 移動速度
     float targetAngle_ = 0.f;         ///< 目標角度
     float hp_ = 100.f;                ///< 体力
     
@@ -32,7 +32,7 @@ private:
     std::unique_ptr<InputHandler> inputHandler_;
     
     // Colliders
-    std::unique_ptr<AABBCollider> bodyCollider_;
+    std::unique_ptr<PlayerCollider> bodyCollider_;
     
     // 攻撃関連
     Boss* targetEnemy_ = nullptr;
@@ -42,6 +42,8 @@ private:
     Block::Colors color_;
 
     std::unique_ptr<Dispenser> dispenser_;
+
+    bool onGround_ = true;
 
 public: // メンバ関数
     Player();
@@ -89,7 +91,8 @@ public: // メンバ関数
     void SetTransform(const Transform& transform) { transform_ = transform; }
     void SetTerrain(Terrain* terrain) {terrain_ = terrain;}
     void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
-    
+    void OnGround();
+
     float GetSpeed() const { return speed_; }
     Camera* GetCamera() const { return camera_; }
     bool GetMode() const { return mode_; }

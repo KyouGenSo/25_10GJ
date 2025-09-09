@@ -5,6 +5,8 @@
 #include <Vector4.h>
 #include <InstancedObject3d.h>
 
+#include "AABBCollider.h"
+
 class Block
 {
 public:
@@ -42,4 +44,5 @@ public:
 private:
     Colors color_ = Colors::White;
     std::unique_ptr<ModelInstance> modelInstance_;
+    std::unique_ptr<AABBCollider> collider_;
 };

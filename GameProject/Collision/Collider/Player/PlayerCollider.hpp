@@ -1,11 +1,11 @@
 ﻿#ifndef PlayerCollider_HPP_
 #define PlayerCollider_HPP_
 #include "AABBCollider.h"
-#include "Object/Player/Player.h"
 
+class Player;
 
 class PlayerCollider final : public AABBCollider{
-    Player* owner_ = nullptr;
+    Player* player_ = nullptr;
 public:
     PlayerCollider(Player* _owner);
     void OnCollisionStay(Collider* other) override;

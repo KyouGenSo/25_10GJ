@@ -28,7 +28,7 @@ void Player::Initialize()
     model_->Initialize();
     model_->SetModel("Player.gltf");
 
-    transform_.translate = Vector3(0.0f, 2.5f, 0.0f);
+    transform_.translate = Vector3(0.0f, 7.f, 0.0f);
     transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
     transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
 
@@ -81,7 +81,7 @@ void Player::Draw()
 void Player::InstancedDraw()
 {
     dispenser_->Draw();
-    }
+}
 
 void Player::Move(float speedMultiplier)
 {
@@ -114,24 +114,29 @@ void Player::Action()
     if (inputHandler_) dispenser_->SelectColor(inputHandler_->GetColor());
 
     //空中は操作させない(例外アリ)
-
-    
-
-    //床の色を判別する
-    Block::Colors blockColor = Block::Colors::White;
-
-    if (terrain_)
+    if (onGround_)
     {
-        blockColor = terrain_->GetBlockColorAt(transform_.translate);
+        velocity_.y = 0;
+        //床の色を判別する
+        Block::Colors blockColor = Block::Colors::White;
+
+        if (terrain_)
+        {
+            Vector3 feetPosition = transform_.translate;
+            feetPosition.y -= kSize / 2.f + Block::kScale / 2.f; // 足元の位置を計算
+            blockColor = terrain_->GetBlockColorAt(feetPosition);
+        }
+
+        if (blockColor == Block::Colors::Gray) Move();
+        if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
+        if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
+        if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
+
+        if (inputHandler_->IsDispense())
+        {
+            Dispense();
+        }
     }
-
-    if (blockColor == Block::Colors::Gray) Move();
-    if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
-    if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
-    if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
-
-    if (inputHandler_->IsDispense())
-        Dispense();
 
     Apply();
 }
@@ -143,17 +148,12 @@ void Player::Apply()
 
     velocity_ *= 0.8f; // 摩擦
     velocity_.y -= 0.1f; // 重力
-
-    if (transform_.translate.y <= 1.5f)
-    {
-        transform_.translate.y = 1.5f;
-        velocity_.y = 0.f;
-    }
 }
 
 void Player::Jump()
 {
     velocity_.y = 1.f;
+    onGround_ = false;
 }
 
 void Player::Dash()
@@ -171,7 +171,8 @@ void Player::Attack()
 
 }
 
-void Player::Dispense() {
+void Player::Dispense()
+{
     dispenser_->Dispense();
 }
 
@@ -179,6 +180,8 @@ void Player::DrawImGui()
 {
     #ifdef _DEBUG
     ImGui::Begin("Player");
+
+    ImGui::DragFloat3("Translate", &transform_.translate.x, 0.1f);
 
     const char* colorNames[] = { "White", "Gray", "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
     int currentColor = static_cast<int>(color_);
@@ -200,14 +203,18 @@ void Player::DrawImGui()
 void Player::SetupColliders()
 {
     // 本体のCollider
-    bodyCollider_ = std::make_unique<AABBCollider>();
+    bodyCollider_ = std::make_unique<PlayerCollider>(this);
     bodyCollider_->SetTransform(&transform_);
     bodyCollider_->SetSize(Vector3(kSize, kSize, kSize));
     bodyCollider_->SetOffset(Vector3(0.0f, 0.0f, 0.0f));
     bodyCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kPlayer));
-    bodyCollider_->SetOwner(this);
 
     // CollisionManagerに登録
     CollisionManager* collisionManager = CollisionManager::GetInstance();
     collisionManager->AddCollider(bodyCollider_.get());
+    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
 }
+
+void Player::OnGround() {
+    onGround_ = true;
+}  
