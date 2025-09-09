@@ -5,6 +5,8 @@
 #include <Vector4.h>
 #include <InstancedObject3d.h>
 
+#include "AABBCollider.h"
+
 class Block
 {
 public:
@@ -21,7 +23,7 @@ public:
     };
 
     /// ColorからVector4への変換
-    static const Vector4& ColorToVector4(Block::Colors color);
+    static Vector4 ColorToVector4(Block::Colors color);
 
 public:
     // Blockの1辺のスケール
@@ -35,11 +37,14 @@ public:
     void Draw();
     void ImGui();
 
-    Colors GetColor() const { return color_; }
     void SetColor(Colors color);
     void SetPosition(const Vector3& position);
+
+    Colors GetColor() const { return color_; }
+    Vector3 GetPosition() const;
 
 private:
     Colors color_ = Colors::White;
     std::unique_ptr<ModelInstance> modelInstance_;
+    std::unique_ptr<AABBCollider> collider_;
 };

@@ -1,5 +1,6 @@
 #include "Dispenser.hpp"
 
+#include <algorithm>
 #include <unordered_map>
 
 #include "Features/Color/Color.h"
@@ -27,12 +28,15 @@ Dispenser& Dispenser::Initialize()
     return *this;
 }
 
-void Dispenser::Update() const
+void Dispenser::Update() 
 {
     for (const auto& ball : balls_)
     {
         ball->Update();
     }
+
+    std::erase_if(balls_,[](const std::unique_ptr<ColorBall>& _ball){ return _ball->IsDead(); });
+
     model_->Update();
 }
 

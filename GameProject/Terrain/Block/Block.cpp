@@ -3,9 +3,12 @@
 #include <unordered_map>
 #include <imgui.h>
 
+#include "CollisionManager.h"
+#include "Collision/CollisionTypeIdDef.h"
+
 const float Block::kScale = 10.0f;
 
-const Vector4& Block::ColorToVector4(Block::Colors color)
+Vector4 Block::ColorToVector4(Block::Colors color)
 {
     static const std::unordered_map<Block::Colors, Color> colors =
     {
@@ -26,6 +29,14 @@ void Block::Initialize(std::unique_ptr<ModelInstance> modelInstance)
 {
     modelInstance_ = std::move(modelInstance);
     modelInstance_->SetScale(Vector3(kScale, kScale, kScale));
+    collider_ = std::make_unique<AABBCollider>();
+    auto tf = modelInstance_->GetTransform();
+    collider_->SetTransform(&tf);
+    collider_->SetSize({kScale, kScale, kScale});
+    collider_->SetOwner(this);
+    collider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kTerrain));
+
+    //CollisionManager::GetInstance()->AddCollider(collider_.get());
 }
 
 void Block::Update()
@@ -75,5 +86,11 @@ void Block::SetPosition(const Vector3& position)
         auto tf = modelInstance_->GetTransform();
         tf.translate = position;
         modelInstance_->SetTransform(tf);
+        collider_->SetTransform(&tf);
     }
+}
+
+Vector3 Block::GetPosition() const
+{
+    return modelInstance_->GetTransform().translate;
 }

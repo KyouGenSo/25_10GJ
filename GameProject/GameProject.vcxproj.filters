@@ -51,6 +51,21 @@
     <Filter Include="Features\Color">
       <UniqueIdentifier>{7c81723f-2cc9-4a4c-915b-9560e0f809d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tutorial">
+      <UniqueIdentifier>{0221bdba-fc72-4388-b4f1-6f43d71558fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bar3d">
+      <UniqueIdentifier>{e943c3c2-6eea-44a9-bd5a-fbaedbab2839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bar2d">
+      <UniqueIdentifier>{011638ec-e56a-4245-8174-3d221d751d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\ColorBall">
+      <UniqueIdentifier>{72869a26-1ebd-45a3-9160-d520968a2e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Dispenser">
+      <UniqueIdentifier>{7562ce60-3d46-4187-8624-f01688d92e33}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Object\EnergyCore">
       <UniqueIdentifier>{4b991d12-5d66-45d7-8a95-d7296dd738b9}</UniqueIdentifier>
     </Filter>
@@ -96,6 +111,30 @@
     <ClCompile Include="Features\Color\Color.cpp">
       <Filter>Features\Color</Filter>
     </ClCompile>
+    <ClCompile Include="Bar3d\Bar3d.cpp">
+      <Filter>Bar3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Bar2d\Bar2d.cpp">
+      <Filter>Bar2d</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\TutorialScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial\TutorialSection.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp">
+      <Filter>Animation\TitleAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Dispenser\Dispenser.cpp">
+      <Filter>Object\Dispenser</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ColorBall\ColorBall.cpp">
+      <Filter>Object\ColorBall</Filter>
+    </ClCompile>
     <ClCompile Include="Collision\BossBodyCollider.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
@@ -105,8 +144,6 @@
     <ClCompile Include="Collision\EnergyCoreCollider.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="ColorBall\ColorBall.cpp" />
-    <ClCompile Include="ColorBall\Dispenser.cpp" />
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp">
       <Filter>Animation\TitleAnimation</Filter>
     </ClCompile>
@@ -174,11 +211,28 @@
     </ClInclude>
     <ClInclude Include="Collision\EnergyCoreCollider.h">
       <Filter>Collision</Filter>
+    <ClInclude Include="Tutorial\TutorialSection.h">
+      <Filter>Tutorial</Filter>
     </ClInclude>
-    <ClInclude Include="ColorBall\ColorBall.hpp" />
-    <ClInclude Include="ColorBall\Dispenser.hpp" />
+    <ClInclude Include="Bar3d\Bar3d.h">
+      <Filter>Bar3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar2d\Bar2d.h">
+      <Filter>Bar2d</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\TutorialScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Dispenser\Dispenser.hpp">
+      <Filter>Object\Dispenser</Filter>
+    </ClInclude>
     <ClInclude Include="Object\EnergyCore\EnergyCoreManager.h">
       <Filter>Object\EnergyCore</Filter>
+    <ClInclude Include="Object\ColorBall\ColorBall.hpp">
+      <Filter>Object\ColorBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

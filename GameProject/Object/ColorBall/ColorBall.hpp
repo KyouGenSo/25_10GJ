@@ -13,9 +13,15 @@ class ColorBall
 
     Transform transform_{};
 
+    float lifetime_ = 5.f;
+    bool dead_ = false;
+
 public:
+    ~ColorBall();
     void Initialize(std::unique_ptr<ModelInstance> _model);
     void Update();
+
+    bool IsDead() const;
 
 private:
     void SetCollider();

@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "ColorBall.hpp"
+#include "../ColorBall/ColorBall.hpp"
 #include "Vector4.h"
 
 class Player;
@@ -29,7 +29,7 @@ public:
     static const Vector4& ToVector4(Colors _color);
 
     Dispenser& Initialize();
-    void Update() const;
+    void Update();
     void Draw() const;
 
     void SelectColor(Colors _color);

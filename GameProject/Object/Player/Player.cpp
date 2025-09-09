@@ -28,7 +28,7 @@ void Player::Initialize()
     model_->Initialize();
     model_->SetModel("Player.gltf");
 
-    transform_.translate = Vector3(0.0f, 2.5f, 0.0f);
+    transform_.translate = Vector3(0.0f, 7.f, 0.0f);
     transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
     transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
 
@@ -41,12 +41,25 @@ void Player::Initialize()
     dispenser_ = std::make_unique<Dispenser>();
     dispenser_->Initialize().SetOwner(this);
 
+    weapon_ = std::make_unique<Object3d>();
+    weapon_->Initialize();
+    weapon_->SetModel("weapon_stick.gltf");
+    weapon_->SetTransform(transform_);
+    weapon_->SetScale({10.f,10.f,10.f});
+    weapon_->SetRotate({0.f, 0.f, 1.57f}); // Z軸を90度回転させて横向きに
+    weapon_->SetMaterialColor({1.f, 1.f, 1.f, 1.f});
+
     // Colliderの設定
     SetupColliders();
 }
 
 void Player::Finalize()
 {
+
+    if (attackCollider_){
+        CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
+    }
+
     // Colliderを削除
     if (bodyCollider_)
     {
@@ -56,14 +69,23 @@ void Player::Finalize()
 
 void Player::Update()
 {
-    float deltaTime = 1.0f / 60.0f; // 60FPSを仮定
-
     // Inputの更新（StateのHandleInputより前に実行）
     if (inputHandler_)
     {
         inputHandler_->Update(this);
     }
 
+    if (isAttacking_){
+        if (timer_ <= kMotionTime){ // InProgress
+            timer_ += 1.f / 60.f;
+            
+            weapon_->Update();
+        } else{
+            CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
+            timer_ = 0.f;
+            isAttacking_ = false;
+        }
+    }
     Action();
 
     dispenser_->Update();
@@ -75,13 +97,14 @@ void Player::Update()
 
 void Player::Draw()
 {
+    if (isAttacking_)weapon_->Draw();
     model_->Draw();
 }
 
 void Player::InstancedDraw()
 {
     dispenser_->Draw();
-    }
+}
 
 void Player::Move(float speedMultiplier)
 {
@@ -114,24 +137,29 @@ void Player::Action()
     if (inputHandler_) dispenser_->SelectColor(inputHandler_->GetColor());
 
     //空中は操作させない(例外アリ)
-
-    
-
-    //床の色を判別する
-    Block::Colors blockColor = Block::Colors::White;
-
-    if (terrain_)
+    if (onGround_)
     {
-        blockColor = terrain_->GetBlockColorAt(transform_.translate);
+        velocity_.y = 0;
+        //床の色を判別する
+        Block::Colors blockColor = Block::Colors::White;
+
+        if (terrain_)
+        {
+            Vector3 feetPosition = transform_.translate;
+            feetPosition.y -= kSize / 2.f + Block::kScale / 2.f; // 足元の位置を計算
+            blockColor = terrain_->GetBlockColorAt(feetPosition);
+        }
+
+        if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
+        if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
+        if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
+        if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
+
+        if (inputHandler_->IsDispense())
+        {
+            Dispense();
+        }
     }
-
-    if (blockColor == Block::Colors::Gray) Move();
-    if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
-    if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
-    if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
-
-    if (inputHandler_->IsDispense())
-        Dispense();
 
     Apply();
 }
@@ -143,17 +171,12 @@ void Player::Apply()
 
     velocity_ *= 0.8f; // 摩擦
     velocity_.y -= 0.1f; // 重力
-
-    if (transform_.translate.y <= 1.5f)
-    {
-        transform_.translate.y = 1.5f;
-        velocity_.y = 0.f;
-    }
 }
 
 void Player::Jump()
 {
     velocity_.y = 1.f;
+    onGround_ = false;
 }
 
 void Player::Dash()
@@ -168,10 +191,16 @@ void Player::Dash()
 
 void Player::Attack()
 {
-
+    if (!isAttacking_){
+        //攻撃開始フレーム
+        isAttacking_ = true;
+        attackCollider_->SetOffset({sinf(transform_.rotate.y) *2.f, 0.f, cosf(transform_.rotate.y) *2.f});
+        CollisionManager::GetInstance()->AddCollider(attackCollider_.get());
+    }
 }
 
-void Player::Dispense() {
+void Player::Dispense()
+{
     dispenser_->Dispense();
 }
 
@@ -180,18 +209,7 @@ void Player::DrawImGui()
     #ifdef _DEBUG
     ImGui::Begin("Player");
 
-    const char* colorNames[] = { "White", "Gray", "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
-    int currentColor = static_cast<int>(color_);
-
-    if (ImGui::Combo("Color", &currentColor, colorNames, IM_ARRAYSIZE(colorNames)))
-    {
-        color_ = static_cast<Block::Colors>(currentColor);
-    }
-
-    if (ImGui::Button("SetColor"))
-    {
-        terrain_->SetBlockColorAt(transform_.translate, color_);
-    }
+    ImGui::DragFloat3("Translate", &transform_.translate.x, 0.1f);
 
     ImGui::End();
     #endif
@@ -199,15 +217,29 @@ void Player::DrawImGui()
 
 void Player::SetupColliders()
 {
+    CollisionManager* collisionManager = CollisionManager::GetInstance();
+
     // 本体のCollider
-    bodyCollider_ = std::make_unique<AABBCollider>();
+    bodyCollider_ = std::make_unique<PlayerCollider>(this);
     bodyCollider_->SetTransform(&transform_);
-    bodyCollider_->SetSize(Vector3(1.5f, 1.5f, 1.5f));
+    bodyCollider_->SetSize(Vector3(kSize, kSize, kSize));
     bodyCollider_->SetOffset(Vector3(0.0f, 0.0f, 0.0f));
     bodyCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kPlayer));
-    bodyCollider_->SetOwner(this);
+
+    // 攻撃
+    attackCollider_ = std::make_unique<AABBCollider>();
+    attackCollider_->SetTransform(&transform_);
+    attackCollider_->SetSize({3.f, 0.5f, 3.f});
+    attackCollider_->SetOffset({0.f,0.f,0.f});
+    attackCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kAttack));
+    attackCollider_->SetOwner(this);
 
     // CollisionManagerに登録
-    CollisionManager* collisionManager = CollisionManager::GetInstance();
     collisionManager->AddCollider(bodyCollider_.get());
+    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
+    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kAttack), static_cast<uint32_t>(CollisionTypeId::kEnemy), true);
 }
+
+void Player::OnGround() {
+    onGround_ = true;
+}  
