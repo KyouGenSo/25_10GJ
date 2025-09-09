@@ -35,11 +35,11 @@ private:
     std::unique_ptr<PlayerCollider> bodyCollider_;
     
     // 攻撃関連
-    Boss* targetEnemy_ = nullptr;
-    bool isAttackHit_ = false;
-    float attackMoveSpeed_ = 2.0f;
-
-    Block::Colors color_;
+    bool isAttacking_ = false;
+    std::unique_ptr<Object3d> weapon_;
+    float timer_ = 0.f;
+    const float kMotionTime = 0.55f;
+    std::unique_ptr<AABBCollider> attackCollider_;
 
     std::unique_ptr<Dispenser> dispenser_;
 

@@ -36,7 +36,7 @@ void Block::Initialize(std::unique_ptr<ModelInstance> modelInstance)
     collider_->SetOwner(this);
     collider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kTerrain));
 
-    CollisionManager::GetInstance()->AddCollider(collider_.get());
+    //CollisionManager::GetInstance()->AddCollider(collider_.get());
 }
 
 void Block::Update()

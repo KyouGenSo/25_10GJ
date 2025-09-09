@@ -41,6 +41,10 @@ void Player::Initialize()
     dispenser_ = std::make_unique<Dispenser>();
     dispenser_->Initialize().SetOwner(this);
 
+    weapon_ = std::make_unique<Object3d>();
+    weapon_->Initialize();
+    weapon_->SetModel("weapon_stick.gltf");
+
     // Colliderの設定
     SetupColliders();
 }
@@ -56,14 +60,23 @@ void Player::Finalize()
 
 void Player::Update()
 {
-    float deltaTime = 1.0f / 60.0f; // 60FPSを仮定
-
     // Inputの更新（StateのHandleInputより前に実行）
     if (inputHandler_)
     {
         inputHandler_->Update(this);
     }
 
+    if (isAttacking_){
+        if (timer_ <= kMotionTime){ // InProgress
+            timer_ += 1.f / 60.f;
+            weapon_->SetTransform(transform_);
+            weapon_->Update();
+        } else{
+            CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
+            timer_ = 0.f;
+            isAttacking_ = false;
+        }
+    }
     Action();
 
     dispenser_->Update();
@@ -75,6 +88,7 @@ void Player::Update()
 
 void Player::Draw()
 {
+    if (isAttacking_)weapon_->Draw();
     model_->Draw();
 }
 
@@ -127,7 +141,7 @@ void Player::Action()
             blockColor = terrain_->GetBlockColorAt(feetPosition);
         }
 
-        if (blockColor == Block::Colors::Gray) Move();
+        if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
         if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
         if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
         if (blockColor == Block::Colors::Yellow && inputHandler_->IsJumping()) Jump();
@@ -168,7 +182,12 @@ void Player::Dash()
 
 void Player::Attack()
 {
-
+    if (!isAttacking_){
+        //攻撃開始フレーム
+        isAttacking_ = true;
+        attackCollider_->SetOffset({sinf(transform_.rotate.y) *2.f, 0.f, cosf(transform_.rotate.y) *2.f});
+        CollisionManager::GetInstance()->AddCollider(attackCollider_.get());
+    }
 }
 
 void Player::Dispense()
@@ -183,25 +202,14 @@ void Player::DrawImGui()
 
     ImGui::DragFloat3("Translate", &transform_.translate.x, 0.1f);
 
-    const char* colorNames[] = { "White", "Gray", "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
-    int currentColor = static_cast<int>(color_);
-
-    if (ImGui::Combo("Color", &currentColor, colorNames, IM_ARRAYSIZE(colorNames)))
-    {
-        color_ = static_cast<Block::Colors>(currentColor);
-    }
-
-    if (ImGui::Button("SetColor"))
-    {
-        terrain_->SetBlockColorAt(transform_.translate, color_);
-    }
-
     ImGui::End();
     #endif
 }
 
 void Player::SetupColliders()
 {
+    CollisionManager* collisionManager = CollisionManager::GetInstance();
+
     // 本体のCollider
     bodyCollider_ = std::make_unique<PlayerCollider>(this);
     bodyCollider_->SetTransform(&transform_);
@@ -209,10 +217,18 @@ void Player::SetupColliders()
     bodyCollider_->SetOffset(Vector3(0.0f, 0.0f, 0.0f));
     bodyCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kPlayer));
 
+    // 攻撃
+    attackCollider_ = std::make_unique<AABBCollider>();
+    attackCollider_->SetTransform(&transform_);
+    attackCollider_->SetSize({3.f, 0.5f, 3.f});
+    attackCollider_->SetOffset({0.f,0.f,0.f});
+    attackCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kAttack));
+    attackCollider_->SetOwner(this);
+
     // CollisionManagerに登録
-    CollisionManager* collisionManager = CollisionManager::GetInstance();
     collisionManager->AddCollider(bodyCollider_.get());
     collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
+    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kAttack), static_cast<uint32_t>(CollisionTypeId::kEnemy), true);
 }
 
 void Player::OnGround() {
