@@ -89,3 +89,8 @@ void Block::SetPosition(const Vector3& position)
         collider_->SetTransform(&tf);
     }
 }
+
+Vector3 Block::GetPosition() const
+{
+    return modelInstance_->GetTransform().translate;
+}

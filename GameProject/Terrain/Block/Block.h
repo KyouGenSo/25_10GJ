@@ -37,9 +37,11 @@ public:
     void Draw();
     void ImGui();
 
-    Colors GetColor() const { return color_; }
     void SetColor(Colors color);
     void SetPosition(const Vector3& position);
+
+    Colors GetColor() const { return color_; }
+    Vector3 GetPosition() const;
 
 private:
     Colors color_ = Colors::White;
