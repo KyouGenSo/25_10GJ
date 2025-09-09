@@ -6,7 +6,7 @@
 #include "Features/Color/Color.h"
 #include "Object/Player/Player.h"
 
-const Vector4& Dispenser::ToVector4(Dispenser::Colors _color)
+Vector4 Dispenser::ToVector4(Dispenser::Colors _color)
 {
     // Blockよりも色を限定し、濃く見やすくする
     static const std::unordered_map<Dispenser::Colors, Color> colors =

@@ -42,6 +42,7 @@ public:
 
     Colors GetColor() const { return color_; }
     Vector3 GetPosition() const;
+    AABBCollider* GetCollider() const { return collider_.get(); }
 
 private:
     Colors color_ = Colors::White;

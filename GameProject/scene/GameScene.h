@@ -11,6 +11,7 @@
 #include "Object/Boss/Boss.h"
 #include "Object/EnergyCore/EnergyCoreManager.h"
 #include <Terrain/Terrain.h>
+#include <Features/CellBasedFiltering/CellBasedFiltering.h>
 
 class GameScene : public BaseScene
 {
@@ -53,6 +54,8 @@ private: // メンバ変数
 
     std::unique_ptr<FollowCamera> followCamera_;
     std::unique_ptr<Terrain> terrain_;
+
+    std::unique_ptr<CellBasedFiltering> cellFilter_;
 
     bool isDebug_ = false;
 
