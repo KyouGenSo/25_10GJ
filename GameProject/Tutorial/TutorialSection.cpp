@@ -60,9 +60,9 @@ void TutorialSection::Progress(float numProgress)
 
 void TutorialSection::KeyTextUpdate()
 {
-    for (auto& [numDik, textButton] : textsButton_)
+    for (auto& [button, textButton] : textsButton_)
     {
-        if (pInput_->PushKey(numDik))
+        if (IsPush(pInput_, button))
         {
             textButton->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
         }
@@ -72,5 +72,32 @@ void TutorialSection::KeyTextUpdate()
         }
 
         textButton->Update();
+    }
+}
+
+bool TutorialSection::IsPush(Input* pInput, InputButtons button)
+{
+    bool isKey = button < InputButtons::KeyboardEnd;
+    bool isTrigger = button > InputButtons::TriggerBegin && button < InputButtons::TriggerEnd;
+    bool isButton = button > InputButtons::ButtonBegin && button < InputButtons::ButtonEnd;
+
+    if (isKey)
+    {
+        return pInput->PushKey(static_cast<BYTE>(button));
+    }
+    else if (isTrigger)
+    {
+        if (button == InputButtons::LTrigger)
+        {
+            return pInput->GetLeftTrigger() > 0.0f;
+        }
+        else if (button == InputButtons::RTrigger)
+        {
+            return pInput->GetRightTrigger() > 0.0f;
+        }
+    }
+    else if (isButton)
+    {
+        return pInput->PushButton(static_cast<int>(button) - static_cast<int>(InputButtons::ButtonBegin) - 1);
     }
 }

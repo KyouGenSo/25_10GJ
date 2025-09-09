@@ -11,6 +11,31 @@
 class TutorialSection
 {
 public:
+    enum class InputButtons
+    {
+        Enter,
+        Space,
+        W,
+        A,
+        S,
+        D,
+        KeyboardEnd,
+
+        TriggerBegin,
+        LTrigger,
+        RTrigger,
+        TriggerEnd,
+
+        ButtonBegin,
+        ButtonA,
+        ButtonB,
+        ButtonX,
+        ButtonY,
+        LShoulder,
+        RShoulder,
+        ButtonEnd,
+    };
+
     TutorialSection() = default;
     ~TutorialSection() = default;
 
@@ -23,16 +48,18 @@ public:
     void Progress(float numProgress);
 
     void AddText(Sprite* text) { texts_.emplace_back(text); }
-    void AddTextButton(BYTE numDik, Sprite* textButton) { textsButton_[numDik] = textButton; }
+    void AddTextButton(InputButtons numDik, Sprite* textButton) { textsButton_[numDik] = textButton; }
 
 protected:
     void KeyTextUpdate();
 
-    std::vector<Sprite*>                    texts_          = {};
-    std::unordered_map<BYTE, Sprite*>       textsButton_    = {};
-    std::unique_ptr<Sprite>                 background_     = nullptr;
-    std::unique_ptr<Bar2d>                  progressBar_    = nullptr;
-    bool                                    isComplete_     = false;
+    static bool IsPush(Input* pInput, InputButtons button);
+
+    std::vector<Sprite*> texts_ = {};
+    std::unordered_map<InputButtons, Sprite*> textsButton_ = {};
+    std::unique_ptr<Sprite> background_ = nullptr;
+    std::unique_ptr<Bar2d> progressBar_ = nullptr;
+    bool isComplete_ = false;
 
     Input* pInput_ = nullptr;
 };
