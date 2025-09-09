@@ -45,6 +45,7 @@ public:
     AABBCollider* GetCollider() const { return collider_.get(); }
 
 private:
+    Transform transform_{};
     Colors color_ = Colors::White;
     std::unique_ptr<ModelInstance> modelInstance_;
     std::unique_ptr<AABBCollider> collider_;

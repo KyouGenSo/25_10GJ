@@ -31,9 +31,8 @@ void Block::Initialize(std::unique_ptr<ModelInstance> modelInstance)
     modelInstance_ = std::move(modelInstance);
     modelInstance_->SetScale(Vector3(kScale, kScale, kScale));
     collider_ = std::make_unique<AABBCollider>();
-    auto tf = modelInstance_->GetTransform();
-    collider_->SetTransform(&tf);
-    collider_->SetOffset(tf.translate);
+    transform_ = modelInstance_->GetTransform();
+    collider_->SetTransform(&transform_);
     collider_->SetSize({kScale, kScale, kScale});
     collider_->SetOwner(this);
     collider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kTerrain));

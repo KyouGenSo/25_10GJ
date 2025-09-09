@@ -20,6 +20,7 @@ public:
     void RegisterPotentials(AABBCollider* pCollider);
     void RegisterAll(CollisionManager* pManager);
     void UnregisterAll(CollisionManager* pManager);
+    void ReassignToGridAll(int cellSize);
 
 private:
     uint64_t ToCellIndex(const Vector3& position) const;
@@ -33,4 +34,5 @@ private:
     std::vector<std::vector<AABBCollider*>> grid_;
     std::set<AABBCollider*> potentialColliders_;
     std::set<uint64_t> uniqueCells_;
+    bool isModifyMode_ = false;
 };
