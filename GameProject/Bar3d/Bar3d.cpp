@@ -2,14 +2,11 @@
 #include <WinApp.h>
 #include <Mat4x4Func.h>
 
-void Bar3d::Initialize()
+void Bar3d::Initialize(const Color& colorContext, const Color& colorBG)
 {
-    auto maxColor = Color(0x000000cc);
-    auto currentColor = Color(0xd91e1e);
-
     // Initialize the background sprite
-    InitializeSprite(sprite_max_, maxColor);
-    InitializeSprite(sprite_current_, currentColor);
+    InitializeSprite(sprite_max_, colorBG);
+    InitializeSprite(sprite_current_, colorContext);
 }
 
 void Bar3d::Update()
