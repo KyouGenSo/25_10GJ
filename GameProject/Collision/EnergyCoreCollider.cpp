@@ -20,10 +20,10 @@ void EnergyCoreCollider::OnCollisionEnter(Collider* other)
     // プレイヤーと衝突した場合
     if (typeID == static_cast<uint32_t>(CollisionTypeId::kPlayer)) 
     {
-        // エネルギーコアを破壊
+        // エネルギーコアにダメージを与える
         if (pEnergyCore_ && !pEnergyCore_->GetIsDestroyed())
         {
-            pEnergyCore_->Destroy();
+            pEnergyCore_->Damage(damage_);
         }
     }
 }

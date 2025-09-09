@@ -64,6 +64,9 @@ void Boss::Finalize()
 void Boss::Update()
 {
     Collapse();
+    
+    // ダメージフラッシュの更新
+    UpdateDamageFlash();
 
     model_->SetTransform(transform_);
     model_->Update();
@@ -87,6 +90,18 @@ void Boss::DrawImGui()
     ImGui::Checkbox("isCollapse", &isCollapse);
     // HPの表示(progress bar)
     ImGui::ProgressBar(hp_ / 200, ImVec2(0.0f, 0.0f), ("HP: " + std::to_string(static_cast<int>(hp_)) + " / " + std::to_string(static_cast<int>(200))).c_str());
+    
+    // フラッシュ設定
+    ImGui::Separator();
+    ImGui::Text("Flash Settings");
+    if (ImGui::DragFloat("Flash Duration", &flashDuration_, 0.01f, 0.01f, 1.0f))
+    {
+        // フラッシュ時間の調整
+    }
+    if (ImGui::Button("Test Flash"))
+    {
+        StartDamageFlash(flashDuration_);
+    }
 
     ImGui::End();
 
@@ -150,6 +165,9 @@ void Boss::Damage(float damage)
     // ダメージ処理
     hp_ -= damage;
     hp_ = std::max<float>(hp_, 0);
+    
+    // ダメージフラッシュを開始
+    StartDamageFlash();
 }
 
 //--------------------------------private--------------------------------//
@@ -214,6 +232,47 @@ void Boss::Collapse()
             isColliderActive = false;
             collapseTimer = 0.0f;
             isCollapse = false; // 崩壊状態を解除
+        }
+    }
+}
+
+void Boss::StartDamageFlash(float duration)
+{
+    // 現在の色を保存（まだフラッシュ中でない場合のみ）
+    if (model_ && !isFlashing_)
+    {
+        originalColor_ = model_->GetMaterialColor();
+    }
+    
+    // フラッシュを開始
+    isFlashing_ = true;
+    flashTimer_ = 0.0f;
+    flashDuration_ = duration;
+    
+    // モデルを白色に変更
+    if (model_)
+    {
+        model_->SetMaterialColor(flashColor_);
+    }
+}
+
+void Boss::UpdateDamageFlash()
+{
+    if (!isFlashing_) return;
+    
+    // タイマー更新
+    flashTimer_ += FrameTimer::GetInstance()->GetDeltaTime();
+    
+    // フラッシュ時間が経過したら元の色に戻す
+    if (flashTimer_ >= flashDuration_)
+    {
+        isFlashing_ = false;
+        flashTimer_ = 0.0f;
+        
+        // 元の色に戻す
+        if (model_)
+        {
+            model_->SetMaterialColor(originalColor_);
         }
     }
 }
