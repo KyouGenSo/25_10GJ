@@ -232,7 +232,6 @@ void GameScene::Draw()
     if (ShadowRenderer::GetInstance()->IsEnabled())
     {
         ShadowRenderer::GetInstance()->BeginShadowPass();
-        ground_->Draw();
         player_->Draw();
         boss_->Draw();
         for (auto& core : energyCores_)
@@ -263,6 +262,7 @@ void GameScene::Draw()
     }
     
     terrain_->Draw();
+    player_->InstancedDraw();
 
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
@@ -321,6 +321,7 @@ void GameScene::DrawImGui()
     ImGui::End();
     
     followCamera_->DrawImGui();
+    terrain_->ImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
     #endif // DEBUG

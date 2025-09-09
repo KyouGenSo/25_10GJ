@@ -3,6 +3,7 @@
 #include "dinput.h"
 #include "vector2.h"
 #include "Xinput.h"
+#include "ColorBall/Dispenser.hpp"
 
 class Player;
 
@@ -22,9 +23,12 @@ public:
 	bool IsShooting() const;
 	bool IsPaused() const;
     bool IsJumping() const;
+    bool IsDispense() const;
 	
 	// 入力方向の取得
 	Vector2 GetMoveDirection() const;
+
+    Dispenser::Colors GetColor() const;
 
 private:
 	// 入力状態を更新
@@ -37,6 +41,9 @@ private:
 	bool isAttacking_ = false;
 	bool isShooting_ = false;
 	bool isPaused_ = false;
+    bool isDispense = false;
 	
 	Vector2 moveDirection_;
+
+    Dispenser::Colors color_ = Dispenser::Colors::GRAY;
 };

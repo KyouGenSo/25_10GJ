@@ -106,6 +106,8 @@
     <ClCompile Include="Collision\EnergyCoreCollider.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="ColorBall\ColorBall.cpp" />
+    <ClCompile Include="ColorBall\Dispenser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -158,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBall\ColorBall.hpp">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBall\Dispenser.hpp">
+      <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Collision\BossBodyCollider.h">
       <Filter>Collision</Filter>
