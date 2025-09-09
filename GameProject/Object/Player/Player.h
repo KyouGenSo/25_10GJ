@@ -16,7 +16,7 @@ class Boss;
 class Player
 {
 public:
-    const float kSize = 1.5f;
+    const float kSize = 3.0f;
 private:
     std::unique_ptr<Object3d> model_; ///< モデル
     Camera* camera_ = nullptr;        ///< カメラ
@@ -108,6 +108,7 @@ public: // メンバ関数
     Object3d* GetModel() const { return model_.get(); }
     InputHandler* GetInputHandler() const { return inputHandler_.get(); }
     Transform* GetTransformPtr() { return &transform_; }
+    AABBCollider* GetBodyCollider() const { return bodyCollider_.get(); }
 
 private:
     /// <summary>

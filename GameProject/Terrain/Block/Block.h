@@ -42,8 +42,10 @@ public:
 
     Colors GetColor() const { return color_; }
     Vector3 GetPosition() const;
+    AABBCollider* GetCollider() const { return collider_.get(); }
 
 private:
+    Transform transform_{};
     Colors color_ = Colors::White;
     std::unique_ptr<ModelInstance> modelInstance_;
     std::unique_ptr<AABBCollider> collider_;

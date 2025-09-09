@@ -331,6 +331,7 @@ CLAUDE.md
 # Claude Code settings
 settings.local.json
 .mcp.json
+.claude/
 
 # Temporary null files
 nul

@@ -9,7 +9,9 @@
 #include "FollowCamera/followCamera.h"
 #include "Object/Player/Player.h"
 #include "Object/Boss/Boss.h"
+#include "Object/EnergyCore/EnergyCoreManager.h"
 #include <Terrain/Terrain.h>
+#include <Features/CellBasedFiltering/CellBasedFiltering.h>
 
 class GameScene : public BaseScene
 {
@@ -45,15 +47,15 @@ private: // メンバ変数
 
     // SkyBox
     std::unique_ptr<SkyBox> skyBox_;
-    std::unique_ptr<Object3d> ground_;
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Boss> boss_;
+    std::unique_ptr<EnergyCoreManager> energyCoreManager_;
 
     std::unique_ptr<FollowCamera> followCamera_;
     std::unique_ptr<Terrain> terrain_;
 
-    Transform groundUvTransform_{};
+    std::unique_ptr<CellBasedFiltering> cellFilter_;
 
     bool isDebug_ = false;
 

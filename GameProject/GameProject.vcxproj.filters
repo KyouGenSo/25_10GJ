@@ -66,6 +66,12 @@
     <Filter Include="Object\Dispenser">
       <UniqueIdentifier>{7562ce60-3d46-4187-8624-f01688d92e33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\EnergyCore">
+      <UniqueIdentifier>{4b991d12-5d66-45d7-8a95-d7296dd738b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\CellBasedFiltering">
+      <UniqueIdentifier>{09304ac1-55ab-454b-be8e-bcf83ec4a3fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -132,6 +138,21 @@
     <ClCompile Include="Object\ColorBall\ColorBall.cpp">
       <Filter>Object\ColorBall</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\BossBodyCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EnergyCore\EnergyCore.cpp">
+      <Filter>Object\EnergyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\EnergyCoreCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EnergyCore\EnergyCoreManager.cpp">
+      <Filter>Object\EnergyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
+      <Filter>Features\CellBasedFiltering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -185,6 +206,15 @@
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
     </ClInclude>
+    <ClInclude Include="Collision\BossBodyCollider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\EnergyCore\EnergyCore.h">
+      <Filter>Object\EnergyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\EnergyCoreCollider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
     <ClInclude Include="Tutorial\TutorialSection.h">
       <Filter>Tutorial</Filter>
     </ClInclude>
@@ -203,8 +233,14 @@
     <ClInclude Include="Object\Dispenser\Dispenser.hpp">
       <Filter>Object\Dispenser</Filter>
     </ClInclude>
+    <ClInclude Include="Object\EnergyCore\EnergyCoreManager.h">
+      <Filter>Object\EnergyCore</Filter>
+    </ClInclude>
     <ClInclude Include="Object\ColorBall\ColorBall.hpp">
       <Filter>Object\ColorBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
+      <Filter>Features\CellBasedFiltering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
