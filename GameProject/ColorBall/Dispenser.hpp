@@ -29,7 +29,7 @@ public:
     static const Vector4& ToVector4(Colors _color);
 
     Dispenser& Initialize();
-    void Update() const;
+    void Update();
     void Draw() const;
 
     void SelectColor(Colors _color);

@@ -113,6 +113,7 @@
     <ClCompile Include="scene\TutorialScene.cpp" />
     <ClCompile Include="ColorBall\ColorBall.cpp" />
     <ClCompile Include="ColorBall\Dispenser.cpp" />
+    <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -182,6 +183,9 @@
       <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="ColorBall\Dispenser.hpp">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
