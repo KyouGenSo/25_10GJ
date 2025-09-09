@@ -7,6 +7,8 @@
 #include "CollisionManager.h"
 #include "../../Collision/CollisionTypeIdDef.h"
 #include <cmath>
+
+#include "GPUParticle.h"
 #include "ImGui.h"
 #include "Terrain/Block/Block.h"
 
@@ -51,6 +53,11 @@ void Player::Initialize()
 
     // Colliderの設定
     SetupColliders();
+
+    emitter_ = std::make_unique<EmitterManager>(GPUParticle::GetInstance());
+    emitter_->CreateSphereEmitter(emitterName_, transform_.translate, 2.f, 30, 0.55f);
+    emitter_->SetEmitterScaleRange(emitterName_, {0.5f, 0.5f}, {0.5f, 0.5f});
+    emitter_->SetEmitterActive(emitterName_, false);
 }
 
 void Player::Finalize()
@@ -70,6 +77,7 @@ void Player::Finalize()
 
 void Player::Update()
 {
+
     // Inputの更新（StateのHandleInputより前に実行）
     if (inputHandler_)
     {
@@ -98,6 +106,9 @@ void Player::Update()
     // モデルの更新
     model_->SetTransform(transform_);
     model_->Update();
+
+    emitter_->SetEmitterPosition(emitterName_, transform_.translate);
+    emitter_->Update();
 }
 
 void Player::Draw()
@@ -156,6 +167,11 @@ void Player::Action()
         }
 
         blockColor = Block::Colors::Gray; // 仮
+
+        if (blockColor == Block::Colors::Purple || blockColor == Block::Colors::Orange || blockColor == Block::Colors::Green){
+            emitter_->SetEmitterActive(emitterName_, true);
+            emitter_->SetEmitterColor(emitterName_, Block::ColorToVector4(blockColor));
+        }
 
         if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
         if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();

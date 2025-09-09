@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "EmitterManager.h"
 #include "Transform.h"
 #include "Collision/Collider/Player/PlayerCollider.hpp"
 #include "Object/Dispenser/Dispenser.hpp"
@@ -44,6 +45,9 @@ private:
     std::unique_ptr<Dispenser> dispenser_;
 
     bool onGround_ = true;
+
+    std::unique_ptr<EmitterManager> emitter_;
+    std::string emitterName_ = "PlayerOnBuffedFloor";
 
 public: // メンバ関数
     Player();
