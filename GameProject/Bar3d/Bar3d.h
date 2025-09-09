@@ -12,7 +12,7 @@ public:
     Bar3d() = default;
     ~Bar3d() = default;
 
-    void Initialize();
+    void Initialize(const Color& colorContext = 0xff0000ff, const Color& colorBG = 0x000000cc);
     void Update();
     void Draw2d();
     void Display(float _sec);
