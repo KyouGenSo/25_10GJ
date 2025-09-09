@@ -69,6 +69,9 @@
     <Filter Include="Object\EnergyCore">
       <UniqueIdentifier>{4b991d12-5d66-45d7-8a95-d7296dd738b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\CellBasedFiltering">
+      <UniqueIdentifier>{09304ac1-55ab-454b-be8e-bcf83ec4a3fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="Object\EnergyCore\EnergyCoreManager.cpp">
       <Filter>Object\EnergyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
+      <Filter>Features\CellBasedFiltering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Object\ColorBall\ColorBall.hpp">
       <Filter>Object\ColorBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
+      <Filter>Features\CellBasedFiltering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

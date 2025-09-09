@@ -5,6 +5,7 @@
 
 #include "CollisionManager.h"
 #include "Collision/CollisionTypeIdDef.h"
+#include <Draw2D.h>
 
 const float Block::kScale = 10.0f;
 
@@ -32,11 +33,10 @@ void Block::Initialize(std::unique_ptr<ModelInstance> modelInstance)
     collider_ = std::make_unique<AABBCollider>();
     auto tf = modelInstance_->GetTransform();
     collider_->SetTransform(&tf);
+    collider_->SetOffset(tf.translate);
     collider_->SetSize({kScale, kScale, kScale});
     collider_->SetOwner(this);
     collider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kTerrain));
-
-    //CollisionManager::GetInstance()->AddCollider(collider_.get());
 }
 
 void Block::Update()
@@ -46,7 +46,6 @@ void Block::Update()
 
 void Block::Draw()
 {
-
 }
 
 void Block::ImGui()

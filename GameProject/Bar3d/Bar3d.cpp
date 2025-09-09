@@ -1,7 +1,6 @@
 #include "./Bar3d.h"
 #include <WinApp.h>
 #include <Mat4x4Func.h>
-//#include "CellBasedFiltering.h"
 
 void Bar3d::Initialize(const Color& colorContext, const Color& colorBG)
 {

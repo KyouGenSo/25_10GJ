@@ -5,7 +5,7 @@
 #include <Features/Color/Color.h>
 
 
-void Terrain::Initialize()
+void Terrain::Initialize(CellBasedFiltering* pCellFilter)
 {
     const float blockScale = Block::kScale;
 
@@ -23,37 +23,29 @@ void Terrain::Initialize()
             for (int z = 0; z < kSize; ++z)
             {
                 bool isUpper = (x < kWidth && z < kWidth) || (x >= kWidth && z >= kWidth);
+                tf.translate = Vector3(static_cast<float>(x), static_cast<float>(-y), static_cast<float>(z));
+                tf.translate *= blockScale;
+                tf.translate.x += blockScale * 0.5f;
+                tf.translate.y -= blockScale * 0.5f; // yは下方向に伸びているので補正
+                tf.translate.z += blockScale * 0.5f;
+
                 if (isUpper)
                 {
-                    tf.translate = Vector3(static_cast<float>(x), static_cast<float>(-y), static_cast<float>(z));
-                    tf.translate *= blockScale;
-
                     auto block = std::make_unique<Block>();
                     block->Initialize(instancedObjectBlock_->CreateInstance(tf));
+                    if (pCellFilter) pCellFilter->AssignToGrid(block->GetCollider());
                     blocks_[x][y][z] = std::move(block);
                 }
                 else if (y == 1)
                 {
-                    tf.translate = Vector3(static_cast<float>(x), static_cast<float>(-y), static_cast<float>(z));
-                    tf.translate *= blockScale;
-
                     auto block = std::make_unique<Block>();
                     block->Initialize(instancedObjectBlock_->CreateInstance(tf));
+                    if (pCellFilter) pCellFilter->AssignToGrid(block->GetCollider());
                     blocks_[x][y][z] = std::move(block);
                 }
             }
         }
     }
-
-    //for (int i = 0; i < kNumBlocks; ++i)
-    //{
-    //    tf.translate = this->ToWorldVector3(i);
-    //    tf.translate.y -= blockScale * .5f;
-
-    //    auto block = std::make_unique<Block>();
-    //    block->Initialize(instancedObjectBlock_->CreateInstance(tf));
-    //    blocks_[i] = std::move(block);
-    //}
 }
 
 void Terrain::Finalize()
@@ -116,9 +108,7 @@ void Terrain::ImGui()
 
         AABB aabb = {};
         aabb.min = selectPosition_ * Block::kScale;
-        aabb.min.x -= Block::kScale * 0.5f;
-        aabb.min.y -= Block::kScale * 0.5f;
-        aabb.min.z -= Block::kScale * 0.5f;
+        aabb.min.y -= Block::kScale; // yは下方向に伸びているので補正
 
         aabb.max = aabb.min + Vector3(Block::kScale, Block::kScale, Block::kScale);
         Draw2D::GetInstance()->DrawAABB(aabb, Color(0x4688ecff).Vec4());

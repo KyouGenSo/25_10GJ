@@ -4,6 +4,7 @@
 #include "./Block/Block.h"
 #include <InstancedObject3d.h>
 #include <memory>
+#include <Features/CellBasedFiltering/CellBasedFiltering.h>
 
 class Terrain
 {
@@ -16,7 +17,7 @@ public:
     Terrain() = default;
     ~Terrain() = default;
 
-    void Initialize();
+    void Initialize(CellBasedFiltering* pCellFilter = nullptr);
     void Finalize();
     void Update();
     void Draw();
