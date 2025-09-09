@@ -157,8 +157,6 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
     <ClCompile Include="Collision\BossBodyCollider.cpp" />
     <ClCompile Include="Collision\EnergyCoreCollider.cpp" />
-    <ClCompile Include="ColorBall\ColorBall.cpp" />
-    <ClCompile Include="ColorBall\Dispenser.cpp" />
     <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
     <ClCompile Include="Bar2d\Bar2d.cpp" />
     <ClCompile Include="Bar3d\Bar3d.cpp" />
@@ -203,8 +201,6 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Bar3d\Bar3d.h" />
     <ClInclude Include="Collision\BossBodyCollider.h" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
-    <ClInclude Include="ColorBall\ColorBall.hpp" />
-    <ClInclude Include="ColorBall\Dispenser.hpp" />
     <ClInclude Include="Collision\EnergyCoreCollider.h" />
     <ClInclude Include="Features\Color\Color.h" />
     <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h" />
