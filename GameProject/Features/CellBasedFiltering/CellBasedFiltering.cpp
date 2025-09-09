@@ -26,15 +26,35 @@ void CellBasedFiltering::UnregisterAll(CollisionManager* pManager)
     potentialColliders_.clear();
 }
 
+void CellBasedFiltering::ReassignToGridAll(int cellSize)
+{
+    cellSize_ = cellSize;
+    numCellsX_ = (worldWidth_ + cellSize_ - 1) / cellSize_;
+    numCellsZ_ = (worldHeight_ + cellSize_ - 1) / cellSize_;
+    std::vector<AABBCollider*> assignedColliders{};
+    for (auto& cell : grid_)
+    {
+        for (auto& collider : cell)
+        {
+            assignedColliders.push_back(collider);
+        }
+    }
+
+    grid_.clear();
+    grid_.resize(static_cast<size_t>(numCellsX_ * numCellsZ_));
+
+    for (auto& collider : assignedColliders)
+    {
+        AssignToGrid(collider);
+    }
+}
+
 void CellBasedFiltering::Draw2d()
 {
     for (auto& collider : potentialColliders_)
     {
         auto aabb = collider->GetAABB();
-        auto position = collider->GetCenter();
-        Vector3 min = aabb.min + position;
-        Vector3 max = aabb.max + position;
-        Draw2D::GetInstance()->DrawAABB({ min, max }, Color(0xff00ffff).Vec4());
+        Draw2D::GetInstance()->DrawAABB(aabb, Color(0xff00ffff).Vec4());
     }
 }
 
@@ -42,7 +62,22 @@ void CellBasedFiltering::DrawImGui()
 {
     if (ImGui::Begin("Cell Based Filtering"))
     {
-        ImGui::Text("Cell Size: %d", cellSize_);
+        ImGui::Checkbox("Enable modify", &isModifyMode_);
+
+        if (!isModifyMode_)
+        {
+            ImGui::Text("Cell Size: %d", cellSize_);
+        }
+        else
+        {
+            ImGui::SliderInt("Cell Size", &cellSize_, 2, 20);
+            if (ImGui::Button("Reassign All"))
+            {
+                ReassignToGridAll(cellSize_);
+                isModifyMode_ = false;
+            }
+        }
+
         ImGui::Text("World Size: %d x %d", worldWidth_, worldHeight_);
         ImGui::Text("Num Cells: %d x %d", numCellsX_, numCellsZ_);
         ImGui::Text("Total Cells: %zu", grid_.size());
@@ -59,9 +94,8 @@ void CellBasedFiltering::DrawImGui()
 void CellBasedFiltering::AssignToGrid(AABBCollider* collider)
 {
     auto aabb = collider->GetAABB();
-    auto position = collider->GetCenter();
-    Vector3 min = aabb.min + position;
-    Vector3 max = aabb.max + position;
+    Vector3 min = aabb.min;
+    Vector3 max = aabb.max;
     Vector3 corners[4] = {
         {min.x, 0.0f, min.z},
         {max.x, 0.0f, min.z},
@@ -88,10 +122,9 @@ void CellBasedFiltering::AssignToGrid(AABBCollider* collider)
 void CellBasedFiltering::RegisterPotentials(AABBCollider* pCollider)
 {
     auto aabb = pCollider->GetAABB();
-    auto position = pCollider->GetCenter();
 
-    Vector3 min = aabb.min + position;
-    Vector3 max = aabb.max + position;
+    Vector3 min = aabb.min;
+    Vector3 max = aabb.max;
 
     Vector3 corners[4] = {
         {min.x, 0.0f, min.z},
