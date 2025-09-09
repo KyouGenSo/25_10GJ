@@ -83,7 +83,7 @@ bool TutorialSection::IsPush(Input* pInput, InputButtons button)
 
     if (isKey)
     {
-        return pInput->PushKey(static_cast<BYTE>(button));
+        return pInput->PushKey(ToDIK(button));
     }
     else if (isTrigger)
     {
@@ -98,6 +98,39 @@ bool TutorialSection::IsPush(Input* pInput, InputButtons button)
     }
     else if (isButton)
     {
-        return pInput->PushButton(static_cast<int>(button) - static_cast<int>(InputButtons::ButtonBegin) - 1);
+        return pInput->PushButton(ToXInput(button));
     }
+}
+
+BYTE TutorialSection::ToDIK(InputButtons button)
+{
+    static const std::unordered_map<InputButtons, BYTE> dikTable =
+    {
+        {InputButtons::Enter, DIK_RETURN},
+        {InputButtons::Space, DIK_SPACE},
+        {InputButtons::W, DIK_W},
+        {InputButtons::A, DIK_A},
+        {InputButtons::S, DIK_S},
+        {InputButtons::D, DIK_D},
+    };
+
+    return dikTable.at(button);
+}
+
+int TutorialSection::ToXInput(InputButtons button)
+{
+    static const std::unordered_map<InputButtons, int> xInputTable =
+    {
+        {InputButtons::ButtonA, XButtons.A},
+        {InputButtons::ButtonB, XButtons.B},
+        {InputButtons::ButtonX, XButtons.X},
+        {InputButtons::ButtonY, XButtons.Y},
+        {InputButtons::LShoulder, XButtons.L_Shoulder},
+        {InputButtons::RShoulder, XButtons.R_Shoulder},
+        {InputButtons::DPadUp, XButtons.DPad_Up},
+        {InputButtons::DPadDown, XButtons.DPad_Down},
+        {InputButtons::DPadLeft, XButtons.DPad_Left},
+        {InputButtons::DPadRight, XButtons.DPad_Right},
+    };
+    return xInputTable.at(button);
 }

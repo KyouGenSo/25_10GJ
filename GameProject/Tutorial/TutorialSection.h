@@ -33,6 +33,10 @@ public:
         ButtonY,
         LShoulder,
         RShoulder,
+        DPadUp,
+        DPadDown,
+        DPadLeft,
+        DPadRight,
         ButtonEnd,
     };
 
@@ -54,6 +58,8 @@ protected:
     void KeyTextUpdate();
 
     static bool IsPush(Input* pInput, InputButtons button);
+    static BYTE ToDIK(InputButtons button);
+    static int ToXInput(InputButtons button);
 
     std::vector<Sprite*> texts_ = {};
     std::unordered_map<InputButtons, Sprite*> textsButton_ = {};
