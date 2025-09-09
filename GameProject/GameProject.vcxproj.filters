@@ -60,6 +60,12 @@
     <Filter Include="Bar2d">
       <UniqueIdentifier>{011638ec-e56a-4245-8174-3d221d751d95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\ColorBall">
+      <UniqueIdentifier>{72869a26-1ebd-45a3-9160-d520968a2e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Dispenser">
+      <UniqueIdentifier>{7562ce60-3d46-4187-8624-f01688d92e33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -99,7 +105,6 @@
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp">
       <Filter>Features\TimeMeasurer</Filter>
     </ClCompile>
-    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
     <ClCompile Include="Features\Color\Color.cpp">
       <Filter>Features\Color</Filter>
     </ClCompile>
@@ -109,11 +114,24 @@
     <ClCompile Include="Bar2d\Bar2d.cpp">
       <Filter>Bar2d</Filter>
     </ClCompile>
-    <ClCompile Include="Tutorial\TutorialSection.cpp" />
-    <ClCompile Include="scene\TutorialScene.cpp" />
-    <ClCompile Include="ColorBall\ColorBall.cpp" />
-    <ClCompile Include="ColorBall\Dispenser.cpp" />
-    <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
+    <ClCompile Include="scene\TutorialScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial\TutorialSection.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp">
+      <Filter>Animation\TitleAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Dispenser\Dispenser.cpp">
+      <Filter>Object\Dispenser</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ColorBall\ColorBall.cpp">
+      <Filter>Object\ColorBall</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -179,14 +197,14 @@
     <ClInclude Include="scene\TutorialScene.h">
       <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="ColorBall\ColorBall.hpp">
-      <Filter>MyGame</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorBall\Dispenser.hpp">
-      <Filter>MyGame</Filter>
-    </ClInclude>
     <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp">
-      <Filter>MyGame</Filter>
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Dispenser\Dispenser.hpp">
+      <Filter>Object\Dispenser</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ColorBall\ColorBall.hpp">
+      <Filter>Object\ColorBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
