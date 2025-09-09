@@ -86,7 +86,7 @@ void GameScene::Initialize()
 
     cellFilter_ = std::make_unique<CellBasedFiltering>();
     cellFilter_->Initialize(
-        static_cast<int>(Block::kScale * 4),
+        static_cast<int>(Block::kScale * 1),
         static_cast<int>(Terrain::kSize * Block::kScale),
         static_cast<int>(Terrain::kSize * Block::kScale)
     );
@@ -146,6 +146,7 @@ void GameScene::Update()
     player_->SetMode(followCamera_->GetMode());
 
     skyBox_->Update();
+    player_->SetDebug(isDebug_);
     player_->Update();
     boss_->Update();
     
@@ -186,7 +187,7 @@ void GameScene::Draw()
         ShadowRenderer::GetInstance()->EndShadowPass();
     }
 
-    cellFilter_->Draw2d();
+    cellFilter_->Draw2dDebug();
 
     //------------------背景Spriteの描画------------------//
     // スプライト共通描画設定

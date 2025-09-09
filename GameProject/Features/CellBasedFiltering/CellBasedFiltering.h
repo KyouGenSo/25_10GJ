@@ -13,7 +13,7 @@ public:
     ~CellBasedFiltering() = default;
 
     void Initialize(int cellSize, int maxWorldX, int maxWorldZ);
-    void Draw2d();
+    void Draw2dDebug();
     void DrawImGui();
 
     void AssignToGrid(AABBCollider* collider);
@@ -25,6 +25,10 @@ public:
 private:
     uint64_t ToCellIndex(const Vector3& position) const;
 
+    void Draw2dPotentials();
+    void Draw2dCurrentCells();
+    void Draw2dAllCells() const;
+
     int cellSize_       = 0;
     int worldWidth_     = 0;
     int worldHeight_    = 0;
@@ -33,6 +37,10 @@ private:
 
     std::vector<std::vector<AABBCollider*>> grid_;
     std::set<AABBCollider*> potentialColliders_;
-    std::set<uint64_t> uniqueCells_;
+    std::set<uint64_t> activeCellsIndices_;
     bool isModifyMode_ = false;
+    bool isDrawPotentials_ = false;
+    bool isDrawCurrentCells_ = false;
+    bool isDrawAllCells_ = false;
+    float cellGridY_ = 0.0f; // 2D描画用のY位置
 };

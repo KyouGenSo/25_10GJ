@@ -174,10 +174,13 @@ void Player::Action()
             emitter_->SetEmitterColor(emitterName_, Block::ColorToVector4(blockColor));
         }
 
-        if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
-        if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack(false);
-        if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash(false);
-        if ((blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange) && inputHandler_->IsJumping()) Jump(blockColor == Block::Colors::Orange);
+        if (!isDebug_)
+        {
+            if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
+            if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack(false);
+            if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash(false);
+            if ((blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange) && inputHandler_->IsJumping()) Jump(blockColor == Block::Colors::Orange);
+        }
 
         if (inputHandler_->IsDispense())
         {
