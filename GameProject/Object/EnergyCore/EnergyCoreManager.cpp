@@ -79,6 +79,19 @@ void EnergyCoreManager::DrawImGui()
 {
 #ifdef _DEBUG
     ImGui::Begin("Energy Cores");
+    
+    // Destroy Allボタン
+    if (ImGui::Button("Destroy All"))
+    {
+        for (auto& core : energyCores_)
+        {
+            core->Destroy();
+        }
+    }
+    
+    ImGui::Separator();
+    
+    // 各エネルギーコアの詳細
     for (size_t i = 0; i < energyCores_.size(); i++)
     {
         ImGui::PushID(static_cast<int>(i));
@@ -133,13 +146,18 @@ void EnergyCoreManager::PlaceRandomly()
         // その位置の最上層のY座標を取得
         float worldY = pTerrain_->GetMaxYAt(worldX, worldZ);
         
-        // エネルギーコアの位置を設定（ブロックの上に浮かせる）
+        // エネルギーコアの位置を設定
+        Vector3 targetPosition = Vector3(worldX, worldY + Block::kScale * 0.5f, worldZ);
+        
         Transform coreTransform;
-        coreTransform.translate = Vector3(worldX, worldY + Block::kScale * 0.5f, worldZ);
+        coreTransform.translate = targetPosition;  // 一時的な位置（StartSpawnAnimationで上書きされる）
         coreTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
         coreTransform.scale = Vector3(1.5f, 1.5f, 1.5f);
         
         energyCores_[i]->SetTransform(coreTransform);
+        
+        // 出現アニメーションを開始
+        energyCores_[i]->StartSpawnAnimation(targetPosition);
     }
 }
 
