@@ -266,15 +266,15 @@ void EnergyCoreManager::PlaceRandomly()
         int xIndex = distX(randomEngine_);
         int zIndex = distZ(randomEngine_);
         
-        // ワールド座標に変換
-        float worldX = xIndex * Block::kScale;
-        float worldZ = zIndex * Block::kScale;
-        
+        // ワールド座標に変換（ブロックの中心に配置）
+        float worldX = xIndex * Block::kScale + Block::kScale * 0.5f;
+        float worldZ = zIndex * Block::kScale + Block::kScale * 0.5f;
+
         // その位置の最上層のY座標を取得
-        float worldY = pTerrain_->GetMaxYAt(worldX, worldZ);
+        float worldY = pTerrain_->GetMaxYAt(xIndex * Block::kScale, zIndex * Block::kScale);
         
-        // エネルギーコアの位置を設定
-        Vector3 targetPosition = Vector3(worldX, worldY + Block::kScale * 0.5f, worldZ);
+        // エネルギーコアの位置を設定（ブロックの上に少し浮かせる）
+        Vector3 targetPosition = Vector3(worldX, worldY, worldZ);
         
         Transform coreTransform;
         coreTransform.translate = targetPosition;  // 一時的な位置（StartSpawnAnimationで上書きされる）

@@ -457,8 +457,8 @@ void EnergyCore::StartSpawnAnimation(const Vector3& targetPosition)
     
     // 開始位置を地面の下に設定（Y軸-10.0f下）
     spawnStartPos_ = targetPosition;
-    if (targetPosition.y >= 5.0f) spawnStartPos_.y = -1.0f;
-    else if (targetPosition.y <= -5.0f) spawnStartPos_.y = -10.6f;
+    if (targetPosition.y >= 0.0f) spawnStartPos_.y = -5.6f;
+    else spawnStartPos_.y = -15.6f;
     
     
     // 初期位置に配置
