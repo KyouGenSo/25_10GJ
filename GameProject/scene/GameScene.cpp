@@ -48,19 +48,17 @@ void GameScene::Initialize()
     // CollisionManagerの初期化（最初に行う）
     collisionManager->Initialize();
 
-    // 床モデルのUV変換設定
-    groundUvTransform_.translate = Vector3(0.0f, 0.0f, 0.0f);
-    groundUvTransform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
-    groundUvTransform_.scale = Vector3(100.0f, 100.0f, 100.0f);
-    // 床モデルの初期化
-    ground_ = std::make_unique<Object3d>();
-    ground_->Initialize();
-    ground_->SetModel("ground_black.gltf");
-    ground_->SetUvTransform(groundUvTransform_);
-
     // 敵モデルの初期化
     boss_ = std::make_unique<Boss>();
     boss_->Initialize();
+
+    // Terrainの初期化（エネルギーコア配置の前に必要）
+    terrain_ = std::make_unique<Terrain>();
+    terrain_->Initialize();
+
+    // エネルギーコアマネージャーの初期化
+    energyCoreManager_ = std::make_unique<EnergyCoreManager>();
+    energyCoreManager_->Initialize(boss_.get(), terrain_.get());
 
     // Playerの初期化
     player_ = std::make_unique<Player>();
@@ -72,19 +70,21 @@ void GameScene::Initialize()
     followCamera_->SetTarget(&player_->GetTransform());
     followCamera_->SetTarget2(&boss_->GetTransform());
 
-    // 衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
-    //collisionManager->SetCollisionMask(
-    //  static_cast<uint32_t>(CollisionTypeId::kPlayer),
-    //  static_cast<uint32_t>(CollisionTypeId::kEnemyAttack),
-    //  true
-    //);
-
-    terrain_ = std::make_unique<Terrain>();
-    terrain_->Initialize();
+     //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
+    collisionManager->SetCollisionMask(
+      static_cast<uint32_t>(CollisionTypeId::kPlayer),
+      static_cast<uint32_t>(CollisionTypeId::kBossBody),
+      true
+    );
+    
+    // プレイヤーとエネルギーコアの衝突判定を有効化
+    collisionManager->SetCollisionMask(
+      static_cast<uint32_t>(CollisionTypeId::kPlayer),
+      static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
+      true
+    );
 
     player_->SetTerrain(terrain_.get());
-
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
@@ -99,6 +99,12 @@ void GameScene::Finalize()
     if (boss_)
     {
         boss_->Finalize();
+    }
+    
+    // エネルギーコアマネージャーの終了処理
+    if (energyCoreManager_)
+    {
+        energyCoreManager_->Finalize();
     }
 
     // CollisionManagerのリセット
@@ -128,9 +134,12 @@ void GameScene::Update()
     player_->SetMode(followCamera_->GetMode());
 
     skyBox_->Update();
-    ground_->Update();
     player_->Update();
     boss_->Update();
+    
+    // エネルギーコアマネージャーの更新
+    energyCoreManager_->Update();
+    
     followCamera_->Update();
 
     terrain_->Update();
@@ -158,6 +167,7 @@ void GameScene::Draw()
         ShadowRenderer::GetInstance()->BeginShadowPass();
         player_->Draw();
         boss_->Draw();
+        energyCoreManager_->Draw();
         ShadowRenderer::GetInstance()->EndShadowPass();
     }
 
@@ -171,9 +181,12 @@ void GameScene::Draw()
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
 
-    //ground_->Draw();
     player_->Draw();
     boss_->Draw();
+    
+    // エネルギーコアの描画
+    energyCoreManager_->Draw();
+    
     terrain_->Draw();
     player_->InstancedDraw();
 
@@ -218,6 +231,10 @@ void GameScene::DrawImGui()
     #ifdef _DEBUG
     player_->DrawImGui();
     boss_->DrawImGui();
+    
+    // エネルギーコアマネージャーのImGui描画
+    energyCoreManager_->DrawImGui();
+    
     followCamera_->DrawImGui();
     terrain_->ImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
