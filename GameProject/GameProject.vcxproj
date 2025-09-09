@@ -155,6 +155,8 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
+    <ClCompile Include="ColorBall\ColorBall.cpp" />
+    <ClCompile Include="ColorBall\Dispenser.cpp" />
     <ClCompile Include="Bar2d\Bar2d.cpp" />
     <ClCompile Include="Bar3d\Bar3d.cpp" />
     <ClCompile Include="Features\Color\Color.cpp" />
@@ -192,6 +194,8 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Bar2d\Bar2d.h" />
     <ClInclude Include="Bar3d\Bar3d.h" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
+    <ClInclude Include="ColorBall\ColorBall.hpp" />
+    <ClInclude Include="ColorBall\Dispenser.hpp" />
     <ClInclude Include="Features\Color\Color.h" />
     <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h" />
     <ClInclude Include="FollowCamera\FollowCamera.h" />

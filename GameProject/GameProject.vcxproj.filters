@@ -111,6 +111,8 @@
     </ClCompile>
     <ClCompile Include="Tutorial\TutorialSection.cpp" />
     <ClCompile Include="scene\TutorialScene.cpp" />
+    <ClCompile Include="ColorBall\ColorBall.cpp" />
+    <ClCompile Include="ColorBall\Dispenser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -175,6 +177,12 @@
     </ClInclude>
     <ClInclude Include="scene\TutorialScene.h">
       <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBall\ColorBall.hpp">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBall\Dispenser.hpp">
+      <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

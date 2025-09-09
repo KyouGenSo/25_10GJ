@@ -20,11 +20,11 @@ void Boss::Initialize()
 {
   model_ = std::make_unique<Object3d>();
   model_->Initialize();
-  model_->SetModel("enemy.gltf");
+  model_->SetModel("Boss.gltf");
 
-  transform_.translate = Vector3(0.0f, 2.5f, 10.0f);
+  transform_.translate = Vector3(95.0f, -9.5f, 95.0f);
   transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
-  transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
+  transform_.scale = Vector3(3.0f, 3.0f, 3.0f);
 
   model_->SetTransform(transform_);
   
@@ -62,6 +62,11 @@ void Boss::Draw()
 void Boss::DrawImGui()
 {
 #ifdef _DEBUG
-
+    ImGui::Begin("Boss");
+    // Transformの編集
+    ImGui::DragFloat3("Position", &transform_.translate.x, 0.1f);
+    ImGui::DragFloat3("Rotation", &transform_.rotate.x, 0.1f);
+    ImGui::DragFloat3("Scale", &transform_.scale.x, 0.1f, 0.1f, 10.0f);
+    ImGui::End();
 #endif
 }
