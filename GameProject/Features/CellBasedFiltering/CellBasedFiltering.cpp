@@ -49,12 +49,19 @@ void CellBasedFiltering::ReassignToGridAll(int cellSize)
     }
 }
 
-void CellBasedFiltering::Draw2d()
+void CellBasedFiltering::Draw2dDebug()
 {
-    for (auto& collider : potentialColliders_)
+    if (isDrawPotentials_)
     {
-        auto aabb = collider->GetAABB();
-        Draw2D::GetInstance()->DrawAABB(aabb, Color(0xff00ffff).Vec4());
+        Draw2dPotentials();
+    }
+    if (isDrawCurrentCells_)
+    {
+        Draw2dCurrentCells();
+    }
+    if (isDrawAllCells_)
+    {
+        Draw2dAllCells();
     }
 }
 
@@ -62,31 +69,64 @@ void CellBasedFiltering::DrawImGui()
 {
     if (ImGui::Begin("Cell Based Filtering"))
     {
-        ImGui::Checkbox("Enable modify", &isModifyMode_);
+        if (ImGui::TreeNode("Display lines"))
+        {
+            ImGui::Indent(15.0f);
 
-        if (!isModifyMode_)
-        {
-            ImGui::Text("Cell Size: %d", cellSize_);
+            ImGui::Checkbox("All Cells", &isDrawAllCells_);
+            ImGui::Checkbox("Current Cells", &isDrawCurrentCells_);
+            ImGui::Checkbox("Potentials", &isDrawPotentials_);
+
+            if (isDrawAllCells_) ImGui::DragFloat("Cell Grid Y", &cellGridY_, 0.01f);
+
+            ImGui::Unindent(15.0f);
+            ImGui::TreePop();
         }
-        else
+
+        if (ImGui::TreeNode("Cells"))
         {
-            ImGui::SliderInt("Cell Size", &cellSize_, 2, 20);
-            if (ImGui::Button("Reassign All"))
+            ImGui::Indent(15.0f);
+
+            ImGui::Checkbox("Enable modify", &isModifyMode_);
+
+            if (!isModifyMode_)
             {
-                ReassignToGridAll(cellSize_);
-                isModifyMode_ = false;
+                ImGui::Text("Cell Size: %d", cellSize_);
             }
+            else
+            {
+                ImGui::SliderInt("Cell Size", &cellSize_, 2, 40);
+                if (ImGui::Button("Reassign All"))
+                {
+                    ReassignToGridAll(cellSize_);
+                    isModifyMode_ = false;
+                }
+            }
+
+            ImGui::Spacing();
+
+            // 各種情報の表示
+            ImGui::Text("World Size: %d x %d", worldWidth_, worldHeight_);
+            ImGui::Text("Num Cells: %d x %d", numCellsX_, numCellsZ_);
+            ImGui::Text("Total Cells: %zu", grid_.size());
+            ImGui::Text("Potential Colliders: %zu", potentialColliders_.size());
+
+            // 現在のアクティブセルの表示
+            if (!activeCellsIndices_.empty())
+            {
+                std::string activeCellsStr = "Active Cells: { ";
+                for (auto& activeCell : activeCellsIndices_)
+                {
+                    activeCellsStr += std::to_string(activeCell) + " ";
+                }
+                activeCellsStr += "}";
+                ImGui::Text("%s", activeCellsStr.c_str());
+            }
+
+            ImGui::Unindent(15.0f);
+            ImGui::TreePop();
         }
 
-        ImGui::Text("World Size: %d x %d", worldWidth_, worldHeight_);
-        ImGui::Text("Num Cells: %d x %d", numCellsX_, numCellsZ_);
-        ImGui::Text("Total Cells: %zu", grid_.size());
-        ImGui::Text("Potential Colliders: %zu", potentialColliders_.size());
-
-        for (auto& uniqueCell : uniqueCells_)
-        {
-            ImGui::Text("Potencial cell index: %llu", uniqueCell);
-        }
     }
     ImGui::End();
 }
@@ -133,15 +173,15 @@ void CellBasedFiltering::RegisterPotentials(AABBCollider* pCollider)
         {max.x, 0.0f, max.z}
     };
 
-    uniqueCells_.clear();
+    activeCellsIndices_.clear();
     for (const auto& corner : corners)
     {
         uint64_t cellIndex = ToCellIndex(corner);
         if (cellIndex < grid_.size())
-        uniqueCells_.insert(cellIndex);
+            activeCellsIndices_.insert(cellIndex);
     }
 
-    for (const auto& cellIndex : uniqueCells_)
+    for (const auto& cellIndex : activeCellsIndices_)
     {
         if (cellIndex < grid_.size())
         {
@@ -167,4 +207,63 @@ uint64_t CellBasedFiltering::ToCellIndex(const Vector3& position) const
     uint64_t ix = static_cast<uint64_t>(position.x) / cellSize_;
     uint64_t iz = static_cast<uint64_t>(position.z) / cellSize_;
     return numCellsX_ * iz + ix;
+}
+
+void CellBasedFiltering::Draw2dPotentials()
+{
+    for (auto& collider : potentialColliders_)
+    {
+        auto aabb = collider->GetAABB();
+        Draw2D::GetInstance()->DrawAABB(aabb, Color(0xff00ffff).Vec4());
+    }
+}
+
+void CellBasedFiltering::Draw2dCurrentCells()
+{
+    // 現在のセルを強調表示
+    for (const auto& cellIndex : activeCellsIndices_)
+    {
+        if (cellIndex < grid_.size())
+        {
+            int ix = static_cast<int>(cellIndex % numCellsX_);
+            int iz = static_cast<int>(cellIndex / numCellsX_);
+            AABB cellAABB{
+                Vector3{static_cast<float>(ix * cellSize_), -100.0f, static_cast<float>(iz * cellSize_)},
+                Vector3{static_cast<float>((ix + 1) * cellSize_), 100.0f, static_cast<float>((iz + 1) * cellSize_)}
+            };
+            Draw2D::GetInstance()->DrawAABB(cellAABB, Color(0x0000ffff).Vec4());
+        }
+    }
+}
+
+void CellBasedFiltering::Draw2dAllCells() const
+{
+    for (int iz = 0; iz < numCellsZ_; ++iz)
+    {
+        for (int ix = 0; ix < numCellsX_; ++ix)
+        {
+            Draw2D::GetInstance()->DrawLine(
+                Vector3{ static_cast<float>(ix * cellSize_), cellGridY_, static_cast<float>(iz * cellSize_) },
+                Vector3{ static_cast<float>((ix + 1) * cellSize_), cellGridY_, static_cast<float>(iz * cellSize_) },
+                Color(0xffff00ff).Vec4());
+            Draw2D::GetInstance()->DrawLine(
+                Vector3{ static_cast<float>(ix * cellSize_), cellGridY_, static_cast<float>(iz * cellSize_) },
+                Vector3{ static_cast<float>(ix * cellSize_), cellGridY_, static_cast<float>((iz + 1) * cellSize_) },
+                Color(0xffff00ff).Vec4());
+            if (ix == numCellsX_ - 1)
+            {
+                Draw2D::GetInstance()->DrawLine(
+                    Vector3{ static_cast<float>((ix + 1) * cellSize_), cellGridY_, static_cast<float>(iz * cellSize_) },
+                    Vector3{ static_cast<float>((ix + 1) * cellSize_), cellGridY_, static_cast<float>((iz + 1) * cellSize_) },
+                    Color(0xffff00ff).Vec4());
+            }
+            if (iz == numCellsZ_ - 1)
+            {
+                Draw2D::GetInstance()->DrawLine(
+                    Vector3{ static_cast<float>(ix * cellSize_), cellGridY_, static_cast<float>((iz + 1) * cellSize_) },
+                    Vector3{ static_cast<float>((ix + 1) * cellSize_), cellGridY_, static_cast<float>((iz + 1) * cellSize_) },
+                    Color(0xffff00ff).Vec4());
+            }
+        }
+    }
 }

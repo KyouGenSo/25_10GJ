@@ -18,6 +18,7 @@ class Player
 public:
     const float kSize = 1.5f;
 private:
+    bool isDebug_ = false;            ///< デバッグ
     std::unique_ptr<Object3d> model_; ///< モデル
     Camera* camera_ = nullptr;        ///< カメラ
     Terrain* terrain_ = nullptr;      ///< 床
@@ -96,6 +97,7 @@ public: // メンバ関数
     void SetTerrain(Terrain* terrain) {terrain_ = terrain;}
     void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
     void OnGround();
+    void SetDebug(bool debug) { isDebug_ = debug; };
 
     float GetSpeed() const { return speed_; }
     Camera* GetCamera() const { return camera_; }
