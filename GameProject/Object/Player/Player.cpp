@@ -45,7 +45,9 @@ void Player::Initialize()
     weapon_->Initialize();
     weapon_->SetModel("weapon_stick.gltf");
     weapon_->SetTransform(transform_);
-    weapon_->SetScale({2.f,2.f,2.f});
+    weapon_->SetScale({10.f,10.f,10.f});
+    weapon_->SetRotate({0.f, 0.f, 1.57f}); // Z軸を90度回転させて横向きに
+    weapon_->SetMaterialColor({1.f, 1.f, 1.f, 1.f});
 
     // Colliderの設定
     SetupColliders();
@@ -76,8 +78,7 @@ void Player::Update()
     if (isAttacking_){
         if (timer_ <= kMotionTime){ // InProgress
             timer_ += 1.f / 60.f;
-
-            weapon_->SetTransform(transform_);
+            
             weapon_->Update();
         } else{
             CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
