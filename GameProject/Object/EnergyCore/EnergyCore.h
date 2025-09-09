@@ -1,7 +1,9 @@
 #pragma once
 #include <memory>
+#include <string>
 #include "Transform.h"
 #include "Vector4.h"
+#include "EmitterManager.h"
 
 class Boss;
 class Object3d;
@@ -146,4 +148,8 @@ private:
     float damageShakeDuration_ = 0.3f;                     ///< ダメージシェーク時間
     Vector3 damageShakeAmplitude_{ 0.3f, 0.1f, 0.3f };    ///< ダメージシェーク振動幅
     Vector3 damageShakeOffset_{};                          ///< ダメージシェークオフセット
+    
+    // パーティクルエフェクト関連
+    std::unique_ptr<EmitterManager> emitterManager_;       ///< エミッターマネージャー
+    std::string emitterName_;                              ///< このコアのエミッター名
 };

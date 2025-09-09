@@ -3,6 +3,7 @@
 #include "CollisionManager.h"
 #include "Model.h"
 #include "FrameTimer.h"
+#include "GPUParticle.h"
 #include "../Boss/Boss.h"
 #include "../../Collision/EnergyCoreCollider.h"
 #include "../../Collision/CollisionTypeIdDef.h"
@@ -47,10 +48,60 @@ void EnergyCore::Initialize(Boss* boss)
     
     // CollisionManagerに登録
     CollisionManager::GetInstance()->AddCollider(collider_.get());
+    
+    // パーティクルエフェクトの初期化
+    emitterManager_ = std::make_unique<EmitterManager>(GPUParticle::GetInstance());
+    
+    // ユニークなエミッター名を生成（ポインタのアドレスを使用）
+    emitterName_ = "EnergyCore_" + std::to_string(reinterpret_cast<uintptr_t>(this));
+    
+    // BoxEmitterを作成（コライダーと同じサイズ）
+    Vector3 emitterSize = collider_->GetSize();
+    emitterManager_->CreateBoxEmitter(
+        emitterName_,
+        transform_.translate + collider_->GetOffset(),  // コライダーと同じ位置
+        emitterSize,                                     // コライダーと同じサイズ  
+        Vector3(0.0f, 0.0f, 0.0f),                      // 回転なし
+        10,                                              // パーティクル数
+        0.2f                                             // 生成頻度（0.2秒ごと）
+    );
+    
+    // パーティクルの色を赤系に設定
+    Vector4 startColor(1.0f, 0.2f, 0.0f, 1.0f);  // 明るい赤
+    Vector4 endColor(0.8f, 0.0f, 0.0f, 0.0f);    // 暗い赤（フェードアウト）
+    emitterManager_->SetEmitterColors(emitterName_, startColor, endColor);
+    
+    // パーティクルの速度を設定（ゆっくり上昇）
+    emitterManager_->SetEmitterVelocityRange(
+        emitterName_,
+        Vector2(-0.05f, 0.05f),   // X軸の速度範囲
+        Vector2(0.05f, 0.3f),    // Y軸の速度範囲（上昇）
+        Vector2(-0.05f, 0.05f)    // Z軸の速度範囲
+    );
+    
+    // パーティクルのサイズを設定（小さめ）
+    emitterManager_->SetEmitterScaleRange(
+        emitterName_,
+        Vector2(0.3f, 0.3f),    // X軸のスケール範囲
+        Vector2(0.3f, 0.3f)     // Y軸のスケール範囲
+    );
+    
+    // パーティクルの寿命を設定
+    emitterManager_->SetEmitterLifeTimeRange(
+        emitterName_,
+        Vector2(1.0f, 2.0f)     // 1〜2秒の寿命
+    );
 }
 
 void EnergyCore::Finalize()
 {
+    // パーティクルエミッターを削除
+    if (emitterManager_)
+    {
+        emitterManager_->RemoveEmitter(emitterName_);
+        emitterManager_.reset();
+    }
+    
     // Colliderを削除
     if (collider_)
     {
@@ -85,6 +136,25 @@ void EnergyCore::Update()
         if (collider_)
         {
             collider_->SetTransform(&transform_);
+        }
+        
+        // パーティクルエミッターの位置を更新（シェークも考慮）
+        if (emitterManager_)
+        {
+            // エミッターの位置をコライダーと同じ位置に更新
+            Vector3 emitterPos = shakeTransform.translate + collider_->GetOffset();
+            emitterManager_->SetEmitterPosition(emitterName_, emitterPos);
+            
+            // エミッターマネージャーの更新
+            emitterManager_->Update();
+        }
+    }
+    else
+    {
+        // 破壊されたらエミッターを無効化
+        if (emitterManager_)
+        {
+            emitterManager_->SetEmitterActive(emitterName_, false);
         }
     }
 }
@@ -228,6 +298,12 @@ void EnergyCore::Destroy()
     {
         isDestroyed_ = true;
         
+        // パーティクルエミッターを無効化
+        if (emitterManager_)
+        {
+            emitterManager_->SetEmitterActive(emitterName_, false);
+        }
+        
         // コライダーを無効化
         if (collider_)
         {
@@ -246,6 +322,12 @@ void EnergyCore::Respawn()
 {
     isDestroyed_ = false;
     hp_ = maxHp_;  // HPを最大値にリセット
+    
+    // パーティクルエミッターを有効化
+    if (emitterManager_)
+    {
+        emitterManager_->SetEmitterActive(emitterName_, true);
+    }
     
     // 注意：コライダーの有効化はStartSpawnAnimationで行うため、ここでは行わない
 }
@@ -273,6 +355,12 @@ void EnergyCore::StartSpawnAnimation(const Vector3& targetPosition)
     if (collider_)
     {
         collider_->SetActive(false);
+    }
+    
+    // アニメーション中はパーティクルを無効化
+    if (emitterManager_)
+    {
+        emitterManager_->SetEmitterActive(emitterName_, false);
     }
 }
 
@@ -313,6 +401,12 @@ void EnergyCore::UpdateSpawnAnimation()
         if (collider_)
         {
             collider_->SetActive(true);
+        }
+        
+        // パーティクルエミッターを有効化
+        if (emitterManager_)
+        {
+            emitterManager_->SetEmitterActive(emitterName_, true);
         }
     }
 }
