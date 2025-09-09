@@ -79,8 +79,15 @@ void GameScene::Initialize()
     //  true
     //);
 
+    cellFilter_ = std::make_unique<CellBasedFiltering>();
+    cellFilter_->Initialize(
+        static_cast<int>(Block::kScale * 4),
+        static_cast<int>(Terrain::kSize * Block::kScale),
+        static_cast<int>(Terrain::kSize * Block::kScale)
+    );
+
     terrain_ = std::make_unique<Terrain>();
-    terrain_->Initialize();
+    terrain_->Initialize(cellFilter_.get());
 
     player_->SetTerrain(terrain_.get());
 
@@ -124,6 +131,8 @@ void GameScene::Update()
     /// ================================== ///
     ///              更新処理               ///
     /// ================================== ///
+    cellFilter_->UnregisterAll(CollisionManager::GetInstance());
+
 
     player_->SetMode(followCamera_->GetMode());
 
@@ -134,6 +143,9 @@ void GameScene::Update()
     followCamera_->Update();
 
     terrain_->Update();
+
+    cellFilter_->RegisterPotentials(player_->GetBodyCollider());
+    cellFilter_->RegisterAll(CollisionManager::GetInstance());
 
     // 衝突判定の実行
     CollisionManager::GetInstance()->CheckAllCollisions();
@@ -160,6 +172,8 @@ void GameScene::Draw()
         boss_->Draw();
         ShadowRenderer::GetInstance()->EndShadowPass();
     }
+
+    cellFilter_->Draw2d();
 
     //------------------背景Spriteの描画------------------//
     // スプライト共通描画設定
@@ -220,6 +234,7 @@ void GameScene::DrawImGui()
     boss_->DrawImGui();
     followCamera_->DrawImGui();
     terrain_->ImGui();
+    cellFilter_->DrawImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
     #endif // DEBUG

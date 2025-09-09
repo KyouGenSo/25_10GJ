@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -158,6 +158,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
     <ClCompile Include="Bar2d\Bar2d.cpp" />
     <ClCompile Include="Bar3d\Bar3d.cpp" />
+    <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp" />
     <ClCompile Include="Features\Color\Color.cpp" />
     <ClCompile Include="Features\TimeMeasurer\TimeMeasurer.cpp" />
     <ClCompile Include="FollowCamera\FollowCamera.cpp" />
@@ -196,6 +197,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Bar2d\Bar2d.h" />
     <ClInclude Include="Bar3d\Bar3d.h" />
     <ClInclude Include="Collision\CollisionTypeIdDef.h" />
+    <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h" />
     <ClInclude Include="Features\Color\Color.h" />
     <ClInclude Include="Features\TimeMeasurer\TimeMeasurer.h" />
     <ClInclude Include="FollowCamera\FollowCamera.h" />

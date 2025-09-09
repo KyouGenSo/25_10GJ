@@ -26,7 +26,7 @@ private:
     Player* owner_ = nullptr;
 
 public:
-    static const Vector4& ToVector4(Colors _color);
+    static Vector4 ToVector4(Colors _color);
 
     Dispenser& Initialize();
     void Update();

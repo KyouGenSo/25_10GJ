@@ -10,6 +10,7 @@
 #include "Object/Player/Player.h"
 #include "Object/Boss/Boss.h"
 #include <Terrain/Terrain.h>
+#include <Features/CellBasedFiltering/CellBasedFiltering.h>
 
 class GameScene : public BaseScene
 {
@@ -52,6 +53,8 @@ private: // メンバ変数
 
     std::unique_ptr<FollowCamera> followCamera_;
     std::unique_ptr<Terrain> terrain_;
+
+    std::unique_ptr<CellBasedFiltering> cellFilter_;
 
     Transform groundUvTransform_{};
 

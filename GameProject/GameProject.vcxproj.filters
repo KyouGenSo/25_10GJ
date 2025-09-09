@@ -66,6 +66,9 @@
     <Filter Include="Object\Dispenser">
       <UniqueIdentifier>{7562ce60-3d46-4187-8624-f01688d92e33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\CellBasedFiltering">
+      <UniqueIdentifier>{09304ac1-55ab-454b-be8e-bcf83ec4a3fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="Object\ColorBall\ColorBall.cpp">
       <Filter>Object\ColorBall</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
+      <Filter>Features\CellBasedFiltering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="Object\ColorBall\ColorBall.hpp">
       <Filter>Object\ColorBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
+      <Filter>Features\CellBasedFiltering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

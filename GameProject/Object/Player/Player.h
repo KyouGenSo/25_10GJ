@@ -101,6 +101,7 @@ public: // メンバ関数
     Object3d* GetModel() const { return model_.get(); }
     InputHandler* GetInputHandler() const { return inputHandler_.get(); }
     Transform* GetTransformPtr() { return &transform_; }
+    AABBCollider* GetBodyCollider() const { return bodyCollider_.get(); }
 
 private:
     /// <summary>

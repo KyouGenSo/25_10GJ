@@ -45,9 +45,9 @@ void Player::Initialize()
     weapon_->Initialize();
     weapon_->SetModel("weapon_stick.gltf");
     weapon_->SetTransform(transform_);
-    weapon_->SetScale({10.f,10.f,10.f});
-    weapon_->SetRotate({0.f, 0.f, 1.57f}); // Z軸を90度回転させて横向きに
-    weapon_->SetMaterialColor({1.f, 1.f, 1.f, 1.f});
+    weapon_->SetScale({ 10.f,10.f,10.f });
+    weapon_->SetRotate({ 0.f, 0.f, 1.57f }); // Z軸を90度回転させて横向きに
+    weapon_->SetMaterialColor({ 1.f, 1.f, 1.f, 1.f });
 
     // Colliderの設定
     SetupColliders();
@@ -56,7 +56,8 @@ void Player::Initialize()
 void Player::Finalize()
 {
 
-    if (attackCollider_){
+    if (attackCollider_)
+    {
         CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
     }
 
@@ -75,12 +76,16 @@ void Player::Update()
         inputHandler_->Update(this);
     }
 
-    if (isAttacking_){
-        if (timer_ <= kMotionTime){ // InProgress
+    if (isAttacking_)
+    {
+        if (timer_ <= kMotionTime)
+        { // InProgress
             timer_ += 1.f / 60.f;
-            
+
             weapon_->Update();
-        } else{
+        }
+        else
+        {
             CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
             timer_ = 0.f;
             isAttacking_ = false;
@@ -150,6 +155,8 @@ void Player::Action()
             blockColor = terrain_->GetBlockColorAt(feetPosition);
         }
 
+        blockColor = Block::Colors::Gray; // 仮
+
         if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
         if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack();
         if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash();
@@ -191,10 +198,11 @@ void Player::Dash()
 
 void Player::Attack()
 {
-    if (!isAttacking_){
+    if (!isAttacking_)
+    {
         //攻撃開始フレーム
         isAttacking_ = true;
-        attackCollider_->SetOffset({sinf(transform_.rotate.y) *2.f, 0.f, cosf(transform_.rotate.y) *2.f});
+        attackCollider_->SetOffset({ sinf(transform_.rotate.y) * 2.f, 0.f, cosf(transform_.rotate.y) * 2.f });
         CollisionManager::GetInstance()->AddCollider(attackCollider_.get());
     }
 }
@@ -229,8 +237,8 @@ void Player::SetupColliders()
     // 攻撃
     attackCollider_ = std::make_unique<AABBCollider>();
     attackCollider_->SetTransform(&transform_);
-    attackCollider_->SetSize({3.f, 0.5f, 3.f});
-    attackCollider_->SetOffset({0.f,0.f,0.f});
+    attackCollider_->SetSize({ 3.f, 0.5f, 3.f });
+    attackCollider_->SetOffset({ 0.f,0.f,0.f });
     attackCollider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kAttack));
     attackCollider_->SetOwner(this);
 
@@ -240,6 +248,7 @@ void Player::SetupColliders()
     collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kAttack), static_cast<uint32_t>(CollisionTypeId::kEnemy), true);
 }
 
-void Player::OnGround() {
+void Player::OnGround()
+{
     onGround_ = true;
-}  
+}
