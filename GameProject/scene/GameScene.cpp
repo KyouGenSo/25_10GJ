@@ -62,6 +62,10 @@ void GameScene::Initialize()
     boss_ = std::make_unique<Boss>();
     boss_->Initialize();
 
+    // Terrainの初期化（エネルギーコア配置の前に必要）
+    terrain_ = std::make_unique<Terrain>();
+    terrain_->Initialize();
+
     // エネルギーコアの初期化（4つ生成）
     energyCores_.resize(4);
     for (int i = 0; i < 4; i++)
@@ -70,30 +74,43 @@ void GameScene::Initialize()
         energyCores_[i]->Initialize(boss_.get());
     }
     
-    // ボスの周りにエネルギーコアを配置
-    Transform coreTransform;
-    coreTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
-    coreTransform.scale = Vector3(1.5f, 1.5f, 1.5f);
+    // Terrainを４等分してエネルギーコアをランダム配置
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     
-    // 4つのコアをボスの周りに配置（四角形の頂点）
-    float distance = 30.0f; // ボスからの距離
-    Vector3 bossPos = boss_->GetTransform().translate;
+    // 各エリアの範囲を定義
+    struct Area {
+        int xMin, xMax, zMin, zMax;
+    };
     
-    // 前方
-    coreTransform.translate = Vector3(bossPos.x, 0.0f, bossPos.z - distance);
-    energyCores_[0]->SetTransform(coreTransform);
+    Area areas[4] = {
+        {0, 9, 0, 9},      // エリア1: 左上
+        {10, 19, 0, 9},    // エリア2: 右上
+        {0, 9, 10, 19},    // エリア3: 左下
+        {10, 19, 10, 19}   // エリア4: 右下
+    };
     
-    // 後方
-    coreTransform.translate = Vector3(bossPos.x, 0.0f, bossPos.z + distance);
-    energyCores_[1]->SetTransform(coreTransform);
-    
-    // 左側
-    coreTransform.translate = Vector3(bossPos.x - distance, 0.0f, bossPos.z);
-    energyCores_[2]->SetTransform(coreTransform);
-    
-    // 右側
-    coreTransform.translate = Vector3(bossPos.x + distance, 0.0f, bossPos.z);
-    energyCores_[3]->SetTransform(coreTransform);
+    // 各エリアでランダムにブロックを選んでエネルギーコアを配置
+    for (int i = 0; i < 4; i++)
+    {
+        // エリア内でランダムな座標を選択
+        int xIndex = areas[i].xMin + std::rand() % (areas[i].xMax - areas[i].xMin + 1);
+        int zIndex = areas[i].zMin + std::rand() % (areas[i].zMax - areas[i].zMin + 1);
+        
+        // ワールド座標に変換
+        float worldX = xIndex * Block::kScale;
+        float worldZ = zIndex * Block::kScale;
+        
+        // その位置の最上層のY座標を取得
+        float worldY = terrain_->GetMaxYAt(worldX, worldZ);
+        
+        // エネルギーコアの位置を設定（ブロックの上に浮かせる）
+        Transform coreTransform;
+        coreTransform.translate = Vector3(worldX, worldY + Block::kScale * 0.5f + 5.0f, worldZ);
+        coreTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+        coreTransform.scale = Vector3(1.5f, 1.5f, 1.5f);
+        
+        energyCores_[i]->SetTransform(coreTransform);
+    }
 
     // Playerの初期化
     player_ = std::make_unique<Player>();
@@ -119,12 +136,7 @@ void GameScene::Initialize()
       true
     );
 
-    terrain_ = std::make_unique<Terrain>();
-    terrain_->Initialize();
-
     player_->SetTerrain(terrain_.get());
-
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }
