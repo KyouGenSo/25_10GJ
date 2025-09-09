@@ -22,6 +22,7 @@ public:
     void ImGui();
 
 public:
+    void SetOpacity(float alpha);
     void SetPosition(const Vector2& _pos) { position_ = _pos; }
     void SetAnchorPoint(const Vector2& _anchor) { anchor_ = _anchor; }
     void SetMaxValue(float _max) { maxValue_ = _max; }
@@ -47,7 +48,6 @@ private:
 
     std::unique_ptr<Sprite> bar_ = nullptr;
     std::unique_ptr<Sprite> name_ = nullptr;
-    std::array<std::unique_ptr<Sprite>, 2> decorations_ = {};
     std::unique_ptr<Sprite> background_ = nullptr;
     std::vector<NumberImage> numbers_;
 

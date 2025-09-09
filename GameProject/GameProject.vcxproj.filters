@@ -109,6 +109,8 @@
     <ClCompile Include="Bar2d\Bar2d.cpp">
       <Filter>Bar2d</Filter>
     </ClCompile>
+    <ClCompile Include="Tutorial\TutorialSection.cpp" />
+    <ClCompile Include="scene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -170,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="Bar2d\Bar2d.h">
       <Filter>Bar2d</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\TutorialScene.h">
+      <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

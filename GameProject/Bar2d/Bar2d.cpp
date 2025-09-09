@@ -31,16 +31,6 @@ void Bar2d::Initialize(const std::string& _nameTexturePath, const Vector2& _barS
     bar_->Initialize(PATH_BAR);
     bar_->SetColor(COLOR_BAR_NORMAL.Vec4());
 
-    for (auto& deco : decorations_)
-    {
-        deco = std::make_unique<Sprite>();
-        deco->Initialize(PATH_DECORATION);
-        deco->SetColor(COLOR_BAR_NORMAL.Vec4());
-        Vector2 size = { barSize_.x, barSize_.y };
-        float y = size.y + size.y / 5.0f;
-        deco->SetSize({ y / 5.0f , y });
-    }
-
     if (isDisplay_name_)
     {
         name_ = std::make_unique<Sprite>();
@@ -62,10 +52,6 @@ void Bar2d::Update()
 
     this->UpdateColor();
 
-    for (auto& deco : decorations_)
-    {
-        if (deco) deco->Update();
-    }
     if (bar_) bar_->Update();
     if (background_) background_->Update();
     if (name_) name_->Update();
@@ -73,10 +59,6 @@ void Bar2d::Update()
 
 void Bar2d::Draw2D()
 {
-    for (const auto& deco : decorations_)
-    {
-        if (deco) deco->Draw();
-    }
     if (background_) background_->Draw();
     if (bar_) bar_->Draw();
     if (name_) name_->Draw();
@@ -110,6 +92,30 @@ void Bar2d::ImGui()
     ImGui::End();
 }
 
+void Bar2d::SetOpacity(float alpha)
+{
+    if (bar_)
+    {
+        Vector4 color = TO_VECTOR4(bar_->GetColor());
+        color.w = alpha;
+        bar_->SetColor(TO_VECTOR4(color));
+    }
+
+    if (background_)
+    {
+        Vector4 color = TO_VECTOR4(background_->GetColor());
+        color.w = alpha;
+        background_->SetColor(TO_VECTOR4(color));
+    }
+
+    if (name_)
+    {
+        Vector4 color = TO_VECTOR4(name_->GetColor());
+        color.w = alpha;
+        name_->SetColor(TO_VECTOR4(color));
+    }
+}
+
 void Bar2d::UpdateTransform()
 {
     Vector2 leftTop = position_ - mul(anchor_, barSize_);
@@ -117,28 +123,19 @@ void Bar2d::UpdateTransform()
 
     if (name_) 
     {
-        name_->SetPos(TO_VECTOR2(cPos));
+        name_->SetPos(cPos);
         cPos.y += name_->GetSize().y;
     }
 
-    cPos += SPACING_HEAD_TO_DECO;
-    decorations_[0]->SetPos(TO_VECTOR2(cPos));
-    Vector2 decoSize = { decorations_[0]->GetSize().x, decorations_[0]->GetSize().y };
-    cPos.x += decoSize.x * 3.0f;
-    cPos.y += decoSize.y / 2.0f - bar_->GetSize().y / 2.0f;
-    bar_->SetPos(TO_VECTOR2(cPos));
+    bar_->SetPos(cPos);
 
     float ratio = currentValue_ / maxValue_;
     bar_->SetSize({ barSize_.x * ratio, barSize_.y });
 
-    background_->SetPos(TO_VECTOR2(cPos));
-    background_->SetSize(TO_VECTOR2(barSize_));
+    background_->SetPos(cPos);
+    background_->SetSize(barSize_);
 
     cPos.x += barSize_.x;
-    cPos.x += decoSize.x * 2.0f;
-    cPos.y -= decoSize.y / 2.0f - bar_->GetSize().y / 2.0f;
-
-    decorations_[1]->SetPos(TO_VECTOR2(cPos));
 }
 
 void Bar2d::UpdateColor()
