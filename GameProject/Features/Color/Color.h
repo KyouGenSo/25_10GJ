@@ -1,6 +1,6 @@
 #pragma once
 
-class Vector4;
+struct Vector4;
 
 /// <summary>
 /// Colors class

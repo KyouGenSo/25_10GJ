@@ -21,7 +21,7 @@ public:
     };
 
     /// ColorからVector4への変換
-    static const Vector4& ColorToVector4(Block::Colors color);
+    static Vector4 ColorToVector4(Block::Colors color);
 
 public:
     // Blockの1辺のスケール

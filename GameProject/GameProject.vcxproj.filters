@@ -51,6 +51,15 @@
     <Filter Include="Features\Color">
       <UniqueIdentifier>{7c81723f-2cc9-4a4c-915b-9560e0f809d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tutorial">
+      <UniqueIdentifier>{0221bdba-fc72-4388-b4f1-6f43d71558fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bar3d">
+      <UniqueIdentifier>{e943c3c2-6eea-44a9-bd5a-fbaedbab2839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bar2d">
+      <UniqueIdentifier>{011638ec-e56a-4245-8174-3d221d751d95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -94,6 +103,14 @@
     <ClCompile Include="Features\Color\Color.cpp">
       <Filter>Features\Color</Filter>
     </ClCompile>
+    <ClCompile Include="Bar3d\Bar3d.cpp">
+      <Filter>Bar3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Bar2d\Bar2d.cpp">
+      <Filter>Bar2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial\TutorialSection.cpp" />
+    <ClCompile Include="scene\TutorialScene.cpp" />
     <ClCompile Include="ColorBall\ColorBall.cpp" />
     <ClCompile Include="ColorBall\Dispenser.cpp" />
   </ItemGroup>
@@ -148,6 +165,18 @@
     </ClInclude>
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial\TutorialSection.h">
+      <Filter>Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar3d\Bar3d.h">
+      <Filter>Bar3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar2d\Bar2d.h">
+      <Filter>Bar2d</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\TutorialScene.h">
+      <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="ColorBall\ColorBall.hpp">
       <Filter>MyGame</Filter>
