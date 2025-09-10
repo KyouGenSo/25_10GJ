@@ -194,6 +194,9 @@
     <ClCompile Include="scene\OverScene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
+    <ClCompile Include="Tutorial\HelpMenu.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -312,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="scene\OverScene.h">
       <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial\HelpMenu.h">
+      <Filter>Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -35,7 +35,7 @@ void GameScene::Initialize()
     Draw2D::GetInstance()->SetDebug(false);
     GPUParticle::GetInstance()->SetIsDebug(false);
     // デバッグビルドではコライダー表示をデフォルトでON
-    collisionManager->SetDebugDrawEnabled(true);
+    CollisionManager::GetInstance()->SetDebugDrawEnabled(true);
 #endif
     CollisionManager* collisionManager = CollisionManager::GetInstance();
     /// ================================== ///
@@ -119,11 +119,14 @@ void GameScene::Initialize()
     colorManualSprite_->SetSize(colorManualSize);
     colorManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-    controlManualSprite_ = std::make_unique<Sprite>();
-    controlManualSprite_->Initialize("ControlManual.png");
-    controlManualSprite_->SetPos(controlManualPos);
-    controlManualSprite_->SetSize(controlManualSize);
-    controlManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+    TextureManager::GetInstance()->LoadTexture("Tutorial/Howto.png");
+    howToPlaySprite_ = std::make_unique<Sprite>();
+    howToPlaySprite_->Initialize("Tutorial/Howto.png");
+    howToPlaySprite_->SetPos(howToPlayPos);
+    howToPlaySprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    helpMenu_ = std::make_unique<HelpMenu>();
+    helpMenu_->Initialize();
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(50.f);
 }
@@ -173,33 +176,33 @@ void GameScene::Update()
     /// ================================== ///
     cellFilter_->UnregisterAll(CollisionManager::GetInstance());
 
+    helpMenu_->Update();
+    bool isHelpActive = helpMenu_->IsDisplay();
+
     colorManualSprite_->SetPos(colorManualPos);
     colorManualSprite_->SetSize(colorManualSize);
     colorManualSprite_->Update();
 
-    controlManualSprite_->SetPos(controlManualPos);
-    controlManualSprite_->SetSize(controlManualSize);
-    controlManualSprite_->Update();
+    howToPlaySprite_->Update();
 
-    player_->SetMode(followCamera_->GetMode());
+    if (!isHelpActive)
+    {
+        player_->SetMode(followCamera_->GetMode());
+        player_->SetDebug(isDebug_);
+        player_->Update();
+        boss_->Update();
+        // エネルギーコアマネージャーの更新
+        energyCoreManager_->Update();
+        followCamera_->Update();
+        terrain_->Update();
+        // 衝突判定用オブジェクトの登録
+        cellFilter_->RegisterPotentials(player_->GetBodyCollider());
+        cellFilter_->RegisterAll(CollisionManager::GetInstance());
+        // 衝突判定の実行
+        CollisionManager::GetInstance()->CheckAllCollisions();
+    }
 
     skyBox_->Update();
-    player_->SetDebug(isDebug_);
-    player_->Update();
-    boss_->Update();
-
-    // エネルギーコアマネージャーの更新
-    energyCoreManager_->Update();
-
-    followCamera_->Update();
-
-    terrain_->Update();
-
-    cellFilter_->RegisterPotentials(player_->GetBodyCollider());
-    cellFilter_->RegisterAll(CollisionManager::GetInstance());
-
-    // 衝突判定の実行
-    CollisionManager::GetInstance()->CheckAllCollisions();
 
     // シーン遷移
     if (player_->GetHp() <= 0)
@@ -289,7 +292,9 @@ void GameScene::DrawWithoutEffect()
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
     player_->DrawHUD();
     colorManualSprite_->Draw();
-    controlManualSprite_->Draw();
+    howToPlaySprite_->Draw();
+    helpMenu_->Draw2d();
+
 }
 
 void GameScene::DrawImGui()
@@ -310,11 +315,6 @@ void GameScene::DrawImGui()
     ImGui::Begin("colorManualSprite");
     ImGui::DragFloat2("Position", &colorManualPos.x, 1.0f, static_cast<float>(-WinApp::clientWidth), static_cast<float>(WinApp::clientWidth));
     ImGui::DragFloat2("Size", &colorManualSize.x, 1.0f, 0.0f, static_cast<float>(WinApp::clientWidth));
-    ImGui::End();
-
-    ImGui::Begin("controlManualSprite");
-    ImGui::DragFloat2("Position", &controlManualPos.x, 1.0f, static_cast<float>(-WinApp::clientWidth), static_cast<float>(WinApp::clientWidth));
-    ImGui::DragFloat2("Size", &controlManualSize.x, 1.0f, 0.0f, static_cast<float>(WinApp::clientWidth));
     ImGui::End();
 #endif // DEBUG
 }

@@ -12,6 +12,7 @@
 #include "Object/EnergyCore/EnergyCoreManager.h"
 #include <Terrain/Terrain.h>
 #include <Features/CellBasedFiltering/CellBasedFiltering.h>
+#include <Tutorial/HelpMenu.h>
 
 class GameScene : public BaseScene
 {
@@ -61,9 +62,10 @@ private: // メンバ変数
     Vector2 colorManualPos{ 0, 4 };
     Vector2 colorManualSize{ 450, 200 };
 
-    std::unique_ptr<Sprite> controlManualSprite_;
-    Vector2 controlManualPos{ 0, 204 };
-    Vector2 controlManualSize{ 455, 280 };
+    std::unique_ptr<Sprite> howToPlaySprite_;
+    Vector2 howToPlayPos{ 0, 210 };
+
+    std::unique_ptr<HelpMenu> helpMenu_;
 
     uint32_t bgmVH_ = 0;
 

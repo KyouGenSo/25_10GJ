@@ -33,7 +33,7 @@ void TutorialScene::Initialize()
     Draw2D::GetInstance()->SetDebug(false);
     GPUParticle::GetInstance()->SetIsDebug(false);
     // デバッグビルドではコライダー表示をデフォルトでON
-    collisionManager->SetDebugDrawEnabled(true);
+    //collisionManager->SetDebugDrawEnabled(true);
     #endif
     CollisionManager* collisionManager = CollisionManager::GetInstance();
 

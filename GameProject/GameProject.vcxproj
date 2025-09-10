@@ -188,6 +188,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="scene\TutorialScene.cpp" />
     <ClCompile Include="Terrain\Block\Block.cpp" />
     <ClCompile Include="Terrain\Terrain.cpp" />
+    <ClCompile Include="Tutorial\HelpMenu.cpp" />
     <ClCompile Include="Tutorial\Tutorial.cpp" />
     <ClCompile Include="Tutorial\TutorialEventRecorder.cpp" />
     <ClCompile Include="Tutorial\TutorialSection.cpp" />
@@ -240,6 +241,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="scene\TutorialScene.h" />
     <ClInclude Include="Terrain\Block\Block.h" />
     <ClInclude Include="Terrain\Terrain.h" />
+    <ClInclude Include="Tutorial\HelpMenu.h" />
     <ClInclude Include="Tutorial\Tutorial.h" />
     <ClInclude Include="Tutorial\TutorialEventRecorder.h" />
     <ClInclude Include="Tutorial\TutorialSection.h" />
