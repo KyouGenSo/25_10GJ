@@ -109,7 +109,7 @@ private:
     bool isColliderActive = false;    ///< コライダーの有効フラグ
     bool isCollapse = false;          ///< 崩壊フラグ
     float collapseTimer = 0;          ///< 崩壊タイマー
-    float collapseDuration_ = 20.0f;   ///< 崩壊時間
+    float collapseDuration_ = 15.0f;   ///< 崩壊時間
 
     // Collider
     std::vector<std::unique_ptr<BossBodyCollider>> bodyColliders_;
