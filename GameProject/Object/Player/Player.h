@@ -51,15 +51,21 @@ private:
     std::unique_ptr<Dispenser> dispenser_;
 
     bool onGround_ = false;
-    uint16_t jumpCount_ = 0;
 
     std::unique_ptr<EmitterManager> emitter_;
     std::string emitterName_ = "PlayerOnBuffedFloor";
 
+    bool canMove_ = false;
+    bool canDash_ = false;
+    bool canJump_ = false;
+    bool canAttack_ = false;
+
+    bool isBuffed_ = false;
+
     // ImGuiで調整可能な物理パラメータ
     float friction_ = 0.8f;
     float gravity_ = 0.1f;
-    float jumpForce_ = 1.0f;
+    float jumpForce_ = 3.0f;
     float dashForce_ = 3.0f;
 
 public: // メンバ関数
@@ -131,7 +137,7 @@ private:
 
     void Jump(bool _isBuffed);
 
-    void Dash(bool _isBuffed);
+    void Dash();
 
     void Attack(bool _isBuffed);
 

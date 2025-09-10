@@ -56,7 +56,7 @@ void Block::ImGui()
 
     if (modelInstance_)
     {
-        const char* colorNames[] = { "White", "Gray", "Blue", "Green", "Red", "Yellow", "Purple", "Orange" };
+        const char* colorNames[] = {"White", "Gray", "Blue", "Yellow", "Red", "DarkBlue", "DarkYellow", "DarkRed", "Green", "Purple", "Orange"};
         int currentColor = static_cast<int>(color_);
         if (ImGui::Combo("Color", &currentColor, colorNames, IM_ARRAYSIZE(colorNames)))
         {
