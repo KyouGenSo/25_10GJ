@@ -15,9 +15,14 @@ public:
         White,
         Gray,
         Blue,
-        Green,
-        Red,
         Yellow,
+        Red,
+
+        DarkBlue,
+        DarkYellow,
+        DarkRed,
+
+        Green,
         Purple,
         Orange,
     };
@@ -43,6 +48,8 @@ public:
     Colors GetColor() const { return color_; }
     Vector3 GetPosition() const;
     AABBCollider* GetCollider() const { return collider_.get(); }
+
+    Colors MixingColor(Colors _new) const;
 
 private:
     Transform transform_{};

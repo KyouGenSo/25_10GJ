@@ -157,6 +157,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
     <ClCompile Include="Collision\BossAttackCollider.cpp" />
     <ClCompile Include="Collision\BossBodyCollider.cpp" />
+    <ClCompile Include="Collision\Collider\ColorBall\ColorBallCollider.cpp" />
     <ClCompile Include="Collision\EnergyCoreCollider.cpp" />
     <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
     <ClCompile Include="Bar2d\Bar2d.cpp" />
@@ -185,6 +186,8 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="scene\TutorialScene.cpp" />
     <ClCompile Include="Terrain\Block\Block.cpp" />
     <ClCompile Include="Terrain\Terrain.cpp" />
+    <ClCompile Include="Tutorial\Tutorial.cpp" />
+    <ClCompile Include="Tutorial\TutorialEventRecorder.cpp" />
     <ClCompile Include="Tutorial\TutorialSection.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +206,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Animation\AnimationTween.hpp" />
     <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h" />
     <ClInclude Include="Collision\BossAttackCollider.h" />
+    <ClInclude Include="Collision\Collider\ColorBall\ColorBallCollider.hpp" />
     <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp" />
     <ClInclude Include="Bar2d\Bar2d.h" />
     <ClInclude Include="Bar3d\Bar3d.h" />
@@ -232,6 +236,8 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="scene\TutorialScene.h" />
     <ClInclude Include="Terrain\Block\Block.h" />
     <ClInclude Include="Terrain\Terrain.h" />
+    <ClInclude Include="Tutorial\Tutorial.h" />
+    <ClInclude Include="Tutorial\TutorialEventRecorder.h" />
     <ClInclude Include="Tutorial\TutorialSection.h" />
   </ItemGroup>
   <ItemGroup>
