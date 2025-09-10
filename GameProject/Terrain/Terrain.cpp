@@ -92,6 +92,7 @@ void Terrain::Draw()
 
 void Terrain::ImGui()
 {
+#ifdef _DEBUG
     bool isOpen = ImGui::Begin("Terrain");
     if (isOpen)
     {
@@ -130,6 +131,7 @@ void Terrain::ImGui()
         ImGui::Unindent(15.0f);
     }
     ImGui::End();
+#endif // _DEBUG
 };
 
 Vector3 Terrain::ToLocalVector3(uint32_t index)

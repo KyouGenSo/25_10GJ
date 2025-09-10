@@ -235,7 +235,7 @@ void Player::Action()
         }
 
         // Debug
-        blockColor = Block::Colors::Gray;
+        //blockColor = Block::Colors::Gray;
 
         if (!isDebug_)
         {
