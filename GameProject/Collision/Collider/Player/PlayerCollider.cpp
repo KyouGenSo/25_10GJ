@@ -9,15 +9,15 @@ PlayerCollider::PlayerCollider(Player* _owner)
     SetOwner(player_);
 }
 
-void PlayerCollider::OnCollisionStay(Collider* other) {
+void PlayerCollider::OnCollisionEnter(Collider* other) {
     if (other->GetTypeID() != static_cast<uint32_t>(CollisionTypeId::kTerrain))return;
     
     Block* block = static_cast<Block*>(other->GetOwner());
     auto blockTransform = other->GetTransform();
     auto playerTransform = player_->GetTransform();
     
-    float blockTop = blockTransform->translate.y + block->kScale / 2.f;
-    float blockBottom = blockTransform->translate.y - block->kScale / 2.f;
+    float blockTop = blockTransform->translate.y + Block::kScale / 2.f;
+    float blockBottom = blockTransform->translate.y - Block::kScale / 2.f;
     float playerBottom = playerTransform.translate.y - player_->kSize / 2.f;
     float playerTop = playerTransform.translate.y + player_->kSize / 2.f;
     

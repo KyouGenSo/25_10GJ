@@ -11,10 +11,11 @@ ColorBall::~ColorBall()
     }
 }
 
-void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model)
+void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint)
 {
     model_ = std::move(_model);
-    
+    color_ = _colorForPaint;
+
     if (model_)
     {
         transform_ = model_->GetTransform();
@@ -52,16 +53,40 @@ bool ColorBall::IsDead() const
     return dead_;
 }
 
+Block::Colors ColorBall::GetColorForPaint() const
+{
+    Block::Colors color = Block::Colors::White;
+    switch (color_){
+    case Colors::GRAY:
+        color = Block::Colors::Gray;
+        break;
+    case Colors::BLUE:
+        color = Block::Colors::Blue;
+        break;
+    case Colors::YELLOW:
+        color = Block::Colors::Yellow;
+        break;
+    case Colors::RED:
+        color = Block::Colors::Red;
+        break;
+    }
+
+    return color;
+}
+
+void ColorBall::imDead()
+{
+    dead_ = true;
+}
+
 void ColorBall::SetCollider()
 {
-    collider_ = std::make_unique<SphereCollider>();
-    Transform transform = model_->GetTransform();
-    collider_->SetTransform(&transform);
+    collider_ = std::make_unique<ColorBallCollider>(this);
+    collider_->SetTransform(&transform_);
     collider_->SetRadius(1.0f);
     collider_->SetOffset({0,0,0});
     collider_->SetTypeID(static_cast<uint32_t>(CollisionTypeId::kColorBall));
-    collider_->SetOwner(this);
 
     CollisionManager::GetInstance()->AddCollider(collider_.get());
-    CollisionManager::GetInstance()->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kColorBall), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
+    CollisionManager::GetInstance()->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kColorBall), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
 }

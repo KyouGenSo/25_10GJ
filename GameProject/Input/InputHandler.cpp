@@ -14,6 +14,7 @@ InputHandler::~InputHandler()
 void InputHandler::Initialize()
 {
 	// 初期化処理
+    color_ = ColorBall::Colors::GRAY;
 }
 
 void InputHandler::Update(Player* player)
@@ -32,9 +33,10 @@ void InputHandler::UpdateInputStates()
         moveDirection_ = input->GetLeftStick();
     }
 
-    color_ = input->TriggerButton(XButtons.DPad_Left) ? Dispenser::Colors::BLUE : Dispenser::Colors::GRAY;
-    color_ = input->TriggerButton(XButtons.DPad_Up) ? Dispenser::Colors::YELLOW : Dispenser::Colors::GRAY;
-    color_ = input->TriggerButton(XButtons.DPad_Right) ? Dispenser::Colors::RED : Dispenser::Colors::GRAY;
+    color_ = input->TriggerButton(XButtons.DPad_Left) ? ColorBall::Colors::BLUE : color_;
+    color_ = input->TriggerButton(XButtons.DPad_Up) ? ColorBall::Colors::YELLOW : color_;
+    color_ = input->TriggerButton(XButtons.DPad_Right) ? ColorBall::Colors::RED : color_;
+    color_ = input->TriggerButton(XButtons.DPad_Down) ? ColorBall::Colors::GRAY : color_;
 
 	// 各アクションの入力状態を更新
 	isMoving_ = !input->LStickInDeadZone();
@@ -84,6 +86,6 @@ Vector2 InputHandler::GetMoveDirection() const
 	return moveDirection_;
 }
 
-Dispenser::Colors InputHandler::GetColor() const {
+ColorBall::Colors InputHandler::GetColor() const {
     return color_;
 }

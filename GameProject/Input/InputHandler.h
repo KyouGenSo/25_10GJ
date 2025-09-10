@@ -28,7 +28,7 @@ public:
 	// 入力方向の取得
 	Vector2 GetMoveDirection() const;
 
-    Dispenser::Colors GetColor() const;
+    ColorBall::Colors GetColor() const;
 
 private:
 	// 入力状態を更新
@@ -45,5 +45,5 @@ private:
 	
 	Vector2 moveDirection_;
 
-    Dispenser::Colors color_ = Dispenser::Colors::GRAY;
+    ColorBall::Colors color_ = ColorBall::Colors::GRAY;
 };

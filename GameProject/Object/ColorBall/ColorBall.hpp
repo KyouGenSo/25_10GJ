@@ -3,12 +3,22 @@
 #include <memory>
 
 #include "InstancedObject3d.h"
-#include "SphereCollider.h"
+#include "Collision/Collider/ColorBall/ColorBallCollider.hpp"
+#include "Terrain/Block/Block.h"
 
 class ColorBall
 {
+public:
+    enum class Colors{
+        GRAY,
+        BLUE,
+        YELLOW,
+        RED
+    };
+
+private:
     std::unique_ptr<ModelInstance> model_;
-    std::unique_ptr<SphereCollider> collider_;
+    std::unique_ptr<ColorBallCollider> collider_;
     Vector3 velocity_{};
 
     Transform transform_{};
@@ -16,12 +26,16 @@ class ColorBall
     float lifetime_ = 5.f;
     bool dead_ = false;
 
+    Colors color_ = Colors::GRAY;
+
 public:
     ~ColorBall();
-    void Initialize(std::unique_ptr<ModelInstance> _model);
+    void Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint);
     void Update();
 
     bool IsDead() const;
+    Block::Colors GetColorForPaint() const;
+    void imDead();
 
 private:
     void SetCollider();
