@@ -50,7 +50,7 @@ void GameScene::Initialize()
 
     // 敵モデルの初期化
     boss_ = std::make_unique<Boss>();
-    boss_->Initialize();
+    boss_->Initialize((*Object3dBasic::GetInstance()->GetCamera()));
 
     // Terrainの初期化（エネルギーコア配置の前に必要）
     terrain_ = std::make_unique<Terrain>();
@@ -58,7 +58,7 @@ void GameScene::Initialize()
 
     // エネルギーコアマネージャーの初期化
     energyCoreManager_ = std::make_unique<EnergyCoreManager>();
-    energyCoreManager_->Initialize(boss_.get(), terrain_.get());
+    energyCoreManager_->Initialize(boss_.get(), terrain_.get(), (*Object3dBasic::GetInstance()->GetCamera()));
 
     // Playerの初期化
     player_ = std::make_unique<Player>();
@@ -222,6 +222,10 @@ void GameScene::Draw()
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
 
+    // HPバー描画
+    boss_->Draw2d();
+    player_->Draw2d();
+    energyCoreManager_->Draw2d();
 
 
     #ifdef _DEBUG

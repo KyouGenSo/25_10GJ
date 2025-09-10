@@ -8,6 +8,8 @@
 class Boss;
 class Object3d;
 class EnergyCoreCollider;
+class Bar3d;
+class Camera;
 
 class EnergyCore
 {
@@ -18,7 +20,7 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    void Initialize(Boss* boss);
+    void Initialize(Boss* boss, Camera* camera);
 
     /// <summary>
     /// 終了処理
@@ -34,6 +36,11 @@ public:
     /// 描画
     /// </summary>
     void Draw();
+
+    /// <summary>
+    /// 2D描画（HPバー）
+    /// </summary>
+    void Draw2d();
 
     /// <summary>
     /// ImGuiの描画
@@ -157,4 +164,8 @@ private:
     // パーティクルエフェクト関連
     std::unique_ptr<EmitterManager> emitterManager_;       ///< エミッターマネージャー
     std::string emitterName_;                              ///< このコアのエミッター名
+
+    // HPバー関連
+    std::unique_ptr<Bar3d> hpBar_;                         ///< HPバー
+    Camera* pCamera_ = nullptr;                            ///< カメラへの参照
 };
