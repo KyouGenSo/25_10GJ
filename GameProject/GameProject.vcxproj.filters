@@ -72,6 +72,9 @@
     <Filter Include="Features\CellBasedFiltering">
       <UniqueIdentifier>{09304ac1-55ab-454b-be8e-bcf83ec4a3fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Boss\Attack">
+      <UniqueIdentifier>{a11596d7-e287-4bec-be41-7ad4945a03fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -152,6 +155,21 @@
     </ClCompile>
     <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
       <Filter>Features\CellBasedFiltering</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\BossAttackManager.cpp">
+      <Filter>Object\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\BossAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\SpikeAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\BossAttackCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\FlameAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Collision\Collider\ColorBall\ColorBallCollider.cpp" />
     <ClCompile Include="Tutorial\Tutorial.cpp" />
@@ -244,6 +262,21 @@
     </ClInclude>
     <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
       <Filter>Features\CellBasedFiltering</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\BossAttackManager.h">
+      <Filter>Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\BossAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\SpikeAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\BossAttackCollider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\FlameAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Collision\Collider\ColorBall\ColorBallCollider.hpp">
       <Filter>MyGame</Filter>

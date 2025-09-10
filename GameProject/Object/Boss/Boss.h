@@ -9,6 +9,9 @@ class BossBodyCollider;
 class OBBCollider;
 class Object3d;
 class AABBCollider;
+class BossAttackManager;
+class Player;
+class Terrain;
 
 class Boss
 {
@@ -58,6 +61,8 @@ public:
     void SetIsCollapse(bool collapse) { isCollapse = collapse; }
     void SetCollapseDuration(float collapseDuration) { collapseDuration_ = collapseDuration; }
     void SetFlashDuration(float duration) { flashDuration_ = duration; }
+    void SetPlayer(Player* player);
+    void SetTerrain(Terrain* terrain);
 
     const Transform& GetTransform() const { return transform_; }
     Transform* GetTransformPtr() { return &transform_; }
@@ -108,4 +113,9 @@ private:
     float flashDuration_ = 0.1f;                           ///< フラッシュ時間（秒）
     Vector4 originalColor_{ 1.0f, 1.0f, 1.0f, 1.0f };     ///< 元の色
     Vector4 flashColor_{ 1.0f, 1.0f, 1.0f, 1.0f };        ///< フラッシュ色（白）
+    
+    // 攻撃システム
+    std::unique_ptr<BossAttackManager> attackManager_;     ///< 攻撃マネージャー
+    Player* player_ = nullptr;                             ///< プレイヤーへの参照
+    Terrain* terrain_ = nullptr;                           ///< テレインへの参照
 };
