@@ -21,6 +21,8 @@ void BossAttackManager::Initialize(Player* player, Terrain* terrain)
 {
     player_ = player;
     terrain_ = terrain;
+
+    autoAttackEnabled_ = true;
     
     // 攻撃パターンを登録
     auto spikeAttack = std::make_unique<SpikeAttack>();
@@ -32,9 +34,7 @@ void BossAttackManager::Initialize(Player* player, Terrain* terrain)
     RegisterAttack(AttackType::Flame, std::move(flameAttack));
     
     // 今後、他の攻撃パターンもここで登録
-    // RegisterAttack(AttackType::Sweep, std::make_unique<SweepAttack>());
-    // RegisterAttack(AttackType::Projectile, std::make_unique<ProjectileAttack>());
-    // RegisterAttack(AttackType::Area, std::make_unique<AreaAttack>());
+
 }
 
 void BossAttackManager::Finalize()

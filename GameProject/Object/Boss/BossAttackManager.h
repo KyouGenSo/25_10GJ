@@ -15,9 +15,6 @@ public:
     {
         Spike,      // 棘攻撃
         Flame,      // 炎攻撃
-        Sweep,      // 範囲攻撃（今後実装）
-        Projectile, // 投射攻撃（今後実装）
-        Area        // エリア攻撃（今後実装）
     };
 
 public:
@@ -52,8 +49,8 @@ private:
     Terrain* terrain_ = nullptr;
     
     float attackTimer_ = 0.0f;
-    float attackInterval_ = 3.0f;  // 攻撃間隔（秒）
-    bool autoAttackEnabled_ = false;  // 自動攻撃の有効/無効
+    float attackInterval_ = 5.0f;  // 攻撃間隔（秒）
+    bool autoAttackEnabled_ = true;  // 自動攻撃の有効/無効
     
     // デバッグ用
     bool debugMode_ = false;
