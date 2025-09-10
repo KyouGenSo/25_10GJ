@@ -179,7 +179,9 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="Object\ColorBall\ColorBall.cpp" />
     <ClCompile Include="Object\Dispenser\Dispenser.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
+    <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="scene\OverScene.cpp" />
     <ClCompile Include="scene\SampleScene.cpp" />
     <ClCompile Include="scene\SceneFactory.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
@@ -229,7 +231,9 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Object\ColorBall\ColorBall.hpp" />
     <ClInclude Include="Object\Dispenser\Dispenser.hpp" />
     <ClInclude Include="Object\Player\Player.h" />
+    <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="scene\OverScene.h" />
     <ClInclude Include="scene\SampleScene.h" />
     <ClInclude Include="scene\SceneFactory.h" />
     <ClInclude Include="scene\TitleScene.h" />

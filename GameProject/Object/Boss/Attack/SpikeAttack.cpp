@@ -299,7 +299,7 @@ void SpikeAttack::UpdateCooldownState()
     {
         try
         {
-            auto block = terrain_->GetBlockAt(GetPlayerBlockPosition());
+            auto block = terrain_->GetBlockAt(spike_->targetPosition);
             block->SetColor(Block::Colors::White);
             hasChangedColor = true;
         }

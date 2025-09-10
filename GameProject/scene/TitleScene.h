@@ -53,6 +53,8 @@ private: // メンバ変数
     std::unique_ptr<Sprite> pSpriteToonRaider1_;
     std::unique_ptr<Sprite> pSpriteToonRaider2_;
     std::unique_ptr<Sprite> pSpriteBackground_;
+    std::unique_ptr<Sprite> buttonSprite_ = nullptr;
+    Vector2 buttonPos_ = { 530, 600 };
 
     // Direction resources
     std::unique_ptr<Terrain> terrain_;

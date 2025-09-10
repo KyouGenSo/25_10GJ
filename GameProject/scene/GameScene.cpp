@@ -27,7 +27,7 @@
 
 void GameScene::Initialize()
 {
-    #ifdef _DEBUG
+#ifdef _DEBUG
     DebugCamera::GetInstance()->Initialize();
     Object3dBasic::GetInstance()->SetDebug(false);
     Draw2D::GetInstance()->SetDebug(false);
@@ -35,7 +35,7 @@ void GameScene::Initialize()
     CollisionManager* collisionManager = CollisionManager::GetInstance();
     // デバッグビルドではコライダー表示をデフォルトでON
     collisionManager->SetDebugDrawEnabled(true);
-    #endif
+#endif
     /// ================================== ///
     ///              初期化処理              ///
     /// ================================== ///
@@ -70,25 +70,25 @@ void GameScene::Initialize()
     followCamera_->SetTarget(&player_->GetTransform());
     followCamera_->SetTarget2(&boss_->GetTransform());
 
-     //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
+    //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
     collisionManager->SetCollisionMask(
       static_cast<uint32_t>(CollisionTypeId::kAttack),
       static_cast<uint32_t>(CollisionTypeId::kBossBody),
       true
     );
-    
+
     // プレイヤーとエネルギーコアの衝突判定を有効化
     collisionManager->SetCollisionMask(
       static_cast<uint32_t>(CollisionTypeId::kAttack),
       static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
       true
     );
-    
+
     // プレイヤーとボス攻撃の衝突判定を有効化
     collisionManager->SetCollisionMask(
-      static_cast<uint32_t>(CollisionTypeId::kPlayer),
-      static_cast<uint32_t>(CollisionTypeId::kBossAttack),
-      true
+        static_cast<uint32_t>(CollisionTypeId::kPlayer),
+        static_cast<uint32_t>(CollisionTypeId::kBossAttack),
+        true
     );
 
     cellFilter_ = std::make_unique<CellBasedFiltering>();
@@ -103,12 +103,24 @@ void GameScene::Initialize()
 
     player_->SetTerrain(terrain_.get());
     player_->SetCellFilter(cellFilter_.get());
-    
+  
     // ボスにプレイヤーとテレインの参照を設定
     boss_->SetPlayer(player_.get());
     boss_->SetTerrain(terrain_.get());
 
-    ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
+    colorManualSprite_ = std::make_unique<Sprite>();
+    colorManualSprite_->Initialize("ColorManual.png");
+    colorManualSprite_->SetPos(colorManualPos);
+    colorManualSprite_->SetSize(colorManualSize);
+    colorManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    controlManualSprite_ = std::make_unique<Sprite>();
+    controlManualSprite_->Initialize("ControlManual.png");
+    controlManualSprite_->SetPos(controlManualPos);
+    controlManualSprite_->SetSize(controlManualSize);
+    controlManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    ShadowRenderer::GetInstance()->SetMaxShadowDistance(50.f);
 }
 
 void GameScene::Finalize()
@@ -122,7 +134,7 @@ void GameScene::Finalize()
     {
         boss_->Finalize();
     }
-    
+
     // エネルギーコアマネージャーの終了処理
     if (energyCoreManager_)
     {
@@ -135,7 +147,7 @@ void GameScene::Finalize()
 
 void GameScene::Update()
 {
-    #ifdef _DEBUG
+#ifdef _DEBUG
     if (Input::GetInstance()->TriggerKey(DIK_F1))
     {
         Object3dBasic::GetInstance()->SetDebug(!Object3dBasic::GetInstance()->GetDebug());
@@ -148,12 +160,19 @@ void GameScene::Update()
     {
         DebugCamera::GetInstance()->Update();
     }
-    #endif
+#endif
     /// ================================== ///
     ///              更新処理               ///
     /// ================================== ///
     cellFilter_->UnregisterAll(CollisionManager::GetInstance());
 
+    colorManualSprite_->SetPos(colorManualPos);
+    colorManualSprite_->SetSize(colorManualSize);
+    colorManualSprite_->Update();
+
+    controlManualSprite_->SetPos(controlManualPos);
+    controlManualSprite_->SetSize(controlManualSize);
+    controlManualSprite_->Update();
 
     player_->SetMode(followCamera_->GetMode());
 
@@ -161,10 +180,10 @@ void GameScene::Update()
     player_->SetDebug(isDebug_);
     player_->Update();
     boss_->Update();
-    
+
     // エネルギーコアマネージャーの更新
     energyCoreManager_->Update();
-    
+
     followCamera_->Update();
 
     terrain_->Update();
@@ -176,9 +195,13 @@ void GameScene::Update()
     CollisionManager::GetInstance()->CheckAllCollisions();
 
     // シーン遷移
-    if (Input::GetInstance()->TriggerKey(DIK_RETURN))
+    if (player_->GetHp() <= 0)
     {
-        SceneManager::GetInstance()->ChangeScene("title");
+        SceneManager::GetInstance()->ChangeScene("over");
+    }
+    else if (boss_->GetHp() <= 0)
+    {
+        SceneManager::GetInstance()->ChangeScene("clear");
     }
 }
 
@@ -212,10 +235,10 @@ void GameScene::Draw()
 
     player_->Draw();
     boss_->Draw();
-    
+
     // エネルギーコアの描画
     energyCoreManager_->Draw();
-    
+
     terrain_->Draw();
     player_->InstancedDraw();
 
@@ -229,10 +252,10 @@ void GameScene::Draw()
     energyCoreManager_->Draw2d();
 
 
-    #ifdef _DEBUG
+#ifdef _DEBUG
     // コライダーのデバッグ描画
     CollisionManager::GetInstance()->DrawColliders();
-    #endif
+#endif
 
 }
 
@@ -258,21 +281,33 @@ void GameScene::DrawWithoutEffect()
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
     player_->DrawHUD();
+    colorManualSprite_->Draw();
+    controlManualSprite_->Draw();
 }
 
 void GameScene::DrawImGui()
 {
-    #ifdef _DEBUG
+#ifdef _DEBUG
     player_->DrawImGui();
     boss_->DrawImGui();
-    
+
     // エネルギーコアマネージャーのImGui描画
     energyCoreManager_->DrawImGui();
-    
+
     followCamera_->DrawImGui();
     terrain_->ImGui();
     cellFilter_->DrawImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
-    #endif // DEBUG
+
+    ImGui::Begin("colorManualSprite");
+    ImGui::DragFloat2("Position", &colorManualPos.x, 1.0f, static_cast<float>(-WinApp::clientWidth), static_cast<float>(WinApp::clientWidth));
+    ImGui::DragFloat2("Size", &colorManualSize.x, 1.0f, 0.0f, static_cast<float>(WinApp::clientWidth));
+    ImGui::End();
+
+    ImGui::Begin("controlManualSprite");
+    ImGui::DragFloat2("Position", &controlManualPos.x, 1.0f, static_cast<float>(-WinApp::clientWidth), static_cast<float>(WinApp::clientWidth));
+    ImGui::DragFloat2("Size", &controlManualSize.x, 1.0f, 0.0f, static_cast<float>(WinApp::clientWidth));
+    ImGui::End();
+#endif // DEBUG
 }
