@@ -7,6 +7,8 @@
 #include "../Boss/Boss.h"
 #include "../../Collision/EnergyCoreCollider.h"
 #include "../../Collision/CollisionTypeIdDef.h"
+#include "../../Bar3d/Bar3d.h"
+#include "Camera.h"
 #include <cmath>
 #include <algorithm>
 
@@ -22,9 +24,10 @@ EnergyCore::~EnergyCore()
 {
 }
 
-void EnergyCore::Initialize(Boss* boss)
+void EnergyCore::Initialize(Boss* boss, Camera* camera)
 {
     pBoss_ = boss;
+    pCamera_ = camera;
     isDestroyed_ = false;
     hp_ = maxHp_;  // HPを最大値に初期化
 
@@ -48,6 +51,16 @@ void EnergyCore::Initialize(Boss* boss)
 
     // CollisionManagerに登録
     CollisionManager::GetInstance()->AddCollider(collider_.get());
+
+    // HPバーの初期化
+    hpBar_ = std::make_unique<Bar3d>();
+    Color hpColor = 0xff0000ff;  // 赤色
+    Color bgColor = 0x000000cc;  // 半透明の黒
+    hpBar_->Initialize(hpColor, bgColor);
+    hpBar_->SetMaxValue(maxHp_);
+    hpBar_->SetCurrentValue(hp_);
+    hpBar_->SetSize(Vector2(80.0f, 12.0f));  // HPバーのサイズ
+    hpBar_->Display(false);  // 初期状態では非表示
 
     // パーティクルエミッターの初期化
     InitParticleEmitter();
@@ -101,12 +114,33 @@ void EnergyCore::Update()
             // エミッターマネージャーの更新
             emitterManager_->Update();
         }
+
+        // HPバーの更新
+        if (hpBar_ && pCamera_)
+        {
+            // HPバーの位置を更新（エネルギーコアの上に表示）
+            Vector2 screenPos = Bar3d::GetHeadUpPositionOnScreen(
+                shakeTransform.translate,
+                Vector2(80.0f, 8.0f),
+                *pCamera_,
+                8.0f  // Y軸オフセット
+            );
+            hpBar_->SetPosition(screenPos);
+            hpBar_->SetCurrentValue(hp_);
+            hpBar_->Update();
+        }
     } else
     {
         // 破壊されたらエミッターを無効化
         if (emitterManager_)
         {
             emitterManager_->SetEmitterActive(emitterName_, false);
+        }
+        
+        // 破壊されたらHPバーも非表示
+        if (hpBar_)
+        {
+            hpBar_->Display(false);
         }
     }
 }
@@ -116,6 +150,14 @@ void EnergyCore::Draw()
     if (!isDestroyed_)
     {
         model_->Draw();
+    }
+}
+
+void EnergyCore::Draw2d()
+{
+    if (hpBar_)
+    {
+        hpBar_->Draw2d();
     }
 }
 
@@ -394,6 +436,12 @@ void EnergyCore::Damage(float damage)
     // ダメージシェークを開始
     StartDamageShake();
 
+    // HPバーを表示（3秒間）
+    if (hpBar_)
+    {
+        hpBar_->Display(3.0f);
+    }
+
     // HPが0になったら破壊
     if (hp_ <= 0.0f)
     {
@@ -436,6 +484,13 @@ void EnergyCore::Respawn()
     if (emitterManager_)
     {
         emitterManager_->SetEmitterActive(emitterName_, true);
+    }
+
+    // HPバーをリセット
+    if (hpBar_)
+    {
+        hpBar_->SetCurrentValue(hp_);
+        hpBar_->Display(false);  // 再生成時は非表示
     }
 
     // 注意：コライダーの有効化はStartSpawnAnimationで行うため、ここでは行わない

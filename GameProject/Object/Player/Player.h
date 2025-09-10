@@ -12,11 +12,13 @@ class InputHandler;
 class Camera;
 class AABBCollider;
 class Boss;
+class Bar3d;
 
 class Player
 {
 public:
     const float kSize = 3.0f;
+    const float kMaxHp = 100.0f;          ///< 最大体力
 private:
     bool isDebug_ = false;            ///< デバッグ
     std::unique_ptr<Object3d> model_; ///< モデル
@@ -67,6 +69,11 @@ private:
     float gravity_ = 0.1f;
     float jumpForce_ = 3.0f;
     float dashForce_ = 3.0f;
+    
+    // UI関連
+    std::unique_ptr<Bar3d> hpBar_;        ///< HPバー
+    Vector2 hpBarSize_ = { 170.0f, 20.0f }; ///< HPバーのサイズ
+    float hpBarOffsetY_ = 0.0f;           ///< HPバーのY軸オフセット
 
 public: // メンバ関数
     Player();
@@ -91,6 +98,11 @@ public: // メンバ関数
     /// 描画
     /// </summary>
     void Draw();
+    
+    /// <summary>
+    /// 2D描画（HPバー）
+    /// </summary>
+    void Draw2d();
 
     /// <summary>
     /// InstancedModel用描画
@@ -114,7 +126,7 @@ public: // メンバ関数
     
     //-----------------------------Getters/Setters------------------------------//
     void SetSpeed(float speed) { speed_ = speed; }
-    void SetCamera(Camera* camera) { camera_ = camera; }
+    void SetCamera(Camera* camera);
     void SetMode(bool mode) { mode_ = mode; } // true: ThirdPersonMode, false: TopDownMode
     void SetTransform(const Transform& transform) { transform_ = transform; }
     void SetTerrain(Terrain* terrain) {terrain_ = terrain;}
@@ -127,6 +139,7 @@ public: // メンバ関数
     Camera* GetCamera() const { return camera_; }
     bool GetMode() const { return mode_; }
     float GetHp() const { return hp_; }
+    float GetMaxHp() const { return kMaxHp; }
     const Transform& GetTransform() const { return transform_; }
     Object3d* GetModel() const { return model_.get(); }
     InputHandler* GetInputHandler() const { return inputHandler_.get(); }
