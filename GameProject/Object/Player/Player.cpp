@@ -30,7 +30,7 @@ void Player::Initialize()
     model_->Initialize();
     model_->SetModel("Player.gltf");
 
-    transform_.translate = Vector3(0.0f, 7.f, 0.0f);
+    transform_.translate = Vector3(2.0f, 7.f, 2.0f);
     transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
     transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
 
@@ -167,17 +167,18 @@ void Player::Action()
             blockColor = terrain_->GetBlockColorAt(feetPosition);
         }
 
-        blockColor = Block::Colors::Gray; // 仮
-
         if (blockColor == Block::Colors::Purple || blockColor == Block::Colors::Orange || blockColor == Block::Colors::Green){
             emitter_->SetEmitterActive(emitterName_, true);
             emitter_->SetEmitterColor(emitterName_, Block::ColorToVector4(blockColor));
         }
 
+        // Debug
+        //blockColor = Block::Colors::Gray;
+
         if (!isDebug_)
         {
             if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
-            if (blockColor == Block::Colors::Red && inputHandler_->IsAttacking()) Attack(false);
+            if ((blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple) && inputHandler_->IsAttacking()) Attack(blockColor == Block::Colors::Purple);
             if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash(false);
             if ((blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange) && inputHandler_->IsJumping()) Jump(blockColor == Block::Colors::Orange);
         }
@@ -196,13 +197,13 @@ void Player::Apply()
     // 位置を更新
     transform_.translate += velocity_;
 
-    velocity_ *= 0.8f; // 摩擦
-    velocity_.y -= 0.1f; // 重力
+    velocity_ *= friction_; // 摩擦
+    velocity_.y -= gravity_; // 重力
 }
 
 void Player::Jump(bool _isBuffed)
 {
-    velocity_.y = 1.f;
+    velocity_.y = jumpForce_;
 
     if (_isBuffed) velocity_.y *= 2.f;
 
@@ -211,11 +212,10 @@ void Player::Jump(bool _isBuffed)
 
 void Player::Dash(bool _isBuffed)
 {
-    float dashForce = 3.0f;
     float currentY = velocity_.y;
 
-    velocity_.x = std::sin(transform_.rotate.y) * dashForce;
-    velocity_.z = std::cos(transform_.rotate.y) * dashForce;
+    velocity_.x = std::sin(transform_.rotate.y) * dashForce_;
+    velocity_.z = std::cos(transform_.rotate.y) * dashForce_;
     velocity_.y = currentY;
 }
 
@@ -226,14 +226,15 @@ void Player::Attack(bool _isBuffed)
         //攻撃開始フレーム
         isAttacking_ = true;
         damage_ = kDamage;
-        attackCollider_->SetSize({ 3.f, 0.5f, 3.f });
+        attackRange_ = defaultAttackRange;
 
         if (_isBuffed){
             damage_ *= 3.f;
-            attackCollider_->SetSize({ 3.f, 0.5f, 5.f });
+            attackRange_ *= 1.5f;
         }
+        attackCollider_->SetSize(attackRange_);
 
-        attackCollider_->SetOffset({ sinf(transform_.rotate.y) * 2.f, 0.f, cosf(transform_.rotate.y) * 2.f });
+        attackCollider_->SetOffset({ sinf(transform_.rotate.y) * offset_, 0.f, cosf(transform_.rotate.y) * offset_ });
         CollisionManager::GetInstance()->AddCollider(attackCollider_.get());
     }
 }
@@ -248,7 +249,50 @@ void Player::DrawImGui()
     #ifdef _DEBUG
     ImGui::Begin("Player");
 
-    ImGui::DragFloat3("Translate", &transform_.translate.x, 0.1f);
+    // Transform調整
+    if (ImGui::CollapsingHeader("Transform"))
+    {
+        ImGui::DragFloat3("Position", &transform_.translate.x, 0.1f);
+        ImGui::DragFloat3("Rotation", &transform_.rotate.x, 0.01f);
+        ImGui::DragFloat3("Scale", &transform_.scale.x, 0.01f);
+    }
+
+    // Movement調整
+    if (ImGui::CollapsingHeader("Movement"))
+    {
+        ImGui::DragFloat("Speed", &speed_, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat3("Velocity", &velocity_.x, 0.01f);
+        ImGui::Checkbox("On Ground", &onGround_);
+        ImGui::DragFloat("Target Angle", &targetAngle_, 0.01f);
+        ImGui::Checkbox("Camera Mode", &mode_);
+        ImGui::Checkbox("Debug Mode", &isDebug_);
+    }
+
+    // Attack調整
+    if (ImGui::CollapsingHeader("Attack"))
+    {
+        ImGui::Checkbox("Is Attacking", &isAttacking_);
+        ImGui::DragFloat("Attack Timer", &timer_, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Damage", &damage_, 0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat3("Attack Size", &defaultAttackRange.x, 0.1f);
+        ImGui::DragFloat("offset", &offset_, 0.1f);
+
+        static float motionTime = kMotionTime;
+        if (ImGui::DragFloat("Motion Time", &motionTime, 0.01f, 0.0f, 2.0f))
+        {
+            const_cast<float&>(kMotionTime) = motionTime;
+        }
+    }
+
+    // Physics調整
+    if (ImGui::CollapsingHeader("Physics"))
+    {
+        ImGui::DragFloat("Gravity", &gravity_, 0.001f, 0.0f, 1.0f);
+        ImGui::DragFloat("Friction", &friction_, 0.01f, 0.0f, 1.0f);
+        ImGui::DragFloat("Jump Force", &jumpForce_, 0.01f, 0.0f, 5.0f);
+        ImGui::DragFloat("Dash Force", &dashForce_, 0.01f, 0.0f, 10.0f);
+    }
+
 
     ImGui::End();
     #endif
@@ -275,11 +319,16 @@ void Player::SetupColliders()
 
     // CollisionManagerに登録
     collisionManager->AddCollider(bodyCollider_.get());
-    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
+    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
     collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kAttack), static_cast<uint32_t>(CollisionTypeId::kEnemy), true);
 }
 
 void Player::OnGround()
 {
     onGround_ = true;
+}
+
+void Player::OffGround()
+{
+    onGround_ = false;
 }

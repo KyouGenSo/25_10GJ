@@ -44,14 +44,23 @@ private:
     std::unique_ptr<AABBCollider> attackCollider_;
     float damage_ = 10.f;
     const float kDamage = 10.f;
+    Vector3 defaultAttackRange { 10.f, 0.5f, 10.f};
+    Vector3 attackRange_ = { 10.f, 0.5f, 10.f };
+    float offset_ = 4.5f;
 
     std::unique_ptr<Dispenser> dispenser_;
 
-    bool onGround_ = true;
+    bool onGround_ = false;
     uint16_t jumpCount_ = 0;
 
     std::unique_ptr<EmitterManager> emitter_;
     std::string emitterName_ = "PlayerOnBuffedFloor";
+
+    // ImGuiで調整可能な物理パラメータ
+    float friction_ = 0.8f;
+    float gravity_ = 0.1f;
+    float jumpForce_ = 1.0f;
+    float dashForce_ = 3.0f;
 
 public: // メンバ関数
     Player();
@@ -100,6 +109,7 @@ public: // メンバ関数
     void SetTerrain(Terrain* terrain) {terrain_ = terrain;}
     void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
     void OnGround();
+    void OffGround();
     void SetDebug(bool debug) { isDebug_ = debug; };
 
     float GetSpeed() const { return speed_; }
