@@ -222,11 +222,16 @@ void Player::Attack(bool _isBuffed)
     {
         //攻撃開始フレーム
         isAttacking_ = true;
+        damage_ = kDamage;
+        attackCollider_->SetSize({ 3.f, 0.5f, 3.f });
+
+        if (_isBuffed){
+            damage_ *= 3.f;
+            attackCollider_->SetSize({ 3.f, 0.5f, 5.f });
+        }
+
         attackCollider_->SetOffset({ sinf(transform_.rotate.y) * 2.f, 0.f, cosf(transform_.rotate.y) * 2.f });
         CollisionManager::GetInstance()->AddCollider(attackCollider_.get());
-        damage_ = kDamage;
-
-        if (_isBuffed) damage_ *= 2.f;
     }
 }
 
