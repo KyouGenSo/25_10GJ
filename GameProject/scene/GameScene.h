@@ -57,6 +57,14 @@ private: // メンバ変数
 
     std::unique_ptr<CellBasedFiltering> cellFilter_;
 
+    std::unique_ptr<Sprite> colorManualSprite_;
+    Vector2 colorManualPos{ 0, 4 };
+    Vector2 colorManualSize{ 450, 200 };
+
+    std::unique_ptr<Sprite> controlManualSprite_;
+    Vector2 controlManualPos{ 0, 204 };
+    Vector2 controlManualSize{ 455, 280 };
+
     bool isDebug_ = false;
 
 };

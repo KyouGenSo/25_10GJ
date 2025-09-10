@@ -43,6 +43,8 @@ void MyGame::Initialize()
     TextureManager::GetInstance()->LoadTexture("gameOver_Text.png");
     TextureManager::GetInstance()->LoadTexture("gameClear_Text.png");
     TextureManager::GetInstance()->LoadTexture("press_text.png");
+    TextureManager::GetInstance()->LoadTexture("ColorManual.png");
+    TextureManager::GetInstance()->LoadTexture("ControlManual.png");
 
     spriteBasicOnresizeId = winApp_->RegisterOnResizeFunc(std::bind(&SpriteBasic::OnResize, SpriteBasic::GetInstance(), std::placeholders::_1));
 
