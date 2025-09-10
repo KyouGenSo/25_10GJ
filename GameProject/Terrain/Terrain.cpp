@@ -198,10 +198,11 @@ float Terrain::GetMaxYAt(float x, float z)
 
     for (int y = 0; y < static_cast<int>(kHeight); ++y)
     {
-        if (blocks_[ix][y][iz])
+        auto& block = blocks_[ix][y][iz];
+        if (block)
         {
             // ブロックの上面の高さを返す
-            auto posBlock = blocks_[ix][y][iz]->GetPosition();
+            auto posBlock = block->GetPosition();
             return posBlock.y + (Block::kScale / 2.0f);
         }
     }
