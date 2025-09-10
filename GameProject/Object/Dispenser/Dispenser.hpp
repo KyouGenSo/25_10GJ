@@ -29,7 +29,8 @@ public:
 
     void SelectColor(ColorBall::Colors _color);
 
-    void Dispense();
+    void Dispense(Vector3 _direction, bool _diffused = false);
+    void Dispense(Vector3 _position, Vector3 _direction, bool _diffused = false);
 
     Dispenser& SetOwner(Player* _owner);
 

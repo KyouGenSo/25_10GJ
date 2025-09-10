@@ -10,6 +10,7 @@
 
 #include "GPUParticle.h"
 #include "ImGui.h"
+#include "FollowCamera/followCamera.h"
 #include "Terrain/Block/Block.h"
 #include "Bar3d/Bar3d.h"
 
@@ -293,7 +294,8 @@ void Player::Attack(bool _isBuffed)
 
 void Player::Dispense()
 {
-    dispenser_->Dispense();
+    Vector3 direction = model_->GetTransform().rotate;
+    dispenser_->Dispense(direction);
 }
 
 void Player::DrawImGui()
