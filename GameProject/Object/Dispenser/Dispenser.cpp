@@ -59,12 +59,18 @@ void Dispenser::SelectColor(const ColorBall::Colors _color)
     color_ = _color;
 }
 
-void Dispenser::Dispense()
+void Dispenser::Dispense(Vector3 _direction, bool _diffused)
 {
     if (!owner_)return;
 
     auto ball = std::make_unique<ColorBall>();
-    ball->Initialize(model_->CreateInstance(owner_->GetTransform(), ToVector4(color_)), color_);
+    ball->Initialize(model_->CreateInstance(owner_->GetTransform(), ToVector4(color_)), color_, this, _direction, _diffused);
+    balls_.push_back(std::move(ball));
+}
+
+void Dispenser::Dispense(Vector3 _position, Vector3 _direction, bool _diffused) {
+    auto ball = std::make_unique<ColorBall>();
+    ball->Initialize(model_->CreateInstance({{1.f, 1.f, 1.f}, {}, _position}, ToVector4(color_)), color_, this, _direction, _diffused);
     balls_.push_back(std::move(ball));
 }
 

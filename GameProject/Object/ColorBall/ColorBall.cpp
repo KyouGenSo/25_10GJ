@@ -11,26 +11,18 @@ ColorBall::~ColorBall()
     }
 }
 
-void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint)
+void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint, Dispenser* _dispenser, Vector3 _direction, bool _diffused)
 {
     model_ = std::move(_model);
     color_ = _colorForPaint;
+    dispenser_ = _dispenser;
+    diffused_ = _diffused;
 
-    if (model_)
-    {
-        transform_ = model_->GetTransform();
-        
-        // 回転行列を作成
-        Matrix4x4 rotationMatrix = Mat4x4::MakeRotateXYZ(transform_.rotate);
-        
-        // デフォルトの前方向ベクトル（Z軸正方向）を回転させてvelocity_を計算
-        Vector3 forward = {0.0f, 0.0f, 1.0f};
-        velocity_ = (Mat4x4::TransformNormal(rotationMatrix, forward)/3.f);
-        velocity_.y = 1.3f;
-        SetCollider();
-    } else {
-        velocity_ = {0.0f, 0.0f, 1.0f};
-    }
+    transform_ = model_->GetTransform();
+    
+    velocity_ = _direction.Normalize() * 0.3f;
+    velocity_.y = 1.3f;
+    SetCollider();
 }
 
 void ColorBall::Update()
@@ -79,9 +71,13 @@ void ColorBall::imDead()
     dead_ = true;
 }
 
+bool ColorBall::IsDiffused() const {
+    return diffused_;
+}
+
 void ColorBall::SetCollider()
 {
-    collider_ = std::make_unique<ColorBallCollider>(this);
+    collider_ = std::make_unique<ColorBallCollider>(this, dispenser_);
     collider_->SetTransform(&transform_);
     collider_->SetRadius(1.0f);
     collider_->SetOffset({0,0,0});
