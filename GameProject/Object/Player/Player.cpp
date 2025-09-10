@@ -48,9 +48,13 @@ void Player::Initialize()
     weapon_ = std::make_unique<Object3d>();
     weapon_->Initialize();
     weapon_->SetModel("weapon_stick.gltf");
-    weapon_->SetTransform(transform_);
-    weapon_->SetScale({ 10.f,10.f,10.f });
-    weapon_->SetRotate({ 0.f, 0.f, 1.57f }); // Z軸を90度回転させて横向きに
+    
+    // weaponTransform_の初期化
+    weaponTransform_.translate = transform_.translate;
+    weaponTransform_.rotate = Vector3(1.57f, 0.f, 0.f); // X軸を90度回転させて横向きに（縦モデルを横に倒す）
+    weaponTransform_.scale = Vector3(2.f, 1.5f, 2.f);
+    
+    weapon_->SetTransform(weaponTransform_);
     weapon_->SetMaterialColor({ 1.f, 1.f, 1.f, 1.f });
 
     // Colliderの設定
@@ -93,7 +97,10 @@ void Player::Update()
         if (timer_ <= kMotionTime)
         { // InProgress
             timer_ += 1.f / 60.f;
-
+            
+            // 攻撃モーション中のweaponTransform_の更新
+            UpdateAttackMotion();
+            
             weapon_->Update();
         }
         else
@@ -101,6 +108,9 @@ void Player::Update()
             CollisionManager::GetInstance()->RemoveCollider(attackCollider_.get());
             timer_ = 0.f;
             isAttacking_ = false;
+            
+            // 攻撃終了時に武器の位置をリセット
+            ResetWeaponTransform();
         }
     }
     Action();
@@ -110,6 +120,16 @@ void Player::Update()
     // モデルの更新
     model_->SetTransform(transform_);
     model_->Update();
+    
+    // 武器のトランスフォーム更新（攻撃中でない場合はプレイヤーに追従）
+    if (!isAttacking_)
+    {
+        weaponTransform_.translate = transform_.translate;
+        weaponTransform_.rotate.x = 1.57f; // 縦モデルを横に倒す
+        weaponTransform_.rotate.y = transform_.rotate.y; // プレイヤーと同じ向き
+        weaponTransform_.rotate.z = 0.0f;
+        weapon_->SetTransform(weaponTransform_);
+    }
 
     emitter_->SetEmitterPosition(emitterName_, transform_.translate);
     emitter_->Update();
@@ -214,17 +234,17 @@ void Player::Action()
         }
 
         // Debug
-        //blockColor = Block::Colors::Gray;
+        blockColor = Block::Colors::DarkRed;
 
         if (!isDebug_)
         {
-            if (blockColor == Block::Colors::Gray && !isAttacking_) canMove_ = true;
-            if (blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple) {
+            if ((blockColor == Block::Colors::Gray || blockColor == Block::Colors::DarkBlue || blockColor == Block::Colors::DarkRed || blockColor == Block::Colors::DarkYellow) && !isAttacking_) canMove_ = true;
+            if (blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple || blockColor == Block::Colors::DarkRed) {
                 isBuffed_ = (blockColor == Block::Colors::Purple);
                 canAttack_ = true;
             }
-            if (blockColor == Block::Colors::Blue || blockColor == Block::Colors::Green) canDash_ = true;
-            if (blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange || blockColor == Block::Colors::Green){
+            if (blockColor == Block::Colors::Blue || blockColor == Block::Colors::Green || blockColor == Block::Colors::DarkBlue) canDash_ = true;
+            if (blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange || blockColor == Block::Colors::Green || blockColor == Block::Colors::DarkYellow){
                 isBuffed_ = (blockColor == Block::Colors::Orange);
                 canJump_ = true;
             }
@@ -441,7 +461,6 @@ void Player::SetupColliders()
     // CollisionManagerに登録
     collisionManager->AddCollider(bodyCollider_.get());
     collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
-    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kAttack), static_cast<uint32_t>(CollisionTypeId::kEnemy), true);
 }
 
 void Player::OnGround()
@@ -452,4 +471,47 @@ void Player::OnGround()
 void Player::OffGround()
 {
     onGround_ = false;
+}
+
+void Player::UpdateAttackMotion()
+{
+    // 攻撃時間の正規化（0.0～1.0）
+    float normalizedTime = timer_ / kMotionTime;
+    
+    // 武器の振り回し半径
+    float swingRadius = 2.5f;
+    
+    // 攻撃開始角度（左側: -π/2）から終了角度（右側: π/2）までの半回転
+    float startAngle = -3.14159f / 2.0f; // -90度
+    float endAngle = 3.14159f / 2.0f;    // +90度
+    float currentSwingAngle = startAngle + (endAngle - startAngle) * normalizedTime;
+    
+    // プレイヤーの向いている方向を基準角度とする
+    float baseAngle = transform_.rotate.y;
+    float totalAngle = baseAngle + currentSwingAngle;
+    
+    // プレイヤーの座標を中心として武器の位置を計算（sin/cosを修正）
+    weaponTransform_.translate.x = transform_.translate.x + std::sin(totalAngle) * swingRadius;
+    weaponTransform_.translate.y = transform_.translate.y + 0.5f; // 少し上に
+    weaponTransform_.translate.z = transform_.translate.z + std::cos(totalAngle) * swingRadius;
+    
+    // 武器の向きを攻撃の軌道に合わせて調整
+    // まず縦モデルを横に倒す回転（X軸90度）+ 攻撃の向き（Y軸回転）
+    weaponTransform_.rotate.x = 1.57f; // 縦モデルを横に倒す
+    weaponTransform_.rotate.y = totalAngle; // 攻撃の向きに合わせて回転
+    weaponTransform_.rotate.z = 0.0f;
+    
+    // 武器のトランスフォームを適用
+    weapon_->SetTransform(weaponTransform_);
+}
+
+void Player::ResetWeaponTransform()
+{
+    // 武器の位置をプレイヤーの位置にリセット
+    weaponTransform_.translate = transform_.translate;
+    weaponTransform_.rotate.x = 1.57f; // 縦モデルを横に倒す
+    weaponTransform_.rotate.y = transform_.rotate.y; // プレイヤーと同じ向き
+    weaponTransform_.rotate.z = 0.0f;
+    
+    weapon_->SetTransform(weaponTransform_);
 }
