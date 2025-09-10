@@ -109,7 +109,7 @@ private:
     bool isColliderActive = false;    ///< コライダーの有効フラグ
     bool isCollapse = false;          ///< 崩壊フラグ
     float collapseTimer = 0;          ///< 崩壊タイマー
-    float collapseDuration_ = 20.0f;   ///< 崩壊時間
+    float collapseDuration_ = 15.0f;   ///< 崩壊時間
 
     // Collider
     std::vector<std::unique_ptr<BossBodyCollider>> bodyColliders_;
@@ -132,4 +132,6 @@ private:
     Camera* camera_ = nullptr;                            ///< カメラへの参照
     Vector2 hpBarSize_ = { 350.0f, 30.0f };              ///< HPバーのサイズ
     float hpBarOffsetY_ = 30.0f;                         ///< HPバーのY軸オフセット
+
+    uint32_t hitVH_ = 0;                               ///< ヒット時のvoice handle
 };

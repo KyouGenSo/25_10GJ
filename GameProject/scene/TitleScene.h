@@ -61,4 +61,7 @@ private: // メンバ変数
     std::unique_ptr<TitleAnimation> pTitleAnimation_;
 
     Input* input_ = nullptr;
+
+    uint32_t bgmVH_ = 0;
+    uint32_t bgmSH_ = 0;
 };

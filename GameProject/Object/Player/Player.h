@@ -76,6 +76,9 @@ private:
     Vector2 hpBarSize_ = { 170.0f, 20.0f }; ///< HPバーのサイズ
     float hpBarOffsetY_ = 0.0f;           ///< HPバーのY軸オフセット
 
+    // sound
+    uint32_t hitVH_ = 0;
+
     CellBasedFiltering* cellFilter_ = nullptr;
 
 public: // メンバ関数
@@ -126,6 +129,8 @@ public: // メンバ関数
     /// 攻撃関連
     /// </summary>
     void SetupColliders();
+
+    void PlayHitSE();
     
     //-----------------------------Getters/Setters------------------------------//
     void SetSpeed(float speed) { speed_ = speed; }

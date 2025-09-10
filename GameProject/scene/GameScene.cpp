@@ -25,6 +25,8 @@
 #endif
 #include <ctime>
 
+#include "Audio.h"
+
 void GameScene::Initialize()
 {
     CollisionManager* collisionManager = CollisionManager::GetInstance();
@@ -40,6 +42,9 @@ void GameScene::Initialize()
     ///              初期化処理              ///
     /// ================================== ///
     pInput_ = Input::GetInstance();
+
+    bgmSH_ = Audio::GetInstance()->LoadMP3File("BGM/Game_3.mp3");
+    bgmVH_ = Audio::GetInstance()->Play(bgmSH_, true, 0.5f);
 
     // SkyBoxの初期化
     skyBox_ = std::make_unique<SkyBox>();
@@ -72,16 +77,16 @@ void GameScene::Initialize()
 
     //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
     collisionManager->SetCollisionMask(
-      static_cast<uint32_t>(CollisionTypeId::kAttack),
-      static_cast<uint32_t>(CollisionTypeId::kBossBody),
-      true
+        static_cast<uint32_t>(CollisionTypeId::kAttack),
+        static_cast<uint32_t>(CollisionTypeId::kBossBody),
+        true
     );
 
     // プレイヤーとエネルギーコアの衝突判定を有効化
     collisionManager->SetCollisionMask(
-      static_cast<uint32_t>(CollisionTypeId::kAttack),
-      static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
-      true
+        static_cast<uint32_t>(CollisionTypeId::kAttack),
+        static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
+        true
     );
 
     // プレイヤーとボス攻撃の衝突判定を有効化
@@ -103,7 +108,7 @@ void GameScene::Initialize()
 
     player_->SetTerrain(terrain_.get());
     player_->SetCellFilter(cellFilter_.get());
-  
+
     // ボスにプレイヤーとテレインの参照を設定
     boss_->SetPlayer(player_.get());
     boss_->SetTerrain(terrain_.get());
@@ -125,6 +130,8 @@ void GameScene::Initialize()
 
 void GameScene::Finalize()
 {
+    Audio::GetInstance()->StopWave(bgmVH_);
+
     // オブジェクトの終了処理
     if (player_)
     {
@@ -195,11 +202,10 @@ void GameScene::Update()
     CollisionManager::GetInstance()->CheckAllCollisions();
 
     // シーン遷移
-    if (player_->GetHp() <= 0)
+    if (player_->GetHp() <= 0 || Input::GetInstance()->TriggerKey(DIK_Q))
     {
         SceneManager::GetInstance()->ChangeScene("over");
-    }
-    else if (boss_->GetHp() <= 0)
+    } else if (boss_->GetHp() <= 0)
     {
         SceneManager::GetInstance()->ChangeScene("clear");
     }

@@ -8,6 +8,7 @@
 #include "../../Collision/CollisionTypeIdDef.h"
 #include <cmath>
 
+#include "Audio.h"
 #include "GPUParticle.h"
 #include "ImGui.h"
 #include "FollowCamera/followCamera.h"
@@ -65,7 +66,8 @@ void Player::Initialize()
     emitter_->SetEmitterScaleRange(emitterName_, {0.5f, 0.5f}, {0.5f, 0.5f});
     emitter_->SetEmitterActive(emitterName_, false);
     
-    // HPバーの初期化はSetCamera()で行う
+    // SEの読み込み
+    hitVH_ = Audio::GetInstance()->LoadWaveFile("playerhit.wav");
 }
 
 void Player::Finalize()
@@ -483,6 +485,11 @@ void Player::SetupColliders()
     // CollisionManagerに登録
     collisionManager->AddCollider(bodyCollider_.get());
     collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
+}
+
+void Player::PlayHitSE()
+{
+    Audio::GetInstance()->Play(hitVH_);
 }
 
 void Player::OnGround()

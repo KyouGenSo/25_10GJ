@@ -12,6 +12,8 @@
 #include <cmath>
 #include <algorithm>
 
+#include "Audio.h"
+
 #ifdef _DEBUG
 #include "ImGui.h"
 #endif
@@ -61,6 +63,9 @@ void EnergyCore::Initialize(Boss* boss, Camera* camera)
     hpBar_->SetCurrentValue(hp_);
     hpBar_->SetSize(Vector2(80.0f, 12.0f));  // HPバーのサイズ
     hpBar_->Display(false);  // 初期状態では非表示
+
+    // SEの読み込み
+    hitVH_ = Audio::GetInstance()->LoadWaveFile("enemyhit.wav");
 
     // パーティクルエミッターの初期化
     InitParticleEmitter();
@@ -435,6 +440,8 @@ void EnergyCore::Damage(float damage)
 
     // ダメージシェークを開始
     StartDamageShake();
+
+    Audio::GetInstance()->Play(hitVH_);
 
     // HPバーを表示（3秒間）
     if (hpBar_)

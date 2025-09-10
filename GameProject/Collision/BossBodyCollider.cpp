@@ -2,7 +2,7 @@
 #include "Collision/CollisionTypeIdDef.h"
 
 BossBodyCollider::BossBodyCollider(Boss* boss)
-    : pBoss_(boss), damage_(10.f) {
+    : pBoss_(boss), damage_(5.f) {
     SetTypeID(static_cast<uint32_t>(CollisionTypeId::kBossBody));
     SetActive(true);
     SetOwner(pBoss_);
