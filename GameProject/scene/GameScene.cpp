@@ -27,6 +27,7 @@
 
 void GameScene::Initialize()
 {
+    CollisionManager* collisionManager = CollisionManager::GetInstance();
 #ifdef _DEBUG
     DebugCamera::GetInstance()->Initialize();
     Object3dBasic::GetInstance()->SetDebug(false);
@@ -35,7 +36,6 @@ void GameScene::Initialize()
     // デバッグビルドではコライダー表示をデフォルトでON
     collisionManager->SetDebugDrawEnabled(true);
 #endif
-    CollisionManager* collisionManager = CollisionManager::GetInstance();
     /// ================================== ///
     ///              初期化処理              ///
     /// ================================== ///
@@ -93,7 +93,7 @@ void GameScene::Initialize()
 
     cellFilter_ = std::make_unique<CellBasedFiltering>();
     cellFilter_->Initialize(
-        static_cast<int>(Block::kScale * 2),
+        static_cast<int>(Block::kScale * 3),
         static_cast<int>(Terrain::kSize * Block::kScale),
         static_cast<int>(Terrain::kSize * Block::kScale)
     );

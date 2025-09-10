@@ -224,6 +224,10 @@ void Player::Action()
         {
             Vector3 feetPosition = transform_.translate;
             feetPosition.y -= kSize / 2.f + Block::kScale / 2.f; // 足元の位置を計算
+            Block* block = terrain_->GetBlockAt(feetPosition);
+            if (!block){
+                feetPosition.y -= Block::kScale / 2.f;
+            }
             blockColor = terrain_->GetBlockColorAt(feetPosition);
         }
 

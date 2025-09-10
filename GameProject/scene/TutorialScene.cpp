@@ -27,6 +27,7 @@
 
 void TutorialScene::Initialize()
 {
+    CollisionManager* collisionManager = CollisionManager::GetInstance();
     #ifdef _DEBUG
     DebugCamera::GetInstance()->Initialize();
     Object3dBasic::GetInstance()->SetDebug(false);
@@ -35,7 +36,6 @@ void TutorialScene::Initialize()
     // デバッグビルドではコライダー表示をデフォルトでON
     collisionManager->SetDebugDrawEnabled(true);
     #endif
-    CollisionManager* collisionManager = CollisionManager::GetInstance();
 
     // CollisionManagerの初期化（最初に行う）
     collisionManager->Initialize();
