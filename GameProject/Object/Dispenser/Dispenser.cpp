@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <unordered_map>
 
+#include "imgui.h"
+#include "TextureManager.h"
 #include "Features/Color/Color.h"
 #include "Object/Player/Player.h"
 
@@ -25,6 +27,11 @@ Dispenser& Dispenser::Initialize()
     model_ = std::make_unique<InstancedObject3d>();
     model_->Initialize("sphere.gltf");
 
+    TextureManager::GetInstance()->LoadTexture("circle-hud.png");
+    sprite_ = std::make_unique<Sprite>();
+    sprite_->Initialize("circle-hud.png");
+    sprite_->SetSize({256, 256});
+
     return *this;
 }
 
@@ -36,6 +43,9 @@ void Dispenser::Update()
         ball->Update();
     }
 
+    sprite_->SetPos(hudPos_);
+    sprite_->SetColor(ToVector4(color_));
+    sprite_->Update();
     model_->Update();
 }
 
@@ -62,4 +72,22 @@ Dispenser& Dispenser::SetOwner(Player* _owner)
 {
     owner_ = _owner;
     return *this;
+}
+
+void Dispenser::DrawImGui()
+{
+    #ifdef _DEBUG
+    const char* colorNames[] = { "GRAY", "BLUE", "YELLOW", "RED" };
+    int currentColor = static_cast<int>(color_);
+    if (ImGui::Combo("Dispenser Color", &currentColor, colorNames, IM_ARRAYSIZE(colorNames)))
+    {
+        this->SelectColor(static_cast<ColorBall::Colors>(currentColor));
+    }
+    ImGui::DragFloat2("Hud", &hudPos_.x, 1.f);
+    ImGui::Text("Balls Count: %zu", balls_.size());
+    #endif
+}
+
+void Dispenser::DrawHUD() const {
+    sprite_->Draw();
 }
