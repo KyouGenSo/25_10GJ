@@ -14,6 +14,8 @@ void ColorBallCollider::OnCollisionEnter(Collider* other) {
     if (other->GetTypeID() != static_cast<uint32_t>(CollisionTypeId::kTerrain))return;
     Block* block = static_cast<Block*>(other->GetOwner());
     block->SetColor(block->MixingColor(colorBall_->GetColorForPaint()));
+    colorBall_->PlaySe();
+
     colorBall_->imDead();
 
     if (colorBall_->IsDiffused()){

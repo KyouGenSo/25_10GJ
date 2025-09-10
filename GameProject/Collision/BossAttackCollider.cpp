@@ -22,6 +22,7 @@ void BossAttackCollider::OnCollisionEnter(Collider* other)
         if (pPlayer_)
         {
             pPlayer_->SetHp(pPlayer_->GetHp() - damage_);
+            pPlayer_->PlayHitSE();
         }
     }
 }

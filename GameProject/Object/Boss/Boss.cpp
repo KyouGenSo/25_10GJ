@@ -4,6 +4,7 @@
 #include <string>
 #include "Object3d.h"
 #include "AABBCollider.h"
+#include "Audio.h"
 #include "CollisionManager.h"
 #include "Model.h"
 #include "OBBCollider.h"
@@ -75,6 +76,9 @@ void Boss::Initialize(Camera* camera)
         hpBar_->SetCurrentValue(hp_);
         hpBar_->Display(true);  // 常に表示
     }
+
+    // SEの読み込み
+    hitVH_ = Audio::GetInstance()->LoadWaveFile("enemyhit.wav");
 }
 
 void Boss::Finalize()
@@ -497,6 +501,8 @@ void Boss::Damage(float damage)
     // ダメージ処理
     hp_ -= damage;
     hp_ = std::max<float>(hp_, 0);
+
+    Audio::GetInstance()->Play(hitVH_);
     
     // ダメージフラッシュを開始
     StartDamageFlash();

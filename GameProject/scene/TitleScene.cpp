@@ -14,6 +14,8 @@
 #endif
 #include <ShadowRenderer.h>
 
+#include "Audio.h"
+
 void TitleScene::Initialize()
 {
     #ifdef _DEBUG
@@ -34,10 +36,14 @@ void TitleScene::Initialize()
     terrain_->Initialize();
 
     this->AnimationsInitialize();
+
+    bgmVH_ = Audio::GetInstance()->LoadMP3File("BGM/Title.mp3");
+    Audio::GetInstance()->Play(bgmVH_, true, 0.5f);
 }
 
 void TitleScene::Finalize()
 {
+    Audio::GetInstance()->StopWave(bgmVH_);
 }
 
 void TitleScene::Update()

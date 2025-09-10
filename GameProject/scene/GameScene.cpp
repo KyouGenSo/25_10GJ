@@ -25,6 +25,8 @@
 #endif
 #include <ctime>
 
+#include "Audio.h"
+
 void GameScene::Initialize()
 {
 #ifdef _DEBUG
@@ -40,6 +42,9 @@ void GameScene::Initialize()
     ///              初期化処理              ///
     /// ================================== ///
     pInput_ = Input::GetInstance();
+
+    bgmVH_ = Audio::GetInstance()->LoadMP3File("BGM/Game.mp3");
+    Audio::GetInstance()->Play(bgmVH_, true, 0.5f);
 
     // SkyBoxの初期化
     skyBox_ = std::make_unique<SkyBox>();
@@ -140,6 +145,8 @@ void GameScene::Finalize()
     {
         energyCoreManager_->Finalize();
     }
+
+    Audio::GetInstance()->StopWave(bgmVH_);
 
     // CollisionManagerのリセット
     CollisionManager::GetInstance()->Reset();
