@@ -6,6 +6,8 @@
 #include "Collision/Collider/ColorBall/ColorBallCollider.hpp"
 #include "Terrain/Block/Block.h"
 
+class Dispenser;
+
 class ColorBall
 {
 public:
@@ -17,6 +19,8 @@ public:
     };
 
 private:
+    Dispenser* dispenser_ = nullptr;
+
     std::unique_ptr<ModelInstance> model_;
     std::unique_ptr<ColorBallCollider> collider_;
     Vector3 velocity_{};
@@ -25,17 +29,19 @@ private:
 
     float lifetime_ = 5.f;
     bool dead_ = false;
+    bool diffused_ = false;
 
     Colors color_ = Colors::GRAY;
 
 public:
     ~ColorBall();
-    void Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint);
+    void Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint, Dispenser* _dispenser, Vector3 _direction, bool _diffused);
     void Update();
 
     bool IsDead() const;
     Block::Colors GetColorForPaint() const;
     void imDead();
+    bool IsDiffused() const;
 
 private:
     void SetCollider();
