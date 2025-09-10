@@ -237,12 +237,12 @@ void Player::Action()
         }
 
         // Debug
-        blockColor = Block::Colors::Gray;
+        //blockColor = Block::Colors::Gray;
 
         if (!isDebug_)
         {
             if ((blockColor == Block::Colors::Gray || blockColor == Block::Colors::DarkBlue || blockColor == Block::Colors::DarkRed || blockColor == Block::Colors::DarkYellow) && !isAttacking_) canMove_ = true;
-            if (blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple || blockColor == Block::Colors::DarkRed) {
+            if (blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple || blockColor == Block::Colors::Orange || blockColor == Block::Colors::DarkRed) {
                 isBuffed_ = (blockColor == Block::Colors::Purple);
                 canAttack_ = true;
             }

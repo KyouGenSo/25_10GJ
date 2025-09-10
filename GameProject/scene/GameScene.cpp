@@ -34,10 +34,10 @@ void GameScene::Initialize()
     Object3dBasic::GetInstance()->SetDebug(false);
     Draw2D::GetInstance()->SetDebug(false);
     GPUParticle::GetInstance()->SetIsDebug(false);
-    CollisionManager* collisionManager = CollisionManager::GetInstance();
     // デバッグビルドではコライダー表示をデフォルトでON
     collisionManager->SetDebugDrawEnabled(true);
 #endif
+    CollisionManager* collisionManager = CollisionManager::GetInstance();
     /// ================================== ///
     ///              初期化処理              ///
     /// ================================== ///
