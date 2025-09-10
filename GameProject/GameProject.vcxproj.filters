@@ -188,6 +188,12 @@
     <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp">
       <Filter>Collision\Collider\Player</Filter>
     </ClCompile>
+    <ClCompile Include="scene\ClearScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\OverScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -300,6 +306,12 @@
     </ClInclude>
     <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp">
       <Filter>Collision\Collider\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\ClearScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\OverScene.h">
+      <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
