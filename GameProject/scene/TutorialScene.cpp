@@ -44,9 +44,8 @@ void TutorialScene::Initialize()
     ///              初期化処理              ///
     /// ================================== ///
     this->InitializeGameScene();
-    section_ = std::make_unique<TutorialSection>();
-    section_->Initialize(100.0f);
-
+    tutorial_ = std::make_unique<Tutorial>();
+    tutorial_->Initialize();
 }
 
 void TutorialScene::Finalize()
@@ -78,7 +77,7 @@ void TutorialScene::Update()
     ///              更新処理               ///
     /// ================================== ///
     this->UpdateGameScene();
-    section_->Update();
+    tutorial_->Update();
 
     // シーン遷移
     if (Input::GetInstance()->TriggerKey(DIK_RETURN))
@@ -121,7 +120,7 @@ void TutorialScene::Draw()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
-    section_->Draw();
+    tutorial_->Draw2d();
 
 
     #ifdef _DEBUG
@@ -162,7 +161,7 @@ void TutorialScene::DrawImGui()
     boss_->DrawImGui();
     followCamera_->DrawImGui();
     terrain_->ImGui();
-    section_->ImGui();
+    tutorial_->ImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
     #endif // DEBUG

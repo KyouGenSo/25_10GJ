@@ -33,6 +33,7 @@ public:
         ButtonY,
         LShoulder,
         RShoulder,
+        DPadAll,
         DPadUp,
         DPadDown,
         DPadLeft,
@@ -45,7 +46,7 @@ public:
 
     void Initialize(float targetProgress);
     void Update();
-    void Draw();
+    void Draw2d();
     void ImGui();
     inline bool IsComplete() const { return isComplete_; }
 
