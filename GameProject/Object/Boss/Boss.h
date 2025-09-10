@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Transform.h"
+#include "vector2.h"
 #include "Vector4.h"
 
 class BossBodyCollider;
@@ -12,6 +13,8 @@ class AABBCollider;
 class BossAttackManager;
 class Player;
 class Terrain;
+class Bar3d;
+class Camera;
 
 class Boss
 {
@@ -22,7 +25,7 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    void Initialize();
+    void Initialize(Camera* camera = nullptr);
 
     /// <summary>
     /// 終了処理
@@ -38,6 +41,11 @@ public:
     /// 描画
     /// </summary>
     void Draw();
+    
+    /// <summary>
+    /// 2D描画（HPバー）
+    /// </summary>
+    void Draw2d();
 
     /// <summary>
     /// ImGuiの描画
@@ -118,4 +126,10 @@ private:
     std::unique_ptr<BossAttackManager> attackManager_;     ///< 攻撃マネージャー
     Player* player_ = nullptr;                             ///< プレイヤーへの参照
     Terrain* terrain_ = nullptr;                           ///< テレインへの参照
+
+    // UI関連
+    std::unique_ptr<Bar3d> hpBar_;                        ///< HPバー
+    Camera* camera_ = nullptr;                            ///< カメラへの参照
+    Vector2 hpBarSize_ = { 350.0f, 30.0f };              ///< HPバーのサイズ
+    float hpBarOffsetY_ = 30.0f;                         ///< HPバーのY軸オフセット
 };

@@ -11,6 +11,8 @@
 #include "../../Collision/CollisionTypeIdDef.h"
 #include "../../Collision/BossBodyCollider.h"
 #include "BossAttackManager.h"
+#include "Bar3d/Bar3d.h"
+#include "Camera.h"
 
 #ifdef _DEBUG
 #include "ImGui.h"
@@ -24,7 +26,7 @@ Boss::~Boss()
 {
 }
 
-void Boss::Initialize()
+void Boss::Initialize(Camera* camera)
 {
     // HPの初期化
     hp_ = 200.0f; // ボスの初期HP
@@ -57,6 +59,21 @@ void Boss::Initialize()
     {
         attackManager_->Initialize(player_, terrain_);
         attackManager_->SetAutoAttack(false);  // デフォルトは手動制御
+    }
+
+    // カメラを保存
+    camera_ = camera;
+    
+    // HPバーの初期化
+    if (camera_) {
+        hpBar_ = std::make_unique<Bar3d>();
+        Color hpColor = 0xff0000ff;  // 赤色
+        Color bgColor = 0x000000ff;  // 黒
+        hpBar_->Initialize(hpColor, bgColor);
+        hpBar_->SetSize(hpBarSize_);  // ボスは大きめのHPバー
+        hpBar_->SetMaxValue(kMaxHp);
+        hpBar_->SetCurrentValue(hp_);
+        hpBar_->Display(true);  // 常に表示
     }
 }
 
@@ -91,6 +108,21 @@ void Boss::Update()
     model_->SetTransform(transform_);
     model_->Update();
     UpdateColliders();
+
+    if (hpBar_ && camera_)
+    {
+        // HPバーの位置を更新（ボスの頭上に表示）
+        Vector2 screenPos = Bar3d::GetHeadUpPositionOnScreen(
+            transform_.translate,
+            hpBarSize_,
+            *camera_,
+            hpBarOffsetY_  // Y軸オフセット（ボスのサイズ分上に）
+        );
+        hpBar_->SetPosition(screenPos);
+        hpBar_->SetCurrentValue(hp_);
+        hpBar_->Display(1000.0f);
+        hpBar_->Update();
+    }
 }
 
 void Boss::Draw()
@@ -101,6 +133,15 @@ void Boss::Draw()
     if (attackManager_)
     {
         attackManager_->Draw();
+    }
+}
+
+void Boss::Draw2d()
+{
+    // HPバーの2D描画
+    if (hpBar_)
+    {
+        hpBar_->Draw2d();
     }
 }
 
@@ -197,6 +238,58 @@ void Boss::DrawImGui()
                     StartDamageFlash(0.5f);
                 }
                 
+                ImGui::Unindent();
+            }
+            
+            // HPバーデバッグ情報
+            if (ImGui::CollapsingHeader("HP Bar Debug"))
+            {
+                ImGui::Indent();
+                ImGui::Text("HP Bar Status:");
+                ImGui::Text("  - Exists: %s", hpBar_ ? "Yes" : "No");
+                ImGui::Text("  - Camera: %s", camera_ ? "Set" : "NULL");
+                
+                if (hpBar_) {
+                    ImGui::Text("  - Current HP: %.1f / %.1f", hp_, kMaxHp);
+                    
+                    ImGui::Separator();
+                    ImGui::Text("HP Bar Settings:");
+                    
+                    // サイズ調整
+                    if (ImGui::DragFloat2("HP Bar Size", &hpBarSize_.x, 1.0f, 1.0f, 300.0f)) {
+                        hpBar_->SetSize(hpBarSize_);
+                    }
+                    
+                    // Y軸オフセット調整
+                    if (ImGui::DragFloat("Y Offset", &hpBarOffsetY_, 0.1f, 0.0f, 50.0f)) {
+                        // オフセットの変更は次のUpdateで反映される
+                    }
+                    
+                    // 現在のHP値を調整（テスト用）
+                    if (ImGui::DragFloat("Test HP Value", &hp_, 1.0f, 0.0f, kMaxHp)) {
+                        hpBar_->SetCurrentValue(hp_);
+                    }
+                    
+                    // 表示状態の切り替え
+                    bool isDisplay = true;
+                    if (ImGui::Checkbox("Display HP Bar", &isDisplay)) {
+                        hpBar_->Display(isDisplay);
+                    }
+                }
+                
+                ImGui::Separator();
+                
+                // HPバー再初期化ボタン
+                if (ImGui::Button("Reinitialize HP Bar") && camera_) {
+                    hpBar_ = std::make_unique<Bar3d>();
+                    Color hpColor = 0xff0000ff;  // 赤色
+                    Color bgColor = 0x000000ff;  // 黒
+                    hpBar_->Initialize(hpColor, bgColor);
+                    hpBar_->SetSize(hpBarSize_);
+                    hpBar_->SetMaxValue(kMaxHp);
+                    hpBar_->SetCurrentValue(hp_);
+                    hpBar_->Display(true);
+                }
                 ImGui::Unindent();
             }
             
@@ -461,6 +554,7 @@ void Boss::Collapse()
 
         if (model_->GetModel()->IsAnimationFinished("CollapseAnimation_All"))
         {
+            hpBarOffsetY_ = 5.0f;
             isColliderActive = true;
             collapseTimer += FrameTimer::GetInstance()->GetDeltaTime();
         }
@@ -470,6 +564,7 @@ void Boss::Collapse()
             model_->GetModel()->SetAnimation("BossIdleAnimation_All", 0.8f);
             isColliderActive = false;
             collapseTimer = 0.0f;
+            hpBarOffsetY_ = 30.0f;
             isCollapse = false; // 崩壊状態を解除
         }
     }

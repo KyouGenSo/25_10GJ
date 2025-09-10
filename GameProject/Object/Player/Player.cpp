@@ -11,6 +11,7 @@
 #include "GPUParticle.h"
 #include "ImGui.h"
 #include "Terrain/Block/Block.h"
+#include "Bar3d/Bar3d.h"
 
 Player::Player()
     :camera_(nullptr)
@@ -58,6 +59,8 @@ void Player::Initialize()
     emitter_->CreateSphereEmitter(emitterName_, transform_.translate, 2.f, 30, 0.55f);
     emitter_->SetEmitterScaleRange(emitterName_, {0.5f, 0.5f}, {0.5f, 0.5f});
     emitter_->SetEmitterActive(emitterName_, false);
+    
+    // HPバーの初期化はSetCamera()で行う
 }
 
 void Player::Finalize()
@@ -109,12 +112,37 @@ void Player::Update()
 
     emitter_->SetEmitterPosition(emitterName_, transform_.translate);
     emitter_->Update();
+
+    // HPバーの更新
+    if (hpBar_ && camera_)
+    {
+        // HPバーの位置を更新（プレイヤーの頭上に表示）
+        Vector2 screenPos = Bar3d::GetHeadUpPositionOnScreen(
+            transform_.translate,
+            hpBarSize_,
+            *camera_,
+            kSize + hpBarOffsetY_  // Y軸オフセット（プレイヤーのサイズ分上に）
+        );
+        hpBar_->SetPosition(screenPos);
+        hpBar_->SetCurrentValue(hp_);
+        hpBar_->Display(1000.0f);
+        hpBar_->Update();
+    }
 }
 
 void Player::Draw()
 {
     if (isAttacking_)weapon_->Draw();
     model_->Draw();
+}
+
+void Player::Draw2d()
+{
+    // HPバーの2D描画
+    if (hpBar_)
+    {
+        hpBar_->Draw2d();
+    }
 }
 
 void Player::InstancedDraw()
@@ -313,9 +341,76 @@ void Player::DrawImGui()
         ImGui::DragFloat("Dash Force", &dashForce_, 0.01f, 0.0f, 10.0f);
     }
 
+    // HPバーデバッグ情報
+    if (ImGui::CollapsingHeader("HP Bar Debug"))
+    {
+        ImGui::Text("HP Bar Status:");
+        ImGui::Text("  - Exists: %s", hpBar_ ? "Yes" : "No");
+        
+        if (hpBar_) {
+            ImGui::Text("  - Camera: %s", camera_ ? "Set" : "NULL");
+            ImGui::Text("  - Current HP: %.1f / %.1f", hp_, kMaxHp);
+            
+            ImGui::Separator();
+            ImGui::Text("HP Bar Settings:");
+            
+            // サイズ調整
+            if (ImGui::DragFloat2("HP Bar Size", &hpBarSize_.x, 1.0f, 1.0f, 200.0f)) {
+                hpBar_->SetSize(hpBarSize_);
+            }
+            
+            // Y軸オフセット調整
+            if (ImGui::DragFloat("Y Offset", &hpBarOffsetY_, 0.1f, 0.0f, 20.0f)) {
+                // オフセットの変更は次のUpdateで反映される
+            }
+            
+            // 現在のHP値を調整（テスト用）
+            if (ImGui::DragFloat("Test HP Value", &hp_, 1.0f, 0.0f, kMaxHp)) {
+                hpBar_->SetCurrentValue(hp_);
+            }
+            
+            // 表示状態の切り替え
+            bool isDisplay = true;
+            if (ImGui::Checkbox("Display HP Bar", &isDisplay)) {
+                hpBar_->Display(isDisplay);
+            }
+        }
+        
+        ImGui::Separator();
+        
+        // HPバー再初期化ボタン
+        if (ImGui::Button("Reinitialize HP Bar") && camera_) {
+            hpBar_ = std::make_unique<Bar3d>();
+            Color hpColor = 0x00ff00ff;  // 緑色
+            Color bgColor = 0x000000ff;  // 黒
+            hpBar_->Initialize(hpColor, bgColor);
+            hpBar_->SetSize(hpBarSize_);
+            hpBar_->SetMaxValue(kMaxHp);
+            hpBar_->SetCurrentValue(hp_);
+            hpBar_->Display(true);
+        }
+    }
 
     ImGui::End();
     #endif
+}
+
+void Player::SetCamera(Camera* camera)
+{
+    camera_ = camera;
+    
+    // カメラが設定されたらHPバーを初期化（条件を修正）
+    if (camera_)  // !hpBar_の条件を削除
+    {
+        hpBar_ = std::make_unique<Bar3d>();
+        Color hpColor = 0x00ff00ff;  // 緑色
+        Color bgColor = 0x000000ff;  // 黒
+        hpBar_->Initialize(hpColor, bgColor);
+        hpBar_->SetSize(hpBarSize_);
+        hpBar_->SetMaxValue(kMaxHp);
+        hpBar_->SetCurrentValue(hp_);
+        hpBar_->Display(true);  // 常に表示
+    }
 }
 
 void Player::SetupColliders()

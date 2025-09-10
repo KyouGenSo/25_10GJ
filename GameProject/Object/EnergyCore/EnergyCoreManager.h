@@ -7,6 +7,7 @@
 class Boss;
 class Terrain;
 class EnergyCore;
+class Camera;
 
 class EnergyCoreManager
 {
@@ -17,7 +18,7 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    void Initialize(Boss* boss, Terrain* terrain);
+    void Initialize(Boss* boss, Terrain* terrain, Camera* camera);
 
     /// <summary>
     /// 終了処理
@@ -33,6 +34,11 @@ public:
     /// 描画
     /// </summary>
     void Draw();
+
+    /// <summary>
+    /// 2D描画（HPバー）
+    /// </summary>
+    void Draw2d();
 
     /// <summary>
     /// ImGuiの描画
@@ -65,5 +71,6 @@ private:
     std::vector<std::unique_ptr<EnergyCore>> energyCores_;  ///< エネルギーコア
     Boss* pBoss_ = nullptr;                                 ///< ボスへの参照
     Terrain* pTerrain_ = nullptr;                          ///< Terrainへの参照
+    Camera* pCamera_ = nullptr;                            ///< カメラへの参照
     std::mt19937 randomEngine_;                            ///< 乱数生成器（メルセンヌツイスター）
 };

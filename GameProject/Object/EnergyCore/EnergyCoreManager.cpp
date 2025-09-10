@@ -17,10 +17,11 @@ EnergyCoreManager::~EnergyCoreManager()
 {
 }
 
-void EnergyCoreManager::Initialize(Boss* boss, Terrain* terrain)
+void EnergyCoreManager::Initialize(Boss* boss, Terrain* terrain, Camera* camera)
 {
     pBoss_ = boss;
     pTerrain_ = terrain;
+    pCamera_ = camera;
 
     // 乱数生成器の初期化（現在時刻をシードに使用）
     std::random_device rd;
@@ -31,7 +32,7 @@ void EnergyCoreManager::Initialize(Boss* boss, Terrain* terrain)
     for (int i = 0; i < kCoreCount; i++)
     {
         energyCores_[i] = std::make_unique<EnergyCore>();
-        energyCores_[i]->Initialize(pBoss_);
+        energyCores_[i]->Initialize(pBoss_, pCamera_);
     }
 
     // Terrain上にランダム配置
@@ -72,6 +73,15 @@ void EnergyCoreManager::Draw()
     for (auto& core : energyCores_)
     {
         core->Draw();
+    }
+}
+
+void EnergyCoreManager::Draw2d()
+{
+    // エネルギーコアのHPバー描画
+    for (auto& core : energyCores_)
+    {
+        core->Draw2d();
     }
 }
 
