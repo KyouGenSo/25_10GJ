@@ -72,6 +72,21 @@
     <Filter Include="Features\CellBasedFiltering">
       <UniqueIdentifier>{09304ac1-55ab-454b-be8e-bcf83ec4a3fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Boss\Attack">
+      <UniqueIdentifier>{a11596d7-e287-4bec-be41-7ad4945a03fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision\Collider">
+      <UniqueIdentifier>{a864d6ec-4d67-4d91-a6ee-218453959675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision\Collider\Boss">
+      <UniqueIdentifier>{a736bff3-7745-4daa-9848-2ea2c30ecc3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision\Collider\ColorBall">
+      <UniqueIdentifier>{05a0cfb8-4631-4cec-8d92-5e83330f8d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision\Collider\Player">
+      <UniqueIdentifier>{260abcfd-01c3-4f26-bb11-3ef26b885284}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyGame.cpp">
@@ -129,23 +144,14 @@
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp">
       <Filter>Animation\TitleAnimation</Filter>
     </ClCompile>
-    <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp">
-      <Filter>Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Dispenser\Dispenser.cpp">
       <Filter>Object\Dispenser</Filter>
     </ClCompile>
     <ClCompile Include="Object\ColorBall\ColorBall.cpp">
       <Filter>Object\ColorBall</Filter>
     </ClCompile>
-    <ClCompile Include="Collision\BossBodyCollider.cpp">
-      <Filter>Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Object\EnergyCore\EnergyCore.cpp">
       <Filter>Object\EnergyCore</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision\EnergyCoreCollider.cpp">
-      <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="Object\EnergyCore\EnergyCoreManager.cpp">
       <Filter>Object\EnergyCore</Filter>
@@ -153,9 +159,35 @@
     <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
       <Filter>Features\CellBasedFiltering</Filter>
     </ClCompile>
-    <ClCompile Include="Collision\Collider\ColorBall\ColorBallCollider.cpp" />
-    <ClCompile Include="Tutorial\Tutorial.cpp" />
+    <ClCompile Include="Object\Boss\BossAttackManager.cpp">
+      <Filter>Object\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\BossAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\SpikeAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\FlameAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClCompile>
     <ClCompile Include="Tutorial\TutorialEventRecorder.cpp" />
+    <ClCompile Include="Tutorial\Tutorial.cpp" />
+    <ClCompile Include="Collision\BossAttackCollider.cpp">
+      <Filter>Collision\Collider\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\BossBodyCollider.cpp">
+      <Filter>Collision\Collider\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\EnergyCoreCollider.cpp">
+      <Filter>Collision\Collider\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collider\ColorBall\ColorBallCollider.cpp">
+      <Filter>Collision\Collider\ColorBall</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp">
+      <Filter>Collision\Collider\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -209,14 +241,8 @@
     <ClInclude Include="Features\Color\Color.h">
       <Filter>Features\Color</Filter>
     </ClInclude>
-    <ClInclude Include="Collision\BossBodyCollider.h">
-      <Filter>Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Object\EnergyCore\EnergyCore.h">
       <Filter>Object\EnergyCore</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision\EnergyCoreCollider.h">
-      <Filter>Collision</Filter>
     </ClInclude>
     <ClInclude Include="Tutorial\TutorialSection.h">
       <Filter>Tutorial</Filter>
@@ -230,9 +256,6 @@
     <ClInclude Include="scene\TutorialScene.h">
       <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp">
-      <Filter>Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Dispenser\Dispenser.hpp">
       <Filter>Object\Dispenser</Filter>
     </ClInclude>
@@ -245,13 +268,38 @@
     <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
       <Filter>Features\CellBasedFiltering</Filter>
     </ClInclude>
-    <ClInclude Include="Collision\Collider\ColorBall\ColorBallCollider.hpp">
-      <Filter>MyGame</Filter>
+    <ClInclude Include="Object\Boss\BossAttackManager.h">
+      <Filter>Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\BossAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\SpikeAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\FlameAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClInclude>
     <ClInclude Include="Tutorial\Tutorial.h">
       <Filter>Tutorial</Filter>
     </ClInclude>
     <ClInclude Include="Tutorial\TutorialEventRecorder.h">
       <Filter>Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\BossAttackCollider.h">
+      <Filter>Collision\Collider\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\BossBodyCollider.h">
+      <Filter>Collision\Collider\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\EnergyCoreCollider.h">
+      <Filter>Collision\Collider\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collider\ColorBall\ColorBallCollider.hpp">
+      <Filter>Collision\Collider\ColorBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp">
+      <Filter>Collision\Collider\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
