@@ -22,7 +22,8 @@ void PlayerCollider::OnCollisionEnter(Collider* other) {
     float playerTop = playerTransform.translate.y + player_->kSize / 2.f;
     
     // 床との衝突判定（プレイヤーがブロックの上にいる場合）
-    if (playerBottom <= blockTop && playerBottom > blockBottom) {
+    // プレイヤーが落下してブロックに着地する場合を検出
+    if (playerBottom <= blockTop && playerTop > blockTop) {
         // 床の処理
         playerTransform.translate.y = blockTop + player_->kSize / 2.f;
         player_->SetTransform(playerTransform);
@@ -69,6 +70,8 @@ void PlayerCollider::OnCollisionEnter(Collider* other) {
 }
 
 void PlayerCollider::OnCollisionExit(Collider* other) {
-    (void) other;
-    player_->OffGround();
+    // 地形ブロックとの衝突終了時のみ地面から離れた状態にする
+    if (other->GetTypeID() == static_cast<uint32_t>(CollisionTypeId::kTerrain)) {
+        player_->OffGround();
+    }
 }

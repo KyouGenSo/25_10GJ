@@ -102,6 +102,7 @@ void GameScene::Initialize()
     terrain_->Initialize(cellFilter_.get());
 
     player_->SetTerrain(terrain_.get());
+    player_->SetCellFilter(cellFilter_.get());
     
     // ボスにプレイヤーとテレインの参照を設定
     boss_->SetPlayer(player_.get());

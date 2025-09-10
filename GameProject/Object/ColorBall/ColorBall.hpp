@@ -42,7 +42,7 @@ public:
     Block::Colors GetColorForPaint() const;
     void imDead();
     bool IsDiffused() const;
-
+    
 private:
     void SetCollider();
 }; // class ColorBall

@@ -41,6 +41,10 @@ void Dispenser::Update()
     for (const auto& ball : balls_)
     {
         ball->Update();
+        if (cellFilter_)
+        {
+            //cellFilter_->RegisterPotentials(ball->GetCollider());
+        }
     }
 
     sprite_->SetPos(hudPos_);
