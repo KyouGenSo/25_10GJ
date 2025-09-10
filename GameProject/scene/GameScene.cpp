@@ -86,7 +86,7 @@ void GameScene::Initialize()
 
     cellFilter_ = std::make_unique<CellBasedFiltering>();
     cellFilter_->Initialize(
-        static_cast<int>(Block::kScale * 1),
+        static_cast<int>(Block::kScale * 2),
         static_cast<int>(Terrain::kSize * Block::kScale),
         static_cast<int>(Terrain::kSize * Block::kScale)
     );
