@@ -153,6 +153,8 @@
     <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
       <Filter>Features\CellBasedFiltering</Filter>
     </ClCompile>
+    <ClCompile Include="Tutorial\Tutorial.cpp" />
+    <ClCompile Include="Tutorial\TutorialEventRecorder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -241,6 +243,12 @@
     </ClInclude>
     <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
       <Filter>Features\CellBasedFiltering</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial\Tutorial.h">
+      <Filter>Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial\TutorialEventRecorder.h">
+      <Filter>Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

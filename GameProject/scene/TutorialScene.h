@@ -2,7 +2,7 @@
 
 #include <BaseScene.h>
 #include <memory>
-#include <Tutorial/TutorialSection.h>
+#include <Tutorial/Tutorial.h>
 #include "SkyBox.h"
 #include "FollowCamera/followCamera.h"
 #include "Object/Player/Player.h"
@@ -26,7 +26,7 @@ private:
     void UpdateGameScene();
     void FinalizeGameScene();
 
-    std::unique_ptr<TutorialSection> section_;
+    std::unique_ptr<Tutorial> tutorial_;
     Input* pInput_ = nullptr;
 
     // SkyBox

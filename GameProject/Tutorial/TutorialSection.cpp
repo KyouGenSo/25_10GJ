@@ -32,7 +32,7 @@ void TutorialSection::Update()
     this->KeyTextUpdate();
 }
 
-void TutorialSection::Draw()
+void TutorialSection::Draw2d()
 {
     background_->Draw();
     progressBar_->Draw2D();
@@ -80,6 +80,7 @@ bool TutorialSection::IsPush(Input* pInput, InputButtons button)
     bool isKey = button < InputButtons::KeyboardEnd;
     bool isTrigger = button > InputButtons::TriggerBegin && button < InputButtons::TriggerEnd;
     bool isButton = button > InputButtons::ButtonBegin && button < InputButtons::ButtonEnd;
+    bool isDPadAll = button == InputButtons::DPadAll;
 
     if (isKey)
     {
@@ -95,6 +96,13 @@ bool TutorialSection::IsPush(Input* pInput, InputButtons button)
         {
             return pInput->GetRightTrigger() > 0.0f;
         }
+    }
+    else if (isDPadAll)
+    {
+        return pInput->PushButton(XButtons.DPad_Up) ||
+            pInput->PushButton(XButtons.DPad_Down) ||
+            pInput->PushButton(XButtons.DPad_Left) ||
+            pInput->PushButton(XButtons.DPad_Right);
     }
     else if (isButton)
     {
