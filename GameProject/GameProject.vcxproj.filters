@@ -153,6 +153,7 @@
     <ClCompile Include="Features\CellBasedFiltering\CellBasedFiltering.cpp">
       <Filter>Features\CellBasedFiltering</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\Collider\ColorBall\ColorBallCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -241,6 +242,9 @@
     </ClInclude>
     <ClInclude Include="Features\CellBasedFiltering\CellBasedFiltering.h">
       <Filter>Features\CellBasedFiltering</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collider\ColorBall\ColorBallCollider.hpp">
+      <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
