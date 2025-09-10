@@ -32,11 +32,13 @@ private:
     bool diffused_ = false;
 
     Colors color_ = Colors::GRAY;
+	uint32_t hitVH_ = 0;
 
 public:
     ~ColorBall();
     void Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorForPaint, Dispenser* _dispenser, Vector3 _direction, bool _diffused);
     void Update();
+    void PlaySe();
 
     bool IsDead() const;
     Block::Colors GetColorForPaint() const;

@@ -1,5 +1,6 @@
 #include "ColorBall.hpp"
 
+#include "Audio.h"
 #include "CollisionManager.h"
 #include "Mat4x4Func.h"
 #include "Collision/CollisionTypeIdDef.h"
@@ -23,6 +24,8 @@ void ColorBall::Initialize(std::unique_ptr<ModelInstance> _model, Colors _colorF
     velocity_ = _direction.Normalize() * 0.3f;
     velocity_.y = 1.3f;
     SetCollider();
+
+    hitVH_ = Audio::GetInstance()->LoadWaveFile("colorballhit.wav");
 }
 
 void ColorBall::Update()
@@ -38,6 +41,11 @@ void ColorBall::Update()
     transform_.translate += velocity_;
 
     model_->SetTransform(transform_);
+}
+
+void ColorBall::PlaySe()
+{
+    Audio::GetInstance()->Play(hitVH_);
 }
 
 bool ColorBall::IsDead() const

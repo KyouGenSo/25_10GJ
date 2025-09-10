@@ -57,6 +57,8 @@ private: // メンバ変数
 
     std::unique_ptr<CellBasedFiltering> cellFilter_;
 
+    uint32_t bgmVH_ = 0;
+
     bool isDebug_ = false;
 
 };
