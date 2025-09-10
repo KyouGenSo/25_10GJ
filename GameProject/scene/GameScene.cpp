@@ -72,16 +72,16 @@ void GameScene::Initialize()
 
     //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
     collisionManager->SetCollisionMask(
-        static_cast<uint32_t>(CollisionTypeId::kPlayer),
-        static_cast<uint32_t>(CollisionTypeId::kBossBody),
-        true
+      static_cast<uint32_t>(CollisionTypeId::kAttack),
+      static_cast<uint32_t>(CollisionTypeId::kBossBody),
+      true
     );
 
     // プレイヤーとエネルギーコアの衝突判定を有効化
     collisionManager->SetCollisionMask(
-        static_cast<uint32_t>(CollisionTypeId::kPlayer),
-        static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
-        true
+      static_cast<uint32_t>(CollisionTypeId::kAttack),
+      static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
+      true
     );
 
     // プレイヤーとボス攻撃の衝突判定を有効化
