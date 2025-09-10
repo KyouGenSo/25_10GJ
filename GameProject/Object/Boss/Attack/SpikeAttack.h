@@ -44,7 +44,7 @@ private:
 private:
     std::unique_ptr<Spike> spike_;                 // 棘オブジェクト
     
-    const float kWarningDuration = 1.0f;           // 警告表示時間
+    const float kWarningDuration = 2.0f;           // 警告表示時間
     const float kAttackDuration = 1.0f;            // 攻撃継続時間
     const float kCooldownDuration = 0.5f;          // クールダウン時間
     const float kSpikeDamage = 20.0f;              // 棘のダメージ

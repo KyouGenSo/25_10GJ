@@ -71,7 +71,7 @@ private:
     Vector2 flameVelY_ = Vector2(3.0f, 3.0f);
     Vector2 flameVelZ_ = Vector2(0.0f, 0.0f);
     Vector2 flameScale_ = Vector2(8.0f, 8.0f);
-    Vector2 flameLifeTime_ = Vector2(0.05f, 0.05f);
+    Vector2 flameLifeTime_ = Vector2(0.03f, 0.03f);
     
     int particleCount_ = 100;                      // パーティクル数
     float particleFrequency_ = 0.05f;              // 生成頻度
