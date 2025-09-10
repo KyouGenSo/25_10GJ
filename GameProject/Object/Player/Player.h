@@ -50,7 +50,7 @@ private:
 
     std::unique_ptr<Dispenser> dispenser_;
 
-    bool onGround_ = true;
+    bool onGround_ = false;
     uint16_t jumpCount_ = 0;
 
     std::unique_ptr<EmitterManager> emitter_;
@@ -109,6 +109,7 @@ public: // メンバ関数
     void SetTerrain(Terrain* terrain) {terrain_ = terrain;}
     void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
     void OnGround();
+    void OffGround();
     void SetDebug(bool debug) { isDebug_ = debug; };
 
     float GetSpeed() const { return speed_; }

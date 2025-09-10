@@ -9,6 +9,7 @@ class PlayerCollider final : public AABBCollider{
 public:
     PlayerCollider(Player* _owner);
     void OnCollisionStay(Collider* other) override;
+    void OnCollisionExit(Collider* other) override;
 
 private:
 

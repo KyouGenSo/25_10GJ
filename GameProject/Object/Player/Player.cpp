@@ -30,7 +30,7 @@ void Player::Initialize()
     model_->Initialize();
     model_->SetModel("Player.gltf");
 
-    transform_.translate = Vector3(0.0f, 7.f, 0.0f);
+    transform_.translate = Vector3(2.0f, 7.f, 2.0f);
     transform_.rotate = Vector3(0.0f, 0.0f, 0.0f);
     transform_.scale = Vector3(1.0f, 1.0f, 1.0f);
 
@@ -171,6 +171,9 @@ void Player::Action()
             emitter_->SetEmitterActive(emitterName_, true);
             emitter_->SetEmitterColor(emitterName_, Block::ColorToVector4(blockColor));
         }
+
+        // Debug
+        //blockColor = Block::Colors::Gray;
 
         if (!isDebug_)
         {
@@ -316,11 +319,16 @@ void Player::SetupColliders()
 
     // CollisionManagerに登録
     collisionManager->AddCollider(bodyCollider_.get());
-    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kActiveTerrain), true);
+    collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kPlayer), static_cast<uint32_t>(CollisionTypeId::kTerrain), true);
     collisionManager->SetCollisionMask(static_cast<uint32_t>(CollisionTypeId::kAttack), static_cast<uint32_t>(CollisionTypeId::kEnemy), true);
 }
 
 void Player::OnGround()
 {
     onGround_ = true;
+}
+
+void Player::OffGround()
+{
+    onGround_ = false;
 }
