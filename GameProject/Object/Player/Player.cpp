@@ -156,7 +156,13 @@ void Player::Action()
     if (onGround_)
     {
         velocity_.y = 0;
-        jumpCount_ = 1;
+
+        canDash_ = false;
+        canMove_ = false;
+        canJump_ = false;
+        canAttack_ = false;
+        isBuffed_ = false;
+
         //床の色を判別する
         Block::Colors blockColor = Block::Colors::White;
 
@@ -179,10 +185,16 @@ void Player::Action()
 
         if (!isDebug_)
         {
-            if (blockColor == Block::Colors::Gray && !isAttacking_) Move();
-            if ((blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple) && inputHandler_->IsAttacking()) Attack(blockColor == Block::Colors::Purple);
-            if (blockColor == Block::Colors::Blue && inputHandler_->IsDashing()) Dash(false);
-            if ((blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange) && inputHandler_->IsJumping()) Jump(blockColor == Block::Colors::Orange);
+            if (blockColor == Block::Colors::Gray && !isAttacking_) canMove_ = true;
+            if (blockColor == Block::Colors::Red || blockColor == Block::Colors::Purple) {
+                isBuffed_ = (blockColor == Block::Colors::Purple);
+                canAttack_ = true;
+            }
+            if (blockColor == Block::Colors::Blue || blockColor == Block::Colors::Green) canDash_ = true;
+            if (blockColor == Block::Colors::Yellow || blockColor == Block::Colors::Orange || blockColor == Block::Colors::Green){
+                isBuffed_ = (blockColor == Block::Colors::Orange);
+                canJump_ = true;
+            }
         }
 
         if (inputHandler_->IsDispense())
@@ -190,6 +202,11 @@ void Player::Action()
             Dispense();
         }
     }
+
+    if (canMove_) Move();
+    if (canDash_ && inputHandler_->IsDashing()) Dash();
+    if (canJump_ && inputHandler_->IsJumping()) Jump(isBuffed_);
+    if (canAttack_ && inputHandler_->IsAttacking()) Attack(isBuffed_);
 
     Apply();
 }
@@ -209,23 +226,24 @@ void Player::Jump(bool _isBuffed)
 
     if (_isBuffed) velocity_.y *= 2.f;
 
+    canJump_ = false;
     onGround_ = false;
 }
 
-void Player::Dash(bool _isBuffed)
+void Player::Dash()
 {
-    float currentY = velocity_.y;
-
+    canDash_ = false;
     velocity_.x = std::sin(transform_.rotate.y) * dashForce_;
     velocity_.z = std::cos(transform_.rotate.y) * dashForce_;
-    velocity_.y = currentY;
+    velocity_.y = 0.f;
 }
 
 void Player::Attack(bool _isBuffed)
 {
-    if (!isAttacking_)
+    if (canAttack_ && !isAttacking_)
     {
         //攻撃開始フレーム
+        canAttack_ = false;
         isAttacking_ = true;
         damage_ = kDamage;
         attackRange_ = defaultAttackRange;
