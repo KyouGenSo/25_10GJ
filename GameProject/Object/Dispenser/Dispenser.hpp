@@ -7,10 +7,12 @@
 #include "../ColorBall/ColorBall.hpp"
 #include "Vector4.h"
 
+class CellBasedFiltering;
 class Player;
 
 class Dispenser
 {
+    CellBasedFiltering* cellFilter_ = nullptr;
     std::unique_ptr<InstancedObject3d> model_;
     std::vector<std::unique_ptr<ColorBall>> balls_;
 

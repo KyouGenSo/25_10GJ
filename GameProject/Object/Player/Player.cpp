@@ -178,6 +178,7 @@ void Player::DrawHUD() const {
 void Player::Move(float speedMultiplier)
 {
     if (!inputHandler_) return;
+    if (!onGround_)return;
 
     Vector2 moveDir = inputHandler_->GetMoveDirection();
     if (moveDir.Length() < 0.1f) return;
@@ -234,7 +235,7 @@ void Player::Action()
         }
 
         // Debug
-        blockColor = Block::Colors::DarkRed;
+        blockColor = Block::Colors::Gray;
 
         if (!isDebug_)
         {
@@ -269,8 +270,25 @@ void Player::Apply()
     // 位置を更新
     transform_.translate += velocity_;
 
+    if (transform_.translate.x <= kSize/2.f){
+        transform_.translate.x = kSize/2.f;
+    }
+    if (transform_.translate.z <= kSize/2.f){
+        transform_.translate.z = kSize/2.f;
+    }
+
+    float _max = Terrain::kSize * Terrain::kSize/2.f - kSize/2.f;
+    if (_max <= transform_.translate.x){
+        transform_.translate.x = _max;
+    }
+    if (_max <= transform_.translate.z){
+        transform_.translate.z = _max;
+    }
+
     velocity_ *= friction_; // 摩擦
     velocity_.y -= gravity_; // 重力
+
+    onGround_ = false;
 }
 
 void Player::Jump(bool _isBuffed)
@@ -471,6 +489,10 @@ void Player::OnGround()
 void Player::OffGround()
 {
     onGround_ = false;
+}
+
+void Player::SetCellFilter(CellBasedFiltering* _cellFiltering) {
+    cellFilter_ = _cellFiltering;
 }
 
 void Player::UpdateAttackMotion()

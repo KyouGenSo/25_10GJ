@@ -76,6 +76,8 @@ private:
     Vector2 hpBarSize_ = { 170.0f, 20.0f }; ///< HPバーのサイズ
     float hpBarOffsetY_ = 0.0f;           ///< HPバーのY軸オフセット
 
+    CellBasedFiltering* cellFilter_ = nullptr;
+
 public: // メンバ関数
     Player();
     ~Player();
@@ -134,7 +136,8 @@ public: // メンバ関数
     void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
     void OnGround();
     void OffGround();
-    void SetDebug(bool debug) { isDebug_ = debug; };
+    void SetDebug(bool debug) { isDebug_ = debug; }
+    void SetCellFilter(CellBasedFiltering* _cellFiltering);
 
     float GetSpeed() const { return speed_; }
     Camera* GetCamera() const { return camera_; }
