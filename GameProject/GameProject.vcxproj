@@ -155,6 +155,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation\TitleAnimation\TitleAnimation.cpp" />
+    <ClCompile Include="Collision\BossAttackCollider.cpp" />
     <ClCompile Include="Collision\BossBodyCollider.cpp" />
     <ClCompile Include="Collision\EnergyCoreCollider.cpp" />
     <ClCompile Include="Collision\Collider\Player\PlayerCollider.cpp" />
@@ -167,7 +168,10 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="Input\InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGame\MyGame.cpp" />
+    <ClCompile Include="Object\Boss\Attack\BossAttack.cpp" />
+    <ClCompile Include="Object\Boss\Attack\SpikeAttack.cpp" />
     <ClCompile Include="Object\Boss\Boss.cpp" />
+    <ClCompile Include="Object\Boss\BossAttackManager.cpp" />
     <ClCompile Include="Object\EnergyCore\EnergyCore.cpp" />
     <ClCompile Include="Object\EnergyCore\EnergyCoreManager.cpp" />
     <ClCompile Include="Object\ColorBall\ColorBall.cpp" />
@@ -197,6 +201,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Animation\AnimationTimeline.h" />
     <ClInclude Include="Animation\AnimationTween.hpp" />
     <ClInclude Include="Animation\TitleAnimation\TitleAnimation.h" />
+    <ClInclude Include="Collision\BossAttackCollider.h" />
     <ClInclude Include="Collision\Collider\Player\PlayerCollider.hpp" />
     <ClInclude Include="Bar2d\Bar2d.h" />
     <ClInclude Include="Bar3d\Bar3d.h" />
@@ -209,7 +214,10 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="FollowCamera\FollowCamera.h" />
     <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="MyGame\MyGame.h" />
+    <ClInclude Include="Object\Boss\Attack\BossAttack.h" />
+    <ClInclude Include="Object\Boss\Attack\SpikeAttack.h" />
     <ClInclude Include="Object\Boss\Boss.h" />
+    <ClInclude Include="Object\Boss\BossAttackManager.h" />
     <ClInclude Include="Object\EnergyCore\EnergyCore.h" />
     <ClInclude Include="Object\EnergyCore\EnergyCoreManager.h" />
     <ClInclude Include="Object\ColorBall\ColorBall.hpp" />

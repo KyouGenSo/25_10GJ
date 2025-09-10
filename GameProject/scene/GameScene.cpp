@@ -83,6 +83,13 @@ void GameScene::Initialize()
       static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
       true
     );
+    
+    // プレイヤーとボス攻撃の衝突判定を有効化
+    collisionManager->SetCollisionMask(
+      static_cast<uint32_t>(CollisionTypeId::kPlayer),
+      static_cast<uint32_t>(CollisionTypeId::kBossAttack),
+      true
+    );
 
     cellFilter_ = std::make_unique<CellBasedFiltering>();
     cellFilter_->Initialize(
@@ -95,6 +102,10 @@ void GameScene::Initialize()
     terrain_->Initialize(cellFilter_.get());
 
     player_->SetTerrain(terrain_.get());
+    
+    // ボスにプレイヤーとテレインの参照を設定
+    boss_->SetPlayer(player_.get());
+    boss_->SetTerrain(terrain_.get());
 
     ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
 }

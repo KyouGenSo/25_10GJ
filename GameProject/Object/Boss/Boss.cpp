@@ -10,6 +10,7 @@
 #include "FrameTimer.h"
 #include "../../Collision/CollisionTypeIdDef.h"
 #include "../../Collision/BossBodyCollider.h"
+#include "BossAttackManager.h"
 
 #ifdef _DEBUG
 #include "ImGui.h"
@@ -49,11 +50,24 @@ void Boss::Initialize()
 
     // コライダーの初期化
     InitializeColliders();
-
+    
+    // 攻撃マネージャーの初期化
+    attackManager_ = std::make_unique<BossAttackManager>();
+    if (player_ && terrain_)
+    {
+        attackManager_->Initialize(player_, terrain_);
+        attackManager_->SetAutoAttack(false);  // デフォルトは手動制御
+    }
 }
 
 void Boss::Finalize()
 {
+    // 攻撃マネージャーの終了処理
+    if (attackManager_)
+    {
+        attackManager_->Finalize();
+    }
+    
     // Colliderを削除
     for (auto& collider : bodyColliders_)
     {
@@ -67,6 +81,12 @@ void Boss::Update()
     
     // ダメージフラッシュの更新
     UpdateDamageFlash();
+    
+    // 攻撃マネージャーの更新（崩壊していない時のみ）
+    if (attackManager_ && !isCollapse)
+    {
+        attackManager_->Update();
+    }
 
     model_->SetTransform(transform_);
     model_->Update();
@@ -76,6 +96,12 @@ void Boss::Update()
 void Boss::Draw()
 {
     model_->Draw();
+    
+    // 攻撃エフェクトの描画
+    if (attackManager_)
+    {
+        attackManager_->Draw();
+    }
 }
 
 void Boss::DrawImGui()
@@ -364,6 +390,12 @@ void Boss::DrawImGui()
     ImGui::End();
 
     model_->DrawImGui();
+    
+    // 攻撃マネージャーのImGui描画
+    if (attackManager_)
+    {
+        attackManager_->DrawImGui();
+    }
 #endif
 }
 
@@ -481,5 +513,27 @@ void Boss::UpdateDamageFlash()
         {
             model_->SetMaterialColor(originalColor_);
         }
+    }
+}
+
+void Boss::SetPlayer(Player* player)
+{
+    player_ = player;
+    
+    // 攻撃マネージャーが既に存在し、テレインも設定されている場合は再初期化
+    if (attackManager_ && player_ && terrain_)
+    {
+        attackManager_->Initialize(player_, terrain_);
+    }
+}
+
+void Boss::SetTerrain(Terrain* terrain)
+{
+    terrain_ = terrain;
+    
+    // 攻撃マネージャーが既に存在し、プレイヤーも設定されている場合は再初期化
+    if (attackManager_ && player_ && terrain_)
+    {
+        attackManager_->Initialize(player_, terrain_);
     }
 }
