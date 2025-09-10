@@ -40,14 +40,15 @@ private:
     
     // 攻撃関連
     bool isAttacking_ = false;
+    Transform weaponTransform_{};
     std::unique_ptr<Object3d> weapon_;
     float timer_ = 0.f;
     const float kMotionTime = 0.55f;
     std::unique_ptr<AABBCollider> attackCollider_;
     float damage_ = 10.f;
     const float kDamage = 10.f;
-    Vector3 defaultAttackRange { 10.f, 0.5f, 10.f};
-    Vector3 attackRange_ = { 10.f, 0.5f, 10.f };
+    Vector3 defaultAttackRange { 15.f, 0.5f, 15.f};
+    Vector3 attackRange_ = { 15.f, 0.5f, 15.f };
     float offset_ = 4.5f;
 
     std::unique_ptr<Dispenser> dispenser_;
@@ -77,6 +78,8 @@ private:
 
     // sound
     uint32_t hitVH_ = 0;
+
+    CellBasedFiltering* cellFilter_ = nullptr;
 
 public: // メンバ関数
     Player();
@@ -138,7 +141,8 @@ public: // メンバ関数
     void SetHp(float hp) { hp_ = hp; if (hp_ < 0.f) hp_ = 0.f; }
     void OnGround();
     void OffGround();
-    void SetDebug(bool debug) { isDebug_ = debug; };
+    void SetDebug(bool debug) { isDebug_ = debug; }
+    void SetCellFilter(CellBasedFiltering* _cellFiltering);
 
     float GetSpeed() const { return speed_; }
     Camera* GetCamera() const { return camera_; }
@@ -169,5 +173,15 @@ private:
     void Action();
 
     void Apply();
+
+    /// <summary>
+    /// 攻撃モーション中の武器の位置・回転を更新
+    /// </summary>
+    void UpdateAttackMotion();
+
+    /// <summary>
+    /// 攻撃終了時に武器の位置をリセット
+    /// </summary>
+    void ResetWeaponTransform();
 };
 

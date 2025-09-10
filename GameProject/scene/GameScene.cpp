@@ -77,16 +77,16 @@ void GameScene::Initialize()
 
     //衝突マスクの設定（どのタイプ同士が衝突判定を行うか）
     collisionManager->SetCollisionMask(
-        static_cast<uint32_t>(CollisionTypeId::kPlayer),
-        static_cast<uint32_t>(CollisionTypeId::kBossBody),
-        true
+      static_cast<uint32_t>(CollisionTypeId::kAttack),
+      static_cast<uint32_t>(CollisionTypeId::kBossBody),
+      true
     );
 
     // プレイヤーとエネルギーコアの衝突判定を有効化
     collisionManager->SetCollisionMask(
-        static_cast<uint32_t>(CollisionTypeId::kPlayer),
-        static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
-        true
+      static_cast<uint32_t>(CollisionTypeId::kAttack),
+      static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
+      true
     );
 
     // プレイヤーとボス攻撃の衝突判定を有効化
@@ -107,12 +107,25 @@ void GameScene::Initialize()
     terrain_->Initialize(cellFilter_.get());
 
     player_->SetTerrain(terrain_.get());
-
+    player_->SetCellFilter(cellFilter_.get());
+  
     // ボスにプレイヤーとテレインの参照を設定
     boss_->SetPlayer(player_.get());
     boss_->SetTerrain(terrain_.get());
 
-    ShadowRenderer::GetInstance()->SetMaxShadowDistance(200.f);
+    colorManualSprite_ = std::make_unique<Sprite>();
+    colorManualSprite_->Initialize("ColorManual.png");
+    colorManualSprite_->SetPos(colorManualPos);
+    colorManualSprite_->SetSize(colorManualSize);
+    colorManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    controlManualSprite_ = std::make_unique<Sprite>();
+    controlManualSprite_->Initialize("ControlManual.png");
+    controlManualSprite_->SetPos(controlManualPos);
+    controlManualSprite_->SetSize(controlManualSize);
+    controlManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    ShadowRenderer::GetInstance()->SetMaxShadowDistance(50.f);
 }
 
 void GameScene::Finalize()
@@ -160,6 +173,13 @@ void GameScene::Update()
     /// ================================== ///
     cellFilter_->UnregisterAll(CollisionManager::GetInstance());
 
+    colorManualSprite_->SetPos(colorManualPos);
+    colorManualSprite_->SetSize(colorManualSize);
+    colorManualSprite_->Update();
+
+    controlManualSprite_->SetPos(controlManualPos);
+    controlManualSprite_->SetSize(controlManualSize);
+    controlManualSprite_->Update();
 
     player_->SetMode(followCamera_->GetMode());
 
@@ -268,6 +288,8 @@ void GameScene::DrawWithoutEffect()
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
     player_->DrawHUD();
+    colorManualSprite_->Draw();
+    controlManualSprite_->Draw();
 }
 
 void GameScene::DrawImGui()
@@ -284,5 +306,15 @@ void GameScene::DrawImGui()
     cellFilter_->DrawImGui();
     ShadowRenderer::GetInstance()->DrawImGui();
     CollisionManager::GetInstance()->DrawImGui();
+
+    ImGui::Begin("colorManualSprite");
+    ImGui::DragFloat2("Position", &colorManualPos.x, 1.0f, static_cast<float>(-WinApp::clientWidth), static_cast<float>(WinApp::clientWidth));
+    ImGui::DragFloat2("Size", &colorManualSize.x, 1.0f, 0.0f, static_cast<float>(WinApp::clientWidth));
+    ImGui::End();
+
+    ImGui::Begin("controlManualSprite");
+    ImGui::DragFloat2("Position", &controlManualPos.x, 1.0f, static_cast<float>(-WinApp::clientWidth), static_cast<float>(WinApp::clientWidth));
+    ImGui::DragFloat2("Size", &controlManualSize.x, 1.0f, 0.0f, static_cast<float>(WinApp::clientWidth));
+    ImGui::End();
 #endif // DEBUG
 }
