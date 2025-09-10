@@ -150,6 +150,10 @@ void Player::InstancedDraw()
     dispenser_->Draw();
 }
 
+void Player::DrawHUD() const {
+    dispenser_->DrawHUD();
+}
+
 void Player::Move(float speedMultiplier)
 {
     if (!inputHandler_) return;

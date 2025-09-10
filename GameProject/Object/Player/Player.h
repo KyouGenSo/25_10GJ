@@ -110,6 +110,11 @@ public: // メンバ関数
     void InstancedDraw();
 
     /// <summary>
+    /// HuDの描画
+    /// </summary>
+    void DrawHUD() const;
+
+    /// <summary>
     /// ImGuiの描画
     /// </summary>
     void DrawImGui();
