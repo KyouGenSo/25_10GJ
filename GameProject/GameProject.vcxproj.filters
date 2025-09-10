@@ -168,6 +168,9 @@
     <ClCompile Include="Collision\BossAttackCollider.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Boss\Attack\FlameAttack.cpp">
+      <Filter>Object\Boss\Attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision\CollisionTypeIdDef.h">
@@ -268,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="Collision\BossAttackCollider.h">
       <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Boss\Attack\FlameAttack.h">
+      <Filter>Object\Boss\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

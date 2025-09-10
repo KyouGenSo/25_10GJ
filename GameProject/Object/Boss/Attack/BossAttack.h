@@ -24,6 +24,7 @@ public:
     virtual void Finalize() = 0;
     virtual void Update() = 0;
     virtual void Draw() = 0;
+    virtual void DrawImGui() {}  // デフォルトは何もしない
     
     virtual void Execute() = 0;
     virtual bool IsFinished() const = 0;

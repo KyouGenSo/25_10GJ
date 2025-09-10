@@ -1,6 +1,7 @@
 #include "BossAttackManager.h"
 #include "Attack/BossAttack.h"
 #include "Attack/SpikeAttack.h"
+#include "Attack/FlameAttack.h"
 #include "FrameTimer.h"
 #include <random>
 
@@ -25,6 +26,10 @@ void BossAttackManager::Initialize(Player* player, Terrain* terrain)
     auto spikeAttack = std::make_unique<SpikeAttack>();
     spikeAttack->Initialize(player, terrain);
     RegisterAttack(AttackType::Spike, std::move(spikeAttack));
+    
+    auto flameAttack = std::make_unique<FlameAttack>();
+    flameAttack->Initialize(player, terrain);
+    RegisterAttack(AttackType::Flame, std::move(flameAttack));
     
     // 今後、他の攻撃パターンもここで登録
     // RegisterAttack(AttackType::Sweep, std::make_unique<SweepAttack>());
@@ -118,7 +123,7 @@ void BossAttackManager::DrawImGui()
     // 手動攻撃実行
     ImGui::Text("Manual Attack Execution:");
     
-    const char* attackTypes[] = { "Spike", "Sweep", "Projectile", "Area" };
+    const char* attackTypes[] = { "Spike", "Flame", "Sweep", "Projectile", "Area" };
     int currentType = static_cast<int>(selectedAttackType_);
     if (ImGui::Combo("Attack Type", &currentType, attackTypes, IM_ARRAYSIZE(attackTypes)))
     {
@@ -154,6 +159,15 @@ void BossAttackManager::DrawImGui()
     }
     
     ImGui::End();
+    
+    // 各攻撃のImGuiを描画
+    for (auto& [type, attack] : attacks_)
+    {
+        if (attack)
+        {
+            attack->DrawImGui();
+        }
+    }
 #endif
 }
 

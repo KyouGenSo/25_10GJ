@@ -169,6 +169,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGame\MyGame.cpp" />
     <ClCompile Include="Object\Boss\Attack\BossAttack.cpp" />
+    <ClCompile Include="Object\Boss\Attack\FlameAttack.cpp" />
     <ClCompile Include="Object\Boss\Attack\SpikeAttack.cpp" />
     <ClCompile Include="Object\Boss\Boss.cpp" />
     <ClCompile Include="Object\Boss\BossAttackManager.cpp" />
@@ -215,6 +216,7 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)resources\" /E /I /Y</Command>
     <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="MyGame\MyGame.h" />
     <ClInclude Include="Object\Boss\Attack\BossAttack.h" />
+    <ClInclude Include="Object\Boss\Attack\FlameAttack.h" />
     <ClInclude Include="Object\Boss\Attack\SpikeAttack.h" />
     <ClInclude Include="Object\Boss\Boss.h" />
     <ClInclude Include="Object\Boss\BossAttackManager.h" />

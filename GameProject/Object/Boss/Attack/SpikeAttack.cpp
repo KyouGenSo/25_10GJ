@@ -9,6 +9,10 @@
 #include "../../../Collision/CollisionTypeIdDef.h"
 #include <algorithm>
 
+#ifdef _DEBUG
+#include "ImGui.h"
+#endif
+
 SpikeAttack::SpikeAttack()
 {
 }
@@ -99,6 +103,103 @@ void SpikeAttack::Draw()
         // 棘の描画
         spike_->model->Draw();
     }
+}
+
+void SpikeAttack::DrawImGui()
+{
+#ifdef _DEBUG
+    if (ImGui::TreeNode("SpikeAttack"))
+    {
+        // 攻撃状態表示
+        const char* stateStr = "Unknown";
+        switch (state_)
+        {
+        case AttackState::Idle: stateStr = "Idle"; break;
+        case AttackState::Warning: stateStr = "Warning"; break;
+        case AttackState::Attack: stateStr = "Attack"; break;
+        case AttackState::Cooldown: stateStr = "Cooldown"; break;
+        }
+        ImGui::Text("State: %s", stateStr);
+        ImGui::Text("State Timer: %.2f", stateTimer_);
+        ImGui::Text("Active: %s", isActive_ ? "Yes" : "No");
+        
+        ImGui::Separator();
+        
+        // パラメータ表示
+        ImGui::Text("Parameters:");
+        ImGui::Text("  Warning Duration: %.1f", kWarningDuration);
+        ImGui::Text("  Attack Duration: %.1f", kAttackDuration);
+        ImGui::Text("  Cooldown Duration: %.1f", kCooldownDuration);
+        ImGui::Text("  Spike Damage: %.1f", kSpikeDamage);
+        ImGui::Text("  Spike Height: %.1f", kSpikeHeight);
+        ImGui::Text("  Animation Speed: %.1f", kSpikeAnimationSpeed);
+        
+        ImGui::Separator();
+        
+        // 棘情報
+        if (spike_)
+        {
+            ImGui::Text("Spike Info:");
+            ImGui::Text("  Target Position: (%.1f, %.1f, %.1f)", 
+                spike_->targetPosition.x, 
+                spike_->targetPosition.y, 
+                spike_->targetPosition.z);
+            ImGui::Text("  Animation Timer: %.2f", spike_->animationTimer);
+            ImGui::Text("  Is Active: %s", spike_->isActive ? "Yes" : "No");
+            
+            // トランスフォーム詳細
+            if (ImGui::TreeNode("Transform Details"))
+            {
+                ImGui::Text("Translate: (%.1f, %.1f, %.1f)", 
+                    spike_->transform.translate.x, 
+                    spike_->transform.translate.y, 
+                    spike_->transform.translate.z);
+                ImGui::Text("Rotate: (%.1f, %.1f, %.1f)", 
+                    spike_->transform.rotate.x, 
+                    spike_->transform.rotate.y, 
+                    spike_->transform.rotate.z);
+                ImGui::Text("Scale: (%.1f, %.1f, %.1f)", 
+                    spike_->transform.scale.x, 
+                    spike_->transform.scale.y, 
+                    spike_->transform.scale.z);
+                ImGui::TreePop();
+            }
+            
+            // コライダー情報
+            if (ImGui::TreeNode("Collider Info"))
+            {
+                ImGui::Text("Active: %s", 
+                    (spike_->collider && spike_->collider->IsActive()) ? "Yes" : "No");
+                if (spike_->collider)
+                {
+                    ImGui::Text("Damage: %.1f", spike_->collider->GetDamage());
+                    const Vector3& colliderSize = spike_->collider->GetSize();
+                    ImGui::Text("Size: (%.1f, %.1f, %.1f)",
+                        colliderSize.x, colliderSize.y, colliderSize.z);
+                }
+                ImGui::TreePop();
+            }
+        }
+        
+        ImGui::Separator();
+        
+        // テスト実行ボタン
+        if (ImGui::Button("Test Execute"))
+        {
+            if (state_ == AttackState::Idle)
+            {
+                Execute();
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Reset"))
+        {
+            Reset();
+        }
+        
+        ImGui::TreePop();
+    }
+#endif
 }
 
 void SpikeAttack::Execute()

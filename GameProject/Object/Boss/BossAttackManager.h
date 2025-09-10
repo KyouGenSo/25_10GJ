@@ -14,6 +14,7 @@ public:
     enum class AttackType
     {
         Spike,      // 棘攻撃
+        Flame,      // 炎攻撃
         Sweep,      // 範囲攻撃（今後実装）
         Projectile, // 投射攻撃（今後実装）
         Area        // エリア攻撃（今後実装）
