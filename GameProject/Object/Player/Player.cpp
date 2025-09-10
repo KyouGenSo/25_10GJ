@@ -122,6 +122,10 @@ void Player::InstancedDraw()
     dispenser_->Draw();
 }
 
+void Player::DrawHUD() const {
+    dispenser_->DrawHUD();
+}
+
 void Player::Move(float speedMultiplier)
 {
     if (!inputHandler_) return;
@@ -313,6 +317,7 @@ void Player::DrawImGui()
         ImGui::DragFloat("Dash Force", &dashForce_, 0.01f, 0.0f, 10.0f);
     }
 
+    dispenser_->DrawImGui();
 
     ImGui::End();
     #endif

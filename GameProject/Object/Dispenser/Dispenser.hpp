@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "Sprite.h"
 #include "../ColorBall/ColorBall.hpp"
 #include "Vector4.h"
 
@@ -16,6 +17,9 @@ class Dispenser
     ColorBall::Colors color_ = ColorBall::Colors::GRAY;
     Player* owner_ = nullptr;
 
+    std::unique_ptr<Sprite> sprite_;
+    Vector2 hudPos_ = { 25.f, 620.f };
+
 public:
     static Vector4 ToVector4(ColorBall::Colors _color);
 
@@ -28,6 +32,9 @@ public:
     void Dispense();
 
     Dispenser& SetOwner(Player* _owner);
+
+    void DrawImGui();
+    void DrawHUD() const;
 
 private:
 

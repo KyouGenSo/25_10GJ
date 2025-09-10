@@ -205,7 +205,6 @@ void GameScene::Draw()
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
 
 
-
     //-------------------Modelの描画-------------------//
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
@@ -222,6 +221,7 @@ void GameScene::Draw()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
+
 
 
     #ifdef _DEBUG
@@ -252,7 +252,7 @@ void GameScene::DrawWithoutEffect()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
-
+    player_->DrawHUD();
 }
 
 void GameScene::DrawImGui()
