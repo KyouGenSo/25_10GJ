@@ -64,14 +64,24 @@ void TitleScene::Update()
     this->SpritesUpdate();
     this->TerrainUpdate();
 
-    if (Input::GetInstance()->TriggerKey(DIK_RETURN))
+    if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->TriggerButton(XButtons.A))
     {
         SceneManager::GetInstance()->ChangeScene("game");
     }
+#ifdef _DEBUG
     if (Input::GetInstance()->TriggerKey(DIK_T))
     {
         SceneManager::GetInstance()->ChangeScene("tutorial");
     }
+    if (Input::GetInstance()->TriggerKey(DIK_C))
+    {
+        SceneManager::GetInstance()->ChangeScene("clear");
+    }
+    if (Input::GetInstance()->TriggerKey(DIK_O))
+    {
+        SceneManager::GetInstance()->ChangeScene("over");
+    }
+#endif
 }
 
 void TitleScene::Draw()
@@ -103,10 +113,10 @@ void TitleScene::Draw()
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
+    buttonSprite_->Draw();
     pSpriteBackground_->Draw();
     pSpriteToonRaider1_->Draw();
     pSpriteToonRaider2_->Draw();
-
 }
 
 void TitleScene::DrawWithoutEffect()
@@ -191,6 +201,12 @@ void TitleScene::SpritesInitialize()
     pSpriteBackground_->Initialize("white.png");
     pSpriteBackground_->SetSize(screenSize);
     pSpriteBackground_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+
+    // ボタンスプライトの初期化
+    buttonSprite_ = std::make_unique<Sprite>();
+    buttonSprite_->Initialize("press_text.png");
+    buttonSprite_->SetPos(buttonPos_);
+    buttonSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 void TitleScene::SpritesUpdate()
@@ -198,6 +214,7 @@ void TitleScene::SpritesUpdate()
     pSpriteToonRaider1_->Update();
     pSpriteToonRaider2_->Update();
     pSpriteBackground_->Update();
+    buttonSprite_->Update();
 }
 
 void TitleScene::TerrainUpdate()
