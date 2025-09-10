@@ -50,10 +50,10 @@ private:
     std::unique_ptr<EmitterManager> emitterManager_;  // パーティクルマネージャー
     
     // 調整可能なパラメータ
-    float warningDuration_ = 4.0f;                 // 警告時間
+    float warningDuration_ = 7.0f;                 // 警告時間
     float warningFadeTime_ = 1.0f;                 // 警告パーティクルが消えるタイミング（警告終了の何秒前か）
-    float flameDuration_ = 1.0f;                   // 炎継続時間
-    float flameDamage_ = 30.0f;                    // ダメージ
+    float flameDuration_ = 0.3f;                   // 炎継続時間
+    float flameDamage_ = 10.0f;                    // ダメージ
     float flameHeight_ = 3.0f;                     // 炎の判定高さ
     
     // パーティクル設定（警告時）
