@@ -14,7 +14,7 @@ void BossBodyCollider::OnCollisionEnter(Collider* other)
 
     uint32_t typeID = other->GetTypeID();
 
-    if (typeID == static_cast<uint32_t>(CollisionTypeId::kPlayer)) {
+    if (typeID == static_cast<uint32_t>(CollisionTypeId::kAttack)) {
 
         pBoss_->Damage(damage_); // Example damage value
 
