@@ -170,6 +170,8 @@ void Player::Action()
         if (blockColor == Block::Colors::Purple || blockColor == Block::Colors::Orange || blockColor == Block::Colors::Green){
             emitter_->SetEmitterActive(emitterName_, true);
             emitter_->SetEmitterColor(emitterName_, Block::ColorToVector4(blockColor));
+        }else{
+            emitter_->SetEmitterActive(emitterName_, false);
         }
 
         // Debug
