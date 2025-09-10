@@ -66,6 +66,7 @@ private: // メンバ変数
     Vector2 controlManualSize{ 455, 280 };
 
     uint32_t bgmVH_ = 0;
+    uint32_t bgmSH_ = 0;
 
     bool isDebug_ = false;
 

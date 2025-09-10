@@ -168,4 +168,6 @@ private:
     // HPバー関連
     std::unique_ptr<Bar3d> hpBar_;                         ///< HPバー
     Camera* pCamera_ = nullptr;                            ///< カメラへの参照
+
+    uint32_t hitVH_ = 0;                               ///< ヒット時のvoice handle
 };

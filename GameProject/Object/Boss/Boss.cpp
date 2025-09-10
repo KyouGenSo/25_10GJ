@@ -536,7 +536,7 @@ void Boss::InitializeColliders()
         bodyColliders_[i] = std::make_unique<BossBodyCollider>(this);
         bodyColliders_[i]->SetTransform(&bodyColliderTransforms_[i]);
         bodyColliders_[i]->SetSize(Vector3(bodyColliderTransforms_[i].scale.x, bodyColliderTransforms_[i].scale.y, bodyColliderTransforms_[i].scale.z));
-        bodyColliders_[i]->SetDamage(10);
+        bodyColliders_[i]->SetDamage(5.f);
         bodyColliders_[i]->SetActive(false);
         // CollisionManagerに登録
         CollisionManager::GetInstance()->AddCollider(bodyColliders_[i].get());

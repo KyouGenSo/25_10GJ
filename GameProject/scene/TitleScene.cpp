@@ -37,8 +37,8 @@ void TitleScene::Initialize()
 
     this->AnimationsInitialize();
 
-    bgmVH_ = Audio::GetInstance()->LoadMP3File("BGM/Title.mp3");
-    Audio::GetInstance()->Play(bgmVH_, true, 0.5f);
+    bgmSH_ = Audio::GetInstance()->LoadMP3File("BGM/Title.mp3");
+    bgmVH_ = Audio::GetInstance()->Play(bgmSH_, true, 0.5f);
 }
 
 void TitleScene::Finalize()
