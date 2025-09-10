@@ -200,7 +200,9 @@ float Terrain::GetMaxYAt(float x, float z)
     {
         if (blocks_[ix][y][iz])
         {
-            return -static_cast<float>(y) * Block::kScale;
+            // ブロックの上面の高さを返す
+            auto posBlock = blocks_[ix][y][iz]->GetPosition();
+            return posBlock.y + (Block::kScale / 2.0f);
         }
     }
 
