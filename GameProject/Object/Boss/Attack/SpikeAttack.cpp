@@ -45,7 +45,6 @@ void SpikeAttack::Initialize(Player* player, Terrain* terrain)
     spike_->collider = std::make_unique<BossAttackCollider>(player_);
     spike_->collider->SetTransform(&spike_->transform);
     spike_->collider->SetSize(Vector3(5.0f, kSpikeHeight, 5.0f));
-    //spike_->collider->SetSize(Vector3(5.0f, kSpikeHeight, 5.0f));
     spike_->collider->SetDamage(kSpikeDamage);
     spike_->collider->SetActive(false);
     CollisionManager::GetInstance()->AddCollider(spike_->collider.get());
@@ -195,11 +194,12 @@ void SpikeAttack::UpdateCooldownState()
 {
     // クールダウン開始時にブロックを白に変更
     static bool hasChangedColor = false;
-    if (stateTimer_ < 0.01f && !hasChangedColor && terrain_)
+    if (!hasChangedColor && terrain_)
     {
         try
         {
-            terrain_->SetBlockColorAt(GetPlayerBlockPosition(), Block::Colors::White);
+            auto block = terrain_->GetBlockAt(GetPlayerBlockPosition());
+            block->SetColor(Block::Colors::White);
             hasChangedColor = true;
         }
         catch (...)
