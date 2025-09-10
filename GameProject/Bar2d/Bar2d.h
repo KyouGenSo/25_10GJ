@@ -28,6 +28,8 @@ public:
     void SetMaxValue(float _max) { maxValue_ = _max; }
     void SetCurrentValue(float _current) { currentValue_ = _current; }
 
+    float GetCurrentRatio() const { return maxValue_ == 0.0f ? 0.0f : currentValue_ / maxValue_; }
+
     void operator=(const float& _val) { currentValue_ = _val; }
     float& operator+=(const float& _val) { currentValue_ += _val; return currentValue_; }
 

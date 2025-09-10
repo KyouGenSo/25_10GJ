@@ -99,27 +99,38 @@ void TutorialScene::Draw()
         ShadowRenderer::GetInstance()->BeginShadowPass();
         player_->Draw();
         boss_->Draw();
+        energyCoreManager_->Draw();
         ShadowRenderer::GetInstance()->EndShadowPass();
     }
+
+    cellFilter_->Draw2dDebug();
 
     //------------------背景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
 
 
-
     //-------------------Modelの描画-------------------//
     // 3Dモデル共通描画設定
     Object3dBasic::GetInstance()->SetCommonRenderSetting();
 
-    //ground_->Draw();
     player_->Draw();
     boss_->Draw();
+
+    // エネルギーコアの描画
+    energyCoreManager_->Draw();
+
     terrain_->Draw();
+    player_->InstancedDraw();
 
     //------------------前景Spriteの描画------------------//
     // スプライト共通描画設定
     SpriteBasic::GetInstance()->SetCommonRenderSetting();
+
+    // HPバー描画
+    boss_->Draw2d();
+    player_->Draw2d();
+    energyCoreManager_->Draw2d();
     tutorial_->Draw2d();
 
 
@@ -127,6 +138,7 @@ void TutorialScene::Draw()
     // コライダーのデバッグ描画
     CollisionManager::GetInstance()->DrawColliders();
     #endif
+
 
 }
 
@@ -169,51 +181,92 @@ void TutorialScene::DrawImGui()
 
 void TutorialScene::InitializeGameScene()
 {
-    pInput_ = Input::GetInstance();
+    auto collisionManager = CollisionManager::GetInstance();
 
-    // SkyBoxの初期化
+    pInput_ = Input::GetInstance();
     skyBox_ = std::make_unique<SkyBox>();
     skyBox_->Initialize("my_skybox.dds");
-
-
-
-    // 敵モデルの初期化
+    collisionManager->Initialize();
     boss_ = std::make_unique<Boss>();
-    boss_->Initialize();
-
-    // Playerの初期化
+    boss_->Initialize((*Object3dBasic::GetInstance()->GetCamera()));
+    terrain_ = std::make_unique<Terrain>();
+    terrain_->Initialize();
+    energyCoreManager_ = std::make_unique<EnergyCoreManager>();
+    energyCoreManager_->Initialize(boss_.get(), terrain_.get(), (*Object3dBasic::GetInstance()->GetCamera()));
     player_ = std::make_unique<Player>();
     player_->Initialize();
     player_->SetCamera((*Object3dBasic::GetInstance()->GetCamera()));
-
     followCamera_ = std::make_unique<FollowCamera>();
     followCamera_->Initialize((*Object3dBasic::GetInstance()->GetCamera()));
     followCamera_->SetTarget(&player_->GetTransform());
     followCamera_->SetTarget2(&boss_->GetTransform());
-
+    collisionManager->SetCollisionMask(
+        static_cast<uint32_t>(CollisionTypeId::kAttack),
+        static_cast<uint32_t>(CollisionTypeId::kBossBody),
+        true
+    );
+    collisionManager->SetCollisionMask(
+        static_cast<uint32_t>(CollisionTypeId::kAttack),
+        static_cast<uint32_t>(CollisionTypeId::kEnergyCore),
+        true
+    );
+    collisionManager->SetCollisionMask(
+        static_cast<uint32_t>(CollisionTypeId::kPlayer),
+        static_cast<uint32_t>(CollisionTypeId::kBossAttack),
+        true
+    );
+    cellFilter_ = std::make_unique<CellBasedFiltering>();
+    cellFilter_->Initialize(
+        static_cast<int>(Block::kScale * 2),
+        static_cast<int>(Terrain::kSize * Block::kScale),
+        static_cast<int>(Terrain::kSize * Block::kScale)
+    );
     terrain_ = std::make_unique<Terrain>();
-    terrain_->Initialize();
-
+    terrain_->Initialize(cellFilter_.get());
     player_->SetTerrain(terrain_.get());
-
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-    ShadowRenderer::GetInstance()->SetMaxShadowDistance(50.0f);
+    boss_->SetPlayer(player_.get());
+    boss_->SetTerrain(terrain_.get());
+    colorManualSprite_ = std::make_unique<Sprite>();
+    colorManualSprite_->Initialize("ColorManual.png");
+    colorManualSprite_->SetPos(colorManualPos);
+    colorManualSprite_->SetSize(colorManualSize);
+    colorManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+    controlManualSprite_ = std::make_unique<Sprite>();
+    controlManualSprite_->Initialize("ControlManual.png");
+    controlManualSprite_->SetPos(controlManualPos);
+    controlManualSprite_->SetSize(controlManualSize);
+    controlManualSprite_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+    ShadowRenderer::GetInstance()->SetMaxShadowDistance(50.f);
 }
 
 void TutorialScene::UpdateGameScene()
 {
+    cellFilter_->UnregisterAll(CollisionManager::GetInstance());
+    colorManualSprite_->SetPos(colorManualPos);
+    colorManualSprite_->SetSize(colorManualSize);
+    colorManualSprite_->Update();
+    controlManualSprite_->SetPos(controlManualPos);
+    controlManualSprite_->SetSize(controlManualSize);
+    controlManualSprite_->Update();
     player_->SetMode(followCamera_->GetMode());
-
     skyBox_->Update();
+    player_->SetDebug(isDebug_);
     player_->Update();
     boss_->Update();
+    energyCoreManager_->Update();
     followCamera_->Update();
-
     terrain_->Update();
-
-    // 衝突判定の実行
+    cellFilter_->RegisterPotentials(player_->GetBodyCollider());
+    cellFilter_->RegisterAll(CollisionManager::GetInstance());
     CollisionManager::GetInstance()->CheckAllCollisions();
+    if (player_->GetHp() <= 0)
+    {
+        SceneManager::GetInstance()->ChangeScene("over");
+    }
+    else if (boss_->GetHp() <= 0)
+    {
+        SceneManager::GetInstance()->ChangeScene("clear");
+    }
 }
 
 void TutorialScene::FinalizeGameScene()
@@ -227,4 +280,13 @@ void TutorialScene::FinalizeGameScene()
     {
         boss_->Finalize();
     }
+
+    // エネルギーコアマネージャーの終了処理
+    if (energyCoreManager_)
+    {
+        energyCoreManager_->Finalize();
+    }
+
+    // CollisionManagerのリセット
+    CollisionManager::GetInstance()->Reset();
 }

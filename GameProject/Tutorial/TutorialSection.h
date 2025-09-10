@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <unordered_map>
 #include <Windows.h>
+#include <Animation/AnimationTween.hpp>
+#include <Features/TimeMeasurer/TimeMeasurer.h>
 
 class TutorialSection
 {
@@ -45,6 +47,7 @@ public:
     ~TutorialSection() = default;
 
     void Initialize(float targetProgress);
+    void Initialize(float targetProgress, const AnimationTween<float>& _in, const AnimationTween<float>& _out);
     void Update();
     void Draw2d();
     void ImGui();
@@ -58,14 +61,21 @@ public:
 protected:
     void KeyTextUpdate();
 
+    void FadeInOutUpdate();
+
     static bool IsPush(Input* pInput, InputButtons button);
     static BYTE ToDIK(InputButtons button);
     static int ToXInput(InputButtons button);
 
+    TimeMeasurer timer_;
     std::vector<Sprite*> texts_ = {};
     std::unordered_map<InputButtons, Sprite*> textsButton_ = {};
     std::unique_ptr<Sprite> background_ = nullptr;
     std::unique_ptr<Bar2d> progressBar_ = nullptr;
+    std::unique_ptr<AnimationTween<float>> fadeInTween_;
+    std::unique_ptr<AnimationTween<float>> fadeOutTween_;
+
+    bool isReached_ = false;
     bool isComplete_ = false;
 
     Input* pInput_ = nullptr;

@@ -33,8 +33,16 @@ void Tutorial::CreateSectionShootTheCBD()
     pTextureManager_->LoadTexture("Tutorial/L-Trigger.png");
     this->CreateSpriteExplanation("Tutorial/Text-1.png", { 697.0f, 156.0f });
     this->CreateSpriteButton("Tutorial/L-Trigger.png", { 617.0f, 156.0f });
+
+    auto inTween = AnimationTween<float>(0.0f, 1.5f, 0.0f, 1.0f);
+    inTween.SetTransitionFunction([](float t)
+    {
+        return t * t * t * t * t; // 二次関数でイージング
+    });
+    auto outTween = AnimationTween<float>(0.0f, 0.5f, 1.0f, 0.0f);
+
     section_ = std::make_unique<TutorialSection>();
-    section_->Initialize(100.0f);
+    section_->Initialize(100.0f, inTween, outTween);
     for (auto& sprite : spriteExplanation_) section_->AddText(sprite.get());
     section_->AddTextButton(TutorialSection::InputButtons::LTrigger, spriteButtonText_[0].get());
 }

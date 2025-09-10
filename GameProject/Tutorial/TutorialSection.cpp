@@ -17,10 +17,21 @@ void TutorialSection::Initialize(float targetProgress)
     background_->Initialize("tutorial/bg.png");
     background_->SetAnchorPoint({ 0.5f, 0.0f });
     background_->SetPos({ WinApp::clientWidth / 2.0f, 65.0f });
+
+    timer_.Reset();
+    timer_.Start();
+}
+
+void TutorialSection::Initialize(float targetProgress, const AnimationTween<float>& _in, const AnimationTween<float>& _out)
+{
+    fadeInTween_ = std::make_unique<AnimationTween<float>>(_in);
+    fadeOutTween_ = std::make_unique<AnimationTween<float>>(_out);
+    this->Initialize(targetProgress);
 }
 
 void TutorialSection::Update()
 {
+    this->FadeInOutUpdate();
     progressBar_->Update();
     background_->Update();
 
@@ -55,7 +66,16 @@ void TutorialSection::ImGui()
 
 void TutorialSection::Progress(float numProgress)
 {
+    if (isReached_) return;
+
     *progressBar_ += numProgress;
+
+    if (progressBar_->GetCurrentRatio() >= 1.0f)
+    {
+        isReached_ = true;
+        timer_.Reset();
+        timer_.Start();
+    }
 }
 
 void TutorialSection::KeyTextUpdate()
@@ -72,6 +92,34 @@ void TutorialSection::KeyTextUpdate()
         }
 
         textButton->Update();
+    }
+}
+
+void TutorialSection::FadeInOutUpdate()
+{
+    float alpha = 1.0f;
+    if (fadeInTween_ && !isReached_)
+    {
+        fadeInTween_->Update(timer_.GetNow<float>(), alpha);
+    }
+    if (fadeOutTween_ && isReached_)
+    {
+        fadeOutTween_->Update(timer_.GetNow<float>(), alpha);
+    }
+
+    background_->SetColor({ 1.0f, 1.0f, 1.0f, alpha });
+    progressBar_->SetOpacity(alpha);
+    for (auto& text : texts_)
+    {
+        text->SetColor({ 1.0f, 1.0f, 1.0f, alpha });
+    }
+    for (auto& [button, textButton] : textsButton_)
+    {
+        textButton->SetColor({ 1.0f, 1.0f, 1.0f, alpha });
+    }
+    if (alpha <= 0.0f)
+    {
+        isComplete_ = true;
     }
 }
 

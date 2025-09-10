@@ -17,6 +17,8 @@ public:
         targetValue_(targetValue)
     {};
 
+    AnimationTween(const AnimationTween& other) = default;
+
     ~AnimationTween() = default;
 
     // 補間関数を設定
@@ -43,8 +45,8 @@ public:
 private:
     float           startSec_       = 0.0f;
     float           durationSec_    = 0.0f;
-    const ValueType targetValue_    = {};
-    const ValueType startValue_     = {};
+    ValueType       targetValue_    = {};
+    ValueType       startValue_     = {};
 
     // 補間関数
     std::function<float(float)> transitionFunction_ = nullptr;
