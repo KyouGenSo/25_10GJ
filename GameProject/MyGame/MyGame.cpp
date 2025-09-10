@@ -18,7 +18,7 @@ void MyGame::Initialize()
 {
     winApp_->WinApp::SetWindowSize(1600, 900);
 
-    winApp_->WinApp::SetWindowTitle(L"10DaysJam");
+    winApp_->WinApp::SetWindowTitle(L"3046_トゥーンレイダー");
 
     TakoFramework::Initialize();
 
