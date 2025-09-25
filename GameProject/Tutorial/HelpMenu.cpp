@@ -6,8 +6,8 @@
 
 void HelpMenu::Initialize()
 {
-    TextureManager::GetInstance()->LoadTexture("Tutorial/HelpMenu.png");
-    TextureManager::GetInstance()->LoadTexture("Tutorial/HelpMenuKey.png");
+    TextureManager::GetInstance()->LoadTexture("Tutorial/HelpMenu_Xbox.png");
+    TextureManager::GetInstance()->LoadTexture("Tutorial/HelpMenu_Keyboard.png");
 
     background_ = std::make_unique<Sprite>();
     background_->Initialize("white.png");
@@ -16,42 +16,46 @@ void HelpMenu::Initialize()
     background_->SetAnchorPoint({ 0.5f, 0.5f });
     background_->SetPos({ static_cast<float>(WinApp::clientWidth) / 2.0f, static_cast<float>(WinApp::clientHeight) / 2.0f });
 
-    mainPad_ = std::make_unique<Sprite>();
-    mainPad_->Initialize("Tutorial/HelpMenu.png");
-    mainPad_->SetAnchorPoint({ 0.5f, 0.5f });
-    mainPad_->SetPos({ static_cast<float>(WinApp::clientWidth) / 2.0f, static_cast<float>(WinApp::clientHeight) / 2.0f });
-
-    mainKey_ = std::make_unique<Sprite>();
-    mainKey_->Initialize("Tutorial/HelpMenuKey.png");
-    mainKey_->SetAnchorPoint({ 0.5f, 0.5f });
-    mainKey_->SetPos({ static_cast<float>(WinApp::clientWidth) / 2.0f, static_cast<float>(WinApp::clientHeight) / 2.0f });
+    xbox_ = std::make_unique<Sprite>();
+    xbox_->Initialize("Tutorial/HelpMenu_Xbox.png");
+    xbox_->SetAnchorPoint({ 0.5f, 0.5f });
+    xbox_->SetPos({ static_cast<float>(WinApp::clientWidth) / 2.0f, static_cast<float>(WinApp::clientHeight) / 2.0f });
+    
+    keyboard_ = std::make_unique<Sprite>();
+    keyboard_->Initialize("Tutorial/HelpMenu_Keyboard.png");
+    keyboard_->SetAnchorPoint({ 0.5f, 0.5f });
+    keyboard_->SetPos({ static_cast<float>(WinApp::clientWidth) / 2.0f, static_cast<float>(WinApp::clientHeight) / 2.0f });
 }
 
 void HelpMenu::Update()
 {
-    background_->Update();
-    mainPad_->Update();
-    mainKey_->Update();
-
     if (Input::GetInstance()->TriggerButton(XButtons.Start))
     {
-        isDisplayPad_ = !isDisplayPad_;
+        isXbox_ = true;
+        isDisplay_ = !isDisplay_;
+    }
+    else if (Input::GetInstance()->TriggerKey(DIK_TAB))
+    {
+        isXbox_ = false;
+        isDisplay_ = !isDisplay_;
     }
 
-    if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
-    {
-        isDisplayKey_ = !isDisplayKey_;
-    }
+    // 表示していないなら更新しない
+    if (!isDisplay_) return;
+
+    background_->Update();
+    xbox_->Update();
+    keyboard_->Update();
 }
 
 void HelpMenu::Draw2d()
 {
-    if (!isDisplayPad_ && !isDisplayKey_) return;
+    if (!isDisplay_) return;
 
     background_->Draw();
 
-    if (isDisplayKey_) mainKey_->Draw();
-    if (isDisplayPad_) mainPad_->Draw();
+    if (isXbox_) xbox_->Draw();
+    else keyboard_->Draw();
 }
 
 void HelpMenu::Finalize()
