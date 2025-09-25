@@ -42,7 +42,7 @@ void InputHandler::UpdateInputStates()
 	isMoving_ = !input->LStickInDeadZone();
 	isDashing_ = input->TriggerKey(DIK_LSHIFT) || input->TriggerButton(XButtons.B);
     isJumping_ = input->TriggerKey(DIK_SPACE) || input->TriggerButton(XButtons.A);
-	isAttacking_ = input->TriggerKey(DIK_Z) || input->TriggerButton(XButtons.X);
+	isAttacking_ = input->TriggerKey(DIK_Z) || input->TriggerButton(XButtons.R_Shoulder);
 	isShooting_ = input->PushKey(DIK_LCONTROL) || input->GetRightTrigger() > 0.5f;
 	isPaused_ = input->TriggerKey(DIK_ESCAPE) || input->TriggerButton(XButtons.Start);
     isDispense = input->TriggerKey(DIK_Q) || input->TriggerButton(XButtons.L_Shoulder);
