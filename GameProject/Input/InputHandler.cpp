@@ -33,10 +33,10 @@ void InputHandler::UpdateInputStates()
         moveDirection_ = input->GetLeftStick();
     }
 
-    color_ = input->TriggerButton(XButtons.DPad_Left) ? ColorBall::Colors::BLUE : color_;
-    color_ = input->TriggerButton(XButtons.DPad_Up) ? ColorBall::Colors::YELLOW : color_;
-    color_ = input->TriggerButton(XButtons.DPad_Right) ? ColorBall::Colors::RED : color_;
-    color_ = input->TriggerButton(XButtons.DPad_Down) ? ColorBall::Colors::GRAY : color_;
+    color_ = (input->TriggerButton(XButtons.DPad_Down) || input->TriggerKey(DIK_1)) ? ColorBall::Colors::GRAY : color_;
+    color_ = (input->TriggerButton(XButtons.DPad_Left) || input->TriggerKey(DIK_2)) ? ColorBall::Colors::BLUE : color_;
+    color_ = (input->TriggerButton(XButtons.DPad_Up) || input->TriggerKey(DIK_3)) ? ColorBall::Colors::YELLOW : color_;
+    color_ = (input->TriggerButton(XButtons.DPad_Right) || input->TriggerKey(DIK_4)) ? ColorBall::Colors::RED : color_;
 
 	// 各アクションの入力状態を更新
 	isMoving_ = !input->LStickInDeadZone();
