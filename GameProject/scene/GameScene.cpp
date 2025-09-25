@@ -205,7 +205,7 @@ void GameScene::Update()
     skyBox_->Update();
 
     // シーン遷移
-    if (player_->GetHp() <= 0 || Input::GetInstance()->TriggerKey(DIK_Q))
+    if (player_->GetHp() <= 0)
     {
         SceneManager::GetInstance()->ChangeScene("over");
     } else if (boss_->GetHp() <= 0)
