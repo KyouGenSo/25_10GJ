@@ -20,7 +20,7 @@ void HelpMenu::Initialize()
     xbox_->Initialize("Tutorial/HelpMenu_Xbox.png");
     xbox_->SetAnchorPoint({ 0.5f, 0.5f });
     xbox_->SetPos({ static_cast<float>(WinApp::clientWidth) / 2.0f, static_cast<float>(WinApp::clientHeight) / 2.0f });
-    
+
     keyboard_ = std::make_unique<Sprite>();
     keyboard_->Initialize("Tutorial/HelpMenu_Keyboard.png");
     keyboard_->SetAnchorPoint({ 0.5f, 0.5f });
@@ -29,14 +29,16 @@ void HelpMenu::Initialize()
 
 void HelpMenu::Update()
 {
-    if (Input::GetInstance()->TriggerButton(XButtons.Start))
+    if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
     {
-        isXbox_ = true;
+        isDisplayXbox_ = false;
+        isDisplayKeyboard_ = true;
         isDisplay_ = !isDisplay_;
     }
-    else if (Input::GetInstance()->TriggerKey(DIK_TAB))
+    if (Input::GetInstance()->TriggerButton(XButtons.Start))
     {
-        isXbox_ = false;
+        isDisplayXbox_ = true;
+        isDisplayKeyboard_ = false;
         isDisplay_ = !isDisplay_;
     }
 
@@ -54,8 +56,9 @@ void HelpMenu::Draw2d()
 
     background_->Draw();
 
-    if (isXbox_) xbox_->Draw();
-    else keyboard_->Draw();
+    if (isDisplayXbox_) xbox_->Draw();
+    else if (isDisplayKeyboard_) keyboard_->Draw();
+    else assert(false);
 }
 
 void HelpMenu::Finalize()
