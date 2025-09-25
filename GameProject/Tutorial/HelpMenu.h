@@ -13,11 +13,13 @@ public:
     void Finalize();
     void ImGui();
 
-    bool IsDisplay() const { return isDisplay_; }
+    bool IsDisplay() const { return (isDisplayPad_ || isDisplayKey_); }
 
 private:
     std::unique_ptr<Sprite> background_ = nullptr;
-    std::unique_ptr<Sprite> main_ = nullptr;
+    std::unique_ptr<Sprite> mainPad_ = nullptr;
+    std::unique_ptr<Sprite> mainKey_ = nullptr;
 
-    bool isDisplay_ = false;
+    bool isDisplayPad_ = false;
+    bool isDisplayKey_ = false;
 };
