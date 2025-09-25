@@ -25,13 +25,15 @@ void InputHandler::Update(Player* player)
 void InputHandler::UpdateInputStates()
 {
 	Input* input = Input::GetInstance();
-	
-	// 移動入力
-    moveDirection_ = {static_cast<float>(input->PushKey(DIK_D) - input->PushKey(DIK_A)), static_cast<float>(input->PushKey(DIK_W) - input->PushKey(DIK_S)) };
 
-    if (input->IsConnect()){
-        moveDirection_ = input->GetLeftStick();
+    moveDirection_ = { 0.0f, 0.0f };
+
+    if (input->IsConnect()) {
+        moveDirection_ += input->GetLeftStick();
     }
+
+	// 移動入力
+    moveDirection_ += {static_cast<float>(input->PushKey(DIK_D) - input->PushKey(DIK_A)), static_cast<float>(input->PushKey(DIK_W) - input->PushKey(DIK_S)) };
 
     color_ = (input->TriggerButton(XButtons.DPad_Down) || input->TriggerKey(DIK_1)) ? ColorBall::Colors::GRAY : color_;
     color_ = (input->TriggerButton(XButtons.DPad_Left) || input->TriggerKey(DIK_2)) ? ColorBall::Colors::BLUE : color_;

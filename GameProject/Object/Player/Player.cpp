@@ -17,7 +17,7 @@
 
 Player::Player()
     :camera_(nullptr)
-    , speed_(1.0f)
+    , speed_(0.65f)
     , targetAngle_(0.0f)
     , mode_(false)
 {
@@ -184,6 +184,7 @@ void Player::Move(float speedMultiplier)
 
     Vector2 moveDir = inputHandler_->GetMoveDirection();
     if (moveDir.Length() < 0.1f) return;
+    moveDir = moveDir.Normalize();
 
     // 3Dベクトルに変換
     velocity_ = { moveDir.x, velocity_.y, moveDir.y };
