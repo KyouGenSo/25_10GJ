@@ -13,7 +13,7 @@ public:
     void Finalize();
     void ImGui();
 
-    bool IsDisplay() const { return isDisplayKeyboard_; }
+    bool IsDisplay() const { return isDisplay_; }
 
 private:
     std::unique_ptr<Sprite> background_ = nullptr;
